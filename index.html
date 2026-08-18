@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Sistem Kokurikulum - Jadual Rasmi Mengikut Slot</title>
+    <title>Sistem Kokurikulum - RAT & Laporan Tahunan SSOT</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         :root {
@@ -31,25 +31,23 @@
         label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #475569; }
         input[type="text"], select, textarea, input[type="date"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #fff; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
         th, td { padding: 8px; border: 1px solid #cbd5e1; text-align: left; }
         th { background: #f1f5f9; color: #1e293b; text-align: center; }
 
         button { background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; padding: 10px 15px; }
         button:hover { background: #1d4ed8; }
         
-        .btn-delete { background: #ef4444; color: white; padding: 5px 10px; font-size: 12px; border-radius: 4px; }
+        .btn-delete { background: #ef4444; color: white; padding: 5px 10px; font-size: 11px; border-radius: 4px; }
         .btn-delete:hover { background: #dc2626; }
         
         .upload-box { background: #eff6ff; border: 2px dashed #3b82f6; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
         .hidden { display: none; }
-        .unit-card { background: #f8fafc; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 10px; }
-        .badge { background: #dbeafe; color: #1d4ed8; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 3px; }
-        .badge-coach { background: #fce7f3; color: #db2777; }
+        .badge { background: #dbeafe; color: #1d4ed8; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; }
 
-        .lmk-container { background: #fff; border: 2px solid #000; padding: 20px; font-family: Arial, sans-serif; color: #000; }
-        .lmk-header { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 15px; }
-        .lmk-meta { display: grid; grid-template-columns: 150px 1fr; gap: 5px; font-size: 13px; margin-bottom: 15px; }
+        /* LMK & Master Report Container */
+        .report-container { background: #fff; border: 2px solid #000; padding: 25px; font-family: Arial, sans-serif; color: #000; margin-bottom: 20px; }
+        .report-header { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 15px; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -67,9 +65,12 @@
     <div class="menu-item" onclick="show('modulTakwim', event)">📅 Takwim Sekolah</div>
     <div class="menu-item" onclick="show('modulJadual', event)">🕒 Jadual Perjumpaan Rasmi</div>
     
-    <div class="menu-category">Analisis & Laporan</div>
+    <div class="menu-category">Modul Pelaporan & RAT</div>
+    <div class="menu-item" onclick="show('modulRAT', event)">📋 RAT (Rancangan Aktiviti)</div>
+    <div class="menu-item" onclick="show('laporanMingguan', event)">📝 Laporan Mingguan (LMK)</div>
+    <div class="menu-item" onclick="show('laporanTahunan', event)">📈 Laporan Tahunan (12 Siri)</div>
+    <div class="menu-item" onclick="show('laporanPemantauan', event)">📊 Laporan Pemantauan</div>
     <div class="menu-item" onclick="show('analisisTugas', event)">📊 Analisis Agihan Tugas</div>
-    <div class="menu-item" onclick="show('laporanKelab', event)">📝 Borang Laporan Rasmi (LMK)</div>
 </div>
 
 <div class="content">
@@ -116,7 +117,7 @@
     <div id="modulKelab" class="card hidden">
         <h2>Tetapan Induk — Senarai Kelab / Unit</h2>
         <form onsubmit="simpanMaster('kelab', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
-            <div class="form-group"><label>Nama Kelab / Unit:</label><input type="text" id="kNama" placeholder="Cth: Kelab Catur" required></div>
+            <div class="form-group"><label>Nama Kelab / Unit:</label><input type="text" id="kNama" placeholder="Cth: Pengakap" required></div>
             <button type="submit">Tambah Kelab</button>
         </form>
         <table>
@@ -129,20 +130,15 @@
     <div id="modulGuru" class="card hidden">
         <h2>Tetapan Induk — Master Guru, Penyelaras & Jurulatih</h2>
         <form onsubmit="simpanMaster('guru', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
-            <div class="form-group"><label>Nama Guru:</label><input type="text" id="gNama" placeholder="Cth: Kylie N" required></div>
+            <div class="form-group"><label>Nama Guru:</label><input type="text" id="gNama" placeholder="Cth: Muhammad Adam Chong" required></div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
                 <div class="form-group"><label>Jawatan / Penyelaras Khas:</label><input type="text" id="gPenyelaras" placeholder="Cth: Penyelaras Karnival"></div>
                 <div class="form-group"><label>Ketua Jurulatih:</label><input type="text" id="gJurulatih" placeholder="Cth: Ketua Jurulatih Olahraga"></div>
             </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px; margin-top:15px;">
-                <div class="unit-card"><label><b>UBB:</b></label><input type="text" id="gUBB" placeholder="Unit" style="margin-bottom:8px;"><select id="gJawatanUBB"><option value="Guru Penasihat">Guru Penasihat</option><option value="Ketua Guru Penasihat">Ketua Guru Penasihat</option></select></div>
-                <div class="unit-card"><label><b>UKP:</b></label><input type="text" id="gUKP" placeholder="Unit" style="margin-bottom:8px;"><select id="gJawatanUKP"><option value="Guru Penasihat">Guru Penasihat</option><option value="Ketua Guru Penasihat">Ketua Guru Penasihat</option></select></div>
-                <div class="unit-card"><label><b>USP:</b></label><input type="text" id="gUSP" placeholder="Unit" style="margin-bottom:8px;"><select id="gJawatanUSP"><option value="Guru Penasihat">Guru Penasihat</option><option value="Ketua Guru Penasihat">Ketua Guru Penasihat</option></select></div>
-            </div>
             <button type="submit" style="margin-top:15px;">Simpan Guru</button>
         </form>
         <table>
-            <thead><tr><th>Nama Guru</th><th>Tugas Khas</th><th>Tanggungjawab Unit</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <thead><tr><th>Nama Guru</th><th>Tugas Khas</th><th style="text-align:center;">Tindakan</th></tr></thead>
             <tbody id="tabel_guru"></tbody>
         </table>
     </div>
@@ -164,138 +160,175 @@
         </table>
     </div>
 
-    <!-- 5. JADUAL PERJUMPAAN RASMI MENGIKUT SLOT -->
+    <!-- 5. JADUAL PERJUMPAAN RASMI -->
     <div id="modulJadual" class="card hidden">
-        <h2>Jadual Perjumpaan Mingguan Kokurikulum (Mengikut Slot Masa Rasmi)</h2>
+        <h2>Jadual Perjumpaan Mingguan Kokurikulum</h2>
         <form onsubmit="simpanMaster('jadual', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
             <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
-                <div class="form-group"><label>Minggu:</label><input type="text" id="jMinggu" placeholder="Cth: M2 / M3" required></div>
+                <div class="form-group"><label>Bil / Minggu:</label><input type="text" id="jBil" placeholder="Cth: BIL 1 / M2" required></div>
                 <div class="form-group"><label>Tarikh:</label><input type="date" id="jTarikh" required></div>
                 <div class="form-group"><label>Hari:</label><input type="text" id="jHari" value="RABU" readonly style="background:#f1f5f9;"></div>
             </div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                <div class="form-group">
-                    <label>Jenis Perjumpaan / Slot Unit:</label>
-                    <select id="jJenisUnit">
-                        <option value="UBB (Unit Beruniform)">UBB (Unit Beruniform)</option>
-                        <option value="UKP (Sukan & Permainan)">UKP (Sukan & Permainan)</option>
-                        <option value="USP (Persatuan / Kelab)">USP (Persatuan / Kelab)</option>
-                        <option value="Perhimpunan / Serentak (UBB/UKP/USP)">Perhimpunan / Serentak (UBB/UKP/USP)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Siri Perjumpaan (Cth: UBB 1 / UBB 2):</label>
-                    <input type="text" id="jSiriUnit" placeholder="Cth: UBB 1 / Mesyuarat Agung" required>
-                </div>
+                <div class="form-group"><label>Aktiviti / Tajuk Perjumpaan:</label><input type="text" id="jAktiviti" placeholder="Cth: Mesyuarat Agung (Pelantikan AJK)" required></div>
+                <div class="form-group"><label>Guru Bertugas:</label><input type="text" id="jGuru" placeholder="Cth: Muhammad Adam Chong" required></div>
             </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                <div class="form-group"><label>Slot Masa:</label><input type="text" id="jMasa" placeholder="Cth: 11:40 AM - 12:40 PM" required></div>
-                <div class="form-group"><label>Catatan / Perkara:</label><input type="text" id="jCatatan" placeholder="Cth: Perlantikan AJK"></div>
-            </div>
-            <button type="submit">Tambah Jadual Slot Perjumpaan</button>
+            <div class="form-group"><label>Masa:</label><input type="text" id="jMasa" value="11:40 AM - 12:40 PM" required></div>
+            <button type="submit">Tambah Jadual Perjumpaan</button>
         </form>
         <table>
-            <thead>
-                <tr>
-                    <th>Minggu</th>
-                    <th>Tarikh</th>
-                    <th>Hari</th>
-                    <th>Slot / Unit</th>
-                    <th>Siri / Aktiviti</th>
-                    <th>Masa</th>
-                    <th style="text-align:center;">Tindakan</th>
-                </tr>
-            </thead>
+            <thead><tr><th>Bil</th><th>Tarikh</th><th>Hari</th><th>Aktiviti</th><th>Guru Bertugas</th><th>Masa</th><th style="text-align:center;">Tindakan</th></tr></thead>
             <tbody id="tabel_jadual"></tbody>
         </table>
     </div>
 
-    <!-- 6. ANALISIS AGIHAN TUGAS -->
-    <div id="analisisTugas" class="card hidden">
-        <h2>Analisis Agihan Tugas Guru Kokurikulum</h2>
-        <table>
-            <thead><tr><th>Nama Guru</th><th>Tugas Khas</th><th>UBB</th><th>UKP</th><th>USP</th></tr></thead>
-            <tbody id="tabel_analisis_tugas"></tbody>
-        </table>
+    <!-- 6. RAT (RANCANGAN AKTIVITI TAHUNAN) -->
+    <div id="modulRAT" class="card hidden">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h2 style="margin:0; border:none;">Rancangan Aktiviti Tahunan (RAT)</h2>
+            <button onclick="window.print()" style="background:#10b981;">🖨️ Cetak RAT</button>
+        </div>
+        <div class="report-container">
+            <div class="report-header">
+                RANCANGAN AKTIVITI TAHUNAN<br>
+                PENGAKAP<br>
+                2026
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:80px;">PERJUMPAAN</th>
+                        <th style="width:120px;">TARIKH</th>
+                        <th>AKTIVITI</th>
+                        <th style="width:200px;">GURU BERTUGAS</th>
+                    </tr>
+                </thead>
+                <tbody id="tabel_rat_view"></tbody>
+            </table>
+            <div style="margin-top:30px; display:grid; grid-template-columns: 1fr 1fr; gap:20px; font-size:12px; text-align:center;">
+                <div>DISEDIAKAN OLEH,<br><br><b>MUHAMMAD ADAM CHONG</b><br>KETUA GURU PENASIHAT</div>
+                <div>DISEMAK OLEH,<br><br><b>AZIZUL BIN ABDIN</b><br>PENOLONG KANAN KOKURIKULUM</div>
+            </div>
+            <div style="margin-top:20px; text-align:center; font-size:12px;">
+                DISAHKAN OLEH,<br><br><b>ASIONG BIN ASUNG</b><br>GURU BESAR
+            </div>
+        </div>
     </div>
 
-    <!-- 7. BORANG LAPORAN RASMI (LMK) -->
-    <div id="laporanKelab" class="card hidden">
-        <div class="lmk-container">
-            <div class="lmk-header">
+    <!-- 7. LAPORAN MINGGUAN (LMK) - CETAK BY BIL -->
+    <div id="laporanMingguan" class="card hidden">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h2>Pilih Bil Perjumpaan untuk Cetak Laporan Mingguan (LMK)</h2>
+            <select id="pilihBilCetak" onchange="muatDataLMKByBil()" style="width:200px; padding:8px; font-weight:bold;"></select>
+            <button onclick="window.print()" style="background:#10b981;">🖨️ Cetak LMK Semasa</button>
+        </div>
+
+        <div class="report-container">
+            <div class="report-header">
                 PELAPORAN KOKURIKULUM<br>
-                LAPORAN MINGGUAN KOKURIKULUM<br>
-                UNIT SUKAN DAN PERMAINAN<br>
+                LAPORAN MINGGUAN KOKURIKULUM (LMK)<br>
                 SK DOGOTON BANGGI KUDAT
             </div>
-
-            <div class="lmk-meta">
-                <div><b>TARIKH</b></div><div>: <input type="date" id="lmkTarikh" style="width:200px; display:inline-block;"></div>
-                <div><b>MASA</b></div><div>: <input type="text" id="lmkMasa" value="11:40 am - 12:40 pm" style="width:200px; display:inline-block;"></div>
-                <div><b>PERJUMPAAN</b></div><div>: <input type="text" id="unitDisplay" readonly style="width:200px; display:inline-block; font-weight:bold; background:#f1f5f9;"></div>
-                <div><b>BIL</b></div><div>: <input type="text" id="lmkBil" value="1/2026" style="width:200px; display:inline-block;"></div>
+            <div style="display:grid; grid-template-columns: 150px 1fr; gap:5px; font-size:13px; margin-bottom:15px;">
+                <div><b>TARIKH</b></div><div id="lmk_tarikh">: 21-Jan-2026</div>
+                <div><b>MASA</b></div><div id="lmk_masa">: 11:40 AM - 12:40 PM</div>
+                <div><b>PERJUMPAAN</b></div><div>: PENGAKAP</div>
+                <div><b>BIL / MINGGU</b></div><div id="lmk_bil">: BIL 1</div>
             </div>
-
-            <!-- Jadual Ringkasan -->
             <table>
                 <thead>
                     <tr>
                         <th rowspan="2" style="width:40px;">BIL</th>
                         <th rowspan="2">UNIT</th>
-                        <th rowspan="2">TEMPAT</th>
                         <th rowspan="2">AKTIVITI</th>
-                        <th colspan="2">KEHADIRAN GURU</th>
+                        <th rowspan="2">GURU BERTUGAS</th>
                         <th colspan="2">KEHADIRAN MURID</th>
                     </tr>
                     <tr>
-                        <th style="width:60px;">HADIR</th>
-                        <th style="width:60px;">JUM GURU</th>
-                        <th style="width:60px;">HADIR</th>
-                        <th style="width:60px;">JUM AHLI</th>
+                        <th>HADIR</th>
+                        <th>JUM AHLI</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="text-align:center;">1</td>
-                        <td id="tabelUnitNama">Kelab Catur</td>
-                        <td><input type="text" id="lmkTempat" value="Makmal Komputer" style="border:none; width:100%;"></td>
-                        <td><input type="text" id="lmkAktiviti" value="Perlantikan AJK" style="border:none; width:100%;"></td>
-                        <td style="text-align:center;"><input type="text" id="guruHadirCount" value="2" style="width:40px; text-align:center; border:none;"></td>
-                        <td style="text-align:center;">3</td>
-                        <td style="text-align:center;" id="muridHadirCount">14</td>
-                        <td style="text-align:center;" id="muridJumAhli">14</td>
+                        <td style="text-align:center;" id="lmk_tabel_bil">1</td>
+                        <td>PENGAKAP</td>
+                        <td id="lmk_tabel_aktiviti">MESYUARAT AGUNG (PELANTIKAN AJK)</td>
+                        <td id="lmk_tabel_guru">MUHAMMAD ADAM CHONG</td>
+                        <td style="text-align:center;">14</td>
+                        <td style="text-align:center;">14</td>
                     </tr>
                 </tbody>
             </table>
-
-            <h3 style="font-size:14px; margin-top:20px;">PELAPORAN & CATATAN:</h3>
-            <textarea rows="4" placeholder="Perlantikan AJK berjalan dengan lancar..."></textarea>
-
-            <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-top:15px;">
-                <div style="background:#22c55e; color:white; padding:8px; font-weight:bold; font-size:13px;">KEKUATAN</div>
-                <input type="text" placeholder="Murid memahami tugas masing-masing.">
-                
-                <div style="background:#ef4444; color:white; padding:8px; font-weight:bold; font-size:13px;">KELEMAHAN</div>
-                <input type="text" placeholder="Tiada masalah ketara.">
-
-                <div style="background:#eab308; color:black; padding:8px; font-weight:bold; font-size:13px;">PENAMBAHBAIKAN</div>
-                <input type="text" placeholder="Teruskan momentum aktiviti.">
-            </div>
-
-            <h3 style="font-size:14px; margin-top:20px;">GAMBAR AKTIVITI:</h3>
-            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-bottom:20px;">
-                <div style="border:1px dashed #94a3b8; height:100px; display:flex; align-items:center; justify-content:center; color:#64748b; font-size:12px;">+ Muat Naik Gambar 1</div>
-                <div style="border:1px dashed #94a3b8; height:100px; display:flex; align-items:center; justify-content:center; color:#64748b; font-size:12px;">+ Muat Naik Gambar 2</div>
-                <div style="border:1px dashed #94a3b8; height:100px; display:flex; align-items:center; justify-content:center; color:#64748b; font-size:12px;">+ Muat Naik Gambar 3</div>
-            </div>
-
-            <div style="margin-top:20px; font-size:13px; display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
-                <div>Disediakan oleh : <b id="tandaTanganPembuat">Kylie N</b></div>
-                <div>Disemak oleh Ketua Guru Penasihat : <b id="tandaTanganSemakan">Kylie N</b></div>
-            </div>
+            <h3 style="font-size:13px; margin-top:15px;">PELAPORAN / CATATAN:</h3>
+            <textarea rows="3" style="width:100%; border:1px solid #ccc; padding:8px;" placeholder="Catatan aktiviti..."></textarea>
         </div>
-        
-        <button style="margin-top:20px; width:100%; background:#10b981;" onclick="alert('Laporan LMK rasmi berjaya disimpan & siap untuk dicetak!')">🖨️ Cetak / Simpan Laporan Rasmi LMK</button>
+    </div>
+
+    <!-- 8. LAPORAN TAHUNAN (12 SIRI TERUS) -->
+    <div id="laporanTahunan" class="card hidden">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h2 style="margin:0; border:none;">Laporan Tahunan Rumusan 12 Siri Perjumpaan</h2>
+            <button onclick="window.print()" style="background:#10b981;">🖨️ Cetak Laporan Tahunan</button>
+        </div>
+        <div class="report-container" style="overflow-x:auto;">
+            <div class="report-header">
+                LAPORAN TAHUNAN KOKURIKULUM — RUMUSAN 12 SIRI<br>
+                SK DOGOTON BANGGI KUDAT 2026
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>BIL</th>
+                        <th>TARIKH</th>
+                        <th>GURU BERTUGAS</th>
+                        <th>% HADIR MURID</th>
+                        <th>% HADIR GURU</th>
+                        <th>AKTIVITI</th>
+                        <th>KEKUATAN</th>
+                        <th>KELEMAHAN</th>
+                        <th>PENAMBAHBAIKAN</th>
+                    </tr>
+                </thead>
+                <tbody id="tabel_laporan_tahunan_view"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 9. LAPORAN PEMANTAUAN -->
+    <div id="laporanPemantauan" class="card hidden">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h2 style="margin:0; border:none;">Laporan Pemantauan Pelaksanaan Kokurikulum</h2>
+            <button onclick="window.print()" style="background:#10b981;">🖨️ Cetak Pemantauan</button>
+        </div>
+        <div class="report-container">
+            <div class="report-header">
+                LAPORAN PEMANTAUAN KOKURIKULUM<br>
+                SK DOGOTON BANGGI KUDAT 2026
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:60px;">BIL</th>
+                        <th style="width:120px;">TARIKH</th>
+                        <th>GURU BERTUGAS</th>
+                        <th style="width:100px; text-align:center;">KEHADIRAN</th>
+                        <th style="width:100px; text-align:center;">LMK</th>
+                        <th style="width:120px; text-align:center;">STATUS</th>
+                    </tr>
+                </thead>
+                <tbody id="tabel_pemantauan_view"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 10. ANALISIS AGIHAN TUGAS -->
+    <div id="analisisTugas" class="card hidden">
+        <h2>Analisis Agihan Tugas Guru Kokurikulum</h2>
+        <table>
+            <thead><tr><th>Nama Guru</th><th>Tugas Khas</th></tr></thead>
+            <tbody id="tabel_analisis_tugas"></tbody>
+        </table>
     </div>
 
 </div>
@@ -303,11 +336,27 @@
 <script>
     if (!localStorage.getItem('db_tetapan')) {
         localStorage.setItem('db_tetapan', JSON.stringify({ tahun: "2026" }));
-        localStorage.setItem('db_murid', JSON.stringify([{ nama: "Mohamad Aznil", kelas: "6 Terbilang", jantina: "L", ubb: "Pengakap", ukp: "Kelab Catur", usp: "Persatuan BM" }]));
-        localStorage.setItem('db_kelab', JSON.stringify([{ nama: "Kelab Catur" }, { nama: "Pengakap" }]));
-        localStorage.setItem('db_guru', JSON.stringify([{ nama: "Kylie N", penyelaras: "Penyelaras Karnival", jurulatih: "Ketua Jurulatih Olahraga", ubb: "Pengakap", jawatanUBB: "Ketua Guru Penasihat", ukp: "Kelab Catur", jawatanUKP: "Guru Penasihat", usp: "Persatuan BM", jawatanUSP: "Guru Penasihat" }]));
+        localStorage.setItem('db_murid', JSON.stringify([{ nama: "Mohamad Aznil", kelas: "6 Terbilang", jantina: "L", ubb: "Pengakap" }]));
+        localStorage.setItem('db_kelab', JSON.stringify([{ nama: "Pengakap" }]));
+        localStorage.setItem('db_guru', JSON.stringify([{ nama: "Muhammad Adam Chong", penyelaras: "Penyelaras Karnival", jurulatih: "Ketua Jurulatih Olahraga" }]));
         localStorage.setItem('db_takwim', JSON.stringify([{ peristiwa: "Mesyuarat Agung", mula: "2026-01-21", akhir: "2026-01-21" }]));
-        localStorage.setItem('db_jadual', JSON.stringify([{ minggu: "M2", tarikh: "2026-01-21", hari: "RABU", jenis: "Perhimpunan / Serentak (UBB/UKP/USP)", siri: "UBB 1 / UKP 1 / USP 1", masa: "11:40 AM - 1:40 PM", catatan: "Mesyuarat Agung" }]));
+        
+        // Data default 12 siri mengikut rujukan jadual rasmi anda
+        let defaultJadual = [
+            { bil: "BIL 1", tarikh: "2026-01-21", hari: "RABU", aktiviti: "MESYUARAT AGUNG (PELANTIKAN AJK)", guru: "WAXRY DE VALNO MASHRINU", masa: "11:40 AM - 12:40 PM" },
+            { bil: "BIL 2", tarikh: "2026-01-28", hari: "RABU", aktiviti: "IKRAR & PERSETIAAN PENGAKAP", guru: "AHMAD SAFWAN BIN JAMALUDIN", masa: "11:40 AM - 12:40 PM" },
+            { bil: "BIL 3", tarikh: "2026-02-04", hari: "RABU", aktiviti: "MENYALIN DAN MENYANYIKAN LAGU PENGAKAP", guru: "SHIRAH SYATIKAH BINTI RAMLEE", masa: "11:40 AM - 12:40 PM" },
+            { bil: "BIL 4", tarikh: "2026-04-08", hari: "RABU", aktiviti: "PENGENALAN LAUNG AGUNG", guru: "MUHAMMAD ADAM CHONG", masa: "11:40 AM - 12:40 PM" },
+            { bil: "BIL 5", tarikh: "2026-04-15", hari: "RABU", aktiviti: "LATIHAN MELAUNGKAN IKRAR & MENYANYIKAN LAGU", guru: "SHIRAH SYATIKAH BINTI RAMLEE", masa: "11:40 AM - 12:40 PM" },
+            { bil: "BIL 6", tarikh: "2026-04-22", hari: "RABU", aktiviti: "KAWAD KAKI STATIK", guru: "WAXRY DE VALNO MASHRINU", masa: "11:40 AM - 12:40 PM" },
+            { bil: "BIL 7", tarikh: "2026-05-06", hari: "RABU", aktiviti: "ASAS KAWAD KAKI", guru: "AHMAD SAFWAN BIN JAMALUDIN", masa: "11:40 AM - 12:40 PM" },
+            { bil: "BIL 8", tarikh: "2026-05-13", hari: "RABU", aktiviti: "ISTIADAT BENDERA DAN LAUNG AGUNG", guru: "MUHAMMAD ADAM CHONG", masa: "11:40 AM - 12:40 PM" },
+            { bil: "BIL 9", tarikh: "2026-06-10", hari: "RABU", aktiviti: "UJIAN LENCANA PENGAKAP", guru: "SHIRAH SYATIKAH BINTI RAMLEE", masa: "11:40 AM - 12:40 PM" },
+            { bil: "BIL 10", tarikh: "2026-06-24", hari: "RABU", aktiviti: "PERTANDINGAN KAWAD KAKI", guru: "WAXRY DE VALNO MASHRINU", masa: "11:40 AM - 12:40 PM" },
+            { bil: "BIL 11", tarikh: "2026-07-08", hari: "RABU", aktiviti: "MELUKIS PETA SEKOLAH", guru: "YIENY ALOI", masa: "11:40 AM - 12:40 PM" },
+            { bil: "BIL 12", tarikh: "2026-07-15", hari: "RABU", aktiviti: "PERKHEMAHAN UNIT BERUNIFORM", guru: "YIENY ALOI", masa: "11:40 AM - 12:40 PM" }
+        ];
+        localStorage.setItem('db_jadual', JSON.stringify(defaultJadual));
     }
 
     function show(id, event) {
@@ -318,20 +367,9 @@
         muatSemuaData();
     }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const kelabAktif = urlParams.get('kelab') || 'Kelab Catur';
-
     window.onload = function() {
-        document.getElementById('unitDisplay').value = kelabAktif;
-        document.getElementById('tabelUnitNama').innerText = kelabAktif;
         muatTahunAktif();
         muatSemuaData();
-        
-        let dbGuru = JSON.parse(localStorage.getItem('db_guru')) || [];
-        let guruBertemu = dbGuru.find(g => g.ubb === kelabAktif || g.ukp === kelabAktif || g.usp === kelabAktif);
-        let namaGuru = guruBertemu ? guruBertemu.nama : "Kylie N";
-        document.getElementById('tandaTanganPembuat').innerText = namaGuru;
-        document.getElementById('tandaTanganSemakan').innerText = namaGuru;
     }
 
     function muatTahunAktif() {
@@ -354,45 +392,39 @@
         muatTabel('guru');
         muatTabel('takwim');
         muatTabel('jadual');
+        muatRAT();
+        muatDropdownLMK();
+        muatLaporanTahunan();
+        muatPemantauan();
         muatAnalisisTugas();
-        hitungKehadiranKelab();
-    }
-
-    function hitungKehadiranKelab() {
-        let dbMurid = JSON.parse(localStorage.getItem('db_murid')) || [];
-        let ahli = dbMurid.filter(m => m.ubb === kelabAktif || m.ukp === kelabAktif || m.usp === kelabAktif);
-        document.getElementById('muridHadirCount').innerText = ahli.length;
-        document.getElementById('muridJumAhli').innerText = ahli.length;
     }
 
     function simpanMaster(jenis, e) {
         e.preventDefault();
         let dataBaru = {};
         if(jenis === 'murid') {
-            dataBaru = { nama: document.getElementById('mNama').value, kelas: document.getElementById('mKelas').value, jantina: document.getElementById('mJantina').value, ubb: document.getElementById('mUBB').value, ukp: document.getElementById('mUKP').value, usp: document.getElementById('mUSP').value };
+            dataBaru = { nama: document.getElementById('mNama').value, kelas: document.getElementById('mKelas').value, jantina: document.getElementById('mJantina').value, ubb: document.getElementById('mUBB').value };
         } else if(jenis === 'kelab') {
             dataBaru = { nama: document.getElementById('kNama').value };
         } else if(jenis === 'guru') {
-            dataBaru = { nama: document.getElementById('gNama').value, penyelaras: document.getElementById('gPenyelaras').value, jurulatih: document.getElementById('gJurulatih').value, ubb: document.getElementById('gUBB').value, jawatanUBB: document.getElementById('gJawatanUBB').value, ukp: document.getElementById('gUKP').value, jawatanUKP: document.getElementById('gJawatanUKP').value, usp: document.getElementById('gUSP').value, jawatanUSP: document.getElementById('gJawatanUSP').value };
+            dataBaru = { nama: document.getElementById('gNama').value, penyelaras: document.getElementById('gPenyelaras').value, jurulatih: document.getElementById('gJurulatih').value };
         } else if(jenis === 'takwim') {
             dataBaru = { peristiwa: document.getElementById('takwimPeristiwa').value, mula: document.getElementById('takwimMula').value, akhir: document.getElementById('takwimAkhir').value };
         } else if(jenis === 'jadual') {
             dataBaru = { 
-                minggu: document.getElementById('jMinggu').value, 
+                bil: document.getElementById('jBil').value, 
                 tarikh: document.getElementById('jTarikh').value, 
                 hari: document.getElementById('jHari').value,
-                jenis: document.getElementById('jJenisUnit').value,
-                siri: document.getElementById('jSiriUnit').value,
-                masa: document.getElementById('jMasa').value,
-                catatan: document.getElementById('jCatatan').value
+                aktiviti: document.getElementById('jAktiviti').value,
+                guru: document.getElementById('jGuru').value,
+                masa: document.getElementById('jMasa').value
             };
         }
         let db = JSON.parse(localStorage.getItem('db_' + jenis)) || [];
         db.push(dataBaru);
         localStorage.setItem('db_' + jenis, JSON.stringify(db));
         e.target.reset();
-        muatTabel(jenis);
-        muatAnalisisTugas();
+        muatSemuaData();
         alert("Berjaya disimpan!");
     }
 
@@ -402,18 +434,15 @@
         db.forEach((item, index) => {
             html += `<tr>`;
             if(jenis === 'murid') {
-                html += `<td><b>${item.nama}</b><br><small>${item.kelas}</small></td><td>${item.jantina}</td><td><small>UBB:${item.ubb} | UKP:${item.ukp}</small></td>`;
+                html += `<td><b>${item.nama}</b><br><small>${item.kelas}</small></td><td>${item.jantina}</td><td>${item.ubb}</td>`;
             } else if(jenis === 'kelab') {
                 html += `<td><b>${item.nama}</b></td>`;
             } else if(jenis === 'guru') {
-                let badgeP = item.penyelaras ? `<span class="badge">📂 ${item.penyelaras}</span><br>` : '';
-                let badgeJ = item.jurulatih ? `<span class="badge badge-coach">🏆 ${item.jurulatih}</span>` : '';
-                let tugasKhas = (badgeP || badgeJ) ? (badgeP + badgeJ) : '<span style="color:#94a3b8;">-</span>';
-                html += `<td><b>${item.nama}</b></td><td>${tugasKhas}</td><td><small><b>UBB:</b> ${item.ubb || '-'} (${item.jawatanUBB})<br><b>UKP:</b> ${item.ukp || '-'} (${item.jawatanUKP})<br><b>USP:</b> ${item.usp || '-'} (${item.jawatanUSP})</small></td>`;
+                html += `<td><b>${item.nama}</b></td><td><span class="badge">📂 ${item.penyelaras || '-'}</span> <span class="badge" style="background:#fce7f3; color:#db2777;">🏆 ${item.jurulatih || '-'}</span></td>`;
             } else if(jenis === 'takwim') {
                 html += `<td><b>${item.peristiwa}</b></td><td>${item.mula} hingga ${item.akhir}</td>`;
             } else if(jenis === 'jadual') {
-                html += `<td><b>${item.minggu}</b></td><td>${item.tarikh}</td><td>${item.hari}</td><td><span class="badge">${item.jenis}</span></td><td><b>${item.siri}</b><br><small>${item.catatan || ''}</small></td><td>${item.masa}</td>`;
+                html += `<td><b>${item.bil}</b></td><td>${item.tarikh}</td><td>${item.hari}</td><td>${item.aktiviti}</td><td>${item.guru}</td><td>${item.masa}</td>`;
             }
             html += `<td style="text-align:center;"><button class="btn-delete" onclick="padamData('${jenis}', ${index})">🗑️ Padam</button></td></tr>`;
         });
@@ -421,19 +450,88 @@
         if(el) el.innerHTML = html;
     }
 
-    function muatAnalisisTugas() {
-        let dbGuru = JSON.parse(localStorage.getItem('db_guru')) || [];
+    function muatRAT() {
+        let db = JSON.parse(localStorage.getItem('db_jadual')) || [];
         let html = "";
-        if(dbGuru.length === 0) {
-            html = `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Tiada rekod guru.</td></tr>`;
-        } else {
-            dbGuru.forEach(g => {
-                let badgeP = g.penyelaras ? `<span class="badge">📂 ${g.penyelaras}</span><br>` : '';
-                let badgeJ = g.jurulatih ? `<span class="badge badge-coach">🏆 ${g.jurulatih}</span>` : '';
-                let tugasKhas = (badgeP || badgeJ) ? (badgeP + badgeJ) : '<span style="color:#94a3b8;">Tiada Tugas Khas</span>';
-                html += `<tr><td><b>${g.nama}</b></td><td>${tugasKhas}</td><td>${g.ubb ? `${g.ubb} <br><small style="color:#2563eb">${g.jawatanUBB}</small>` : '-'}</td><td>${g.ukp ? `${g.ukp} <br><small style="color:#2563eb">${g.jawatanUKP}</small>` : '-'}</td><td>${g.usp ? `${g.usp} <br><small style="color:#2563eb">${g.jawatanUSP}</small>` : '-'}</td></tr>`;
-            });
+        db.forEach(item => {
+            html += `<tr>
+                <td style="text-align:center;"><b>${item.bil}</b></td>
+                <td>${item.tarikh}</td>
+                <td>${item.aktiviti}</td>
+                <td>${item.guru}</td>
+            </tr>`;
+        });
+        document.getElementById('tabel_rat_view').innerHTML = html;
+    }
+
+    function muatDropdownLMK() {
+        let db = JSON.parse(localStorage.getItem('db_jadual')) || [];
+        let select = document.getElementById('pilihBilCetak');
+        select.innerHTML = "";
+        db.forEach((item, index) => {
+            let opt = document.createElement('option');
+            opt.value = index;
+            opt.innerText = item.bil + " (" + item.tarikh + ")";
+            select.appendChild(opt);
+        });
+        if(db.length > 0) muatDataLMKByBil();
+    }
+
+    function muatDataLMKByBil() {
+        let index = document.getElementById('pilihBilCetak').value;
+        let db = JSON.parse(localStorage.getItem('db_jadual')) || [];
+        if(db[index]) {
+            let item = db[index];
+            document.getElementById('lmk_tarikh').innerText = ": " + item.tarikh;
+            document.getElementById('lmk_masa').innerText = ": " + item.masa;
+            document.getElementById('lmk_bil').innerText = ": " + item.bil;
+            document.getElementById('lmk_tabel_bil').innerText = item.bil.replace("BIL ", "");
+            document.getElementById('lmk_tabel_aktiviti').innerText = item.aktiviti;
+            document.getElementById('lmk_tabel_guru').innerText = item.guru;
         }
+    }
+
+    function muatLaporanTahunan() {
+        let db = JSON.parse(localStorage.getItem('db_jadual')) || [];
+        let html = "";
+        db.forEach(item => {
+            html += `<tr>
+                <td style="text-align:center;"><b>${item.bil}</b></td>
+                <td>${item.tarikh}</td>
+                <td>${item.guru}</td>
+                <td style="text-align:center;">100%</td>
+                <td style="text-align:center;">100%</td>
+                <td>${item.aktiviti}</td>
+                <td>Semua murid memahami arahan.</td>
+                <td>Tiada masalah.</td>
+                <td>Teruskan momentum.</td>
+            </tr>`;
+        });
+        document.getElementById('tabel_laporan_tahunan_view').innerHTML = html;
+    }
+
+    function muatPemantauan() {
+        let db = JSON.parse(localStorage.getItem('db_jadual')) || [];
+        let html = "";
+        db.forEach(item => {
+            html += `<tr>
+                <td style="text-align:center;"><b>${item.bil}</b></td>
+                <td>${item.tarikh}</td>
+                <td>${item.guru}</td>
+                <td style="text-align:center;">✓</td>
+                <td style="text-align:center;">✓</td>
+                <td style="text-align:center; font-weight:bold; color:#10b981;">✓ LENGKAP</td>
+            </tr>`;
+        });
+        document.getElementById('tabel_pemantauan_view').innerHTML = html;
+    }
+
+    function muatAnalisisTugas() {
+        let db = JSON.parse(localStorage.getItem('db_guru')) || [];
+        let html = "";
+        db.forEach(g => {
+            html += `<tr><td><b>${g.nama}</b></td><td><span class="badge">📂 ${g.penyelaras || '-'}</span> <span class="badge" style="background:#fce7f3; color:#db2777;">🏆 ${g.jurulatih || '-'}</span></td></tr>`;
+        });
         document.getElementById('tabel_analisis_tugas').innerHTML = html;
     }
 
@@ -442,8 +540,7 @@
             let db = JSON.parse(localStorage.getItem('db_' + jenis)) || [];
             db.splice(index, 1);
             localStorage.setItem('db_' + jenis, JSON.stringify(db));
-            muatTabel(jenis);
-            muatAnalisisTugas();
+            muatSemuaData();
         }
     }
 
@@ -462,15 +559,12 @@
                     nama: row['Nama'] || row['NAMA'] || 'Tanpa Nama',
                     kelas: row['Kelas'] || row['KELAS'] || '-',
                     jantina: row['Jantina'] || row['JANTINA'] || 'L',
-                    ubb: row['UBB'] || '-',
-                    ukp: row['UKP'] || '-',
-                    usp: row['USP'] || '-'
+                    ubb: row['UBB'] || 'Pengakap'
                 });
             });
             localStorage.setItem('db_murid', JSON.stringify(db));
             alert(jsonRaws.length + " rekod murid berjaya dimuat naik!");
             muatTabel('murid');
-            document.getElementById('excelFile').value = "";
         };
         reader.readAsArrayBuffer(file);
     }
