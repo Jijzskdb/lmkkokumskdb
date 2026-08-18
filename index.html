@@ -1,44 +1,62 @@
-<!-- 11. DASHBOARD INDUK (ADMIN VIEW) -->
-<div id="dashboardAdmin" class="card hidden">
-    <h2>🏠 Dashboard Induk (Pandangan Menyeluruh)</h2>
-    <div id="adminGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-        <!-- Kad kelab akan dijana automatik oleh JavaScript -->
-    </div>
-</div>
-
-<script>
-    // FUNGSI JANA KAD KELAB AUTOMATIK
-    function muatDashboardAdmin() {
-        let dbKelab = JSON.parse(localStorage.getItem('db_kelab')) || [];
-        let container = document.getElementById('adminGrid');
-        container.innerHTML = "";
-
-        dbKelab.forEach(kelab => {
-            container.innerHTML += `
-                <div style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 5px solid #2563eb;">
-                    <h3 style="margin-top:0; color:#1e293b; font-size: 16px;">${kelab.nama}</h3>
-                    <p style="font-size:11px; color:#64748b; margin-bottom: 20px;">${kelab.kategori}</p>
-                    <div style="display:flex; flex-direction:column; gap:8px;">
-                        <button onclick="pilihKelabDanPergi('${kelab.nama}', 'modulRAT')" style="background:#64748b; font-size:12px;">📋 Lihat RAT</button>
-                        <button onclick="pilihKelabDanPergi('${kelab.nama}', 'laporanMingguan')" style="background:#10b981; font-size:12px;">📝 Lihat LMK</button>
-                        <button onclick="pilihKelabDanPergi('${kelab.nama}', 'laporanTahunan')" style="background:#8b5cf6; font-size:12px;">📈 Laporan Tahunan</button>
-                    </div>
-                </div>
-            `;
-        });
-    }
-
-    // FUNGSI NAVIGASI PINTAS
-    function pilihKelabDanPergi(namaKelab, targetModul) {
-        // 1. Set dropdown kelab di modul sasaran (jika ada)
-        let select = document.getElementById('pilihKelabCetak');
-        if(select) {
-            select.value = namaKelab;
-            muatDataLMKByBil(); // Refresh data berdasarkan kelab
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <title>Buku Laporan 12 Siri</title>
+    <style>
+        /* Tetapan Khas untuk Cetakan */
+        @media print {
+            .page-break { page-break-after: always; }
+            .no-print { display: none; }
         }
         
-        // 2. Buka modul sasaran
-        document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
-        document.getElementById(targetModul).classList.remove('hidden');
-    }
-</script>
+        body { font-family: Arial, sans-serif; background: #eee; padding: 20px; }
+        .borang-container { 
+            background: white; 
+            width: 210mm; /* A4 Width */
+            margin: 10px auto; 
+            padding: 15mm; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .header { text-align: center; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #000; padding: 8px; font-size: 12px; }
+        
+        button { position: fixed; top: 20px; right: 20px; padding: 15px 25px; background: #2563eb; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<button class="no-print" onclick="window.print()">🖨️ Cetak Semua 12 Borang</button>
+
+<div id="print-zone">
+    <!-- Skrip ini akan generate 12 borang secara automatik -->
+    <script>
+        // Data ni nanti anda boleh tarik dari Sheet, buat masa ni contoh saja
+        const data12Siri = [
+            {bil: 1, tarikh: "21-Jan-2026", aktiviti: "Mesyuarat Agung", guru: "Waxry De Valno"},
+            {bil: 2, tarikh: "28-Jan-2026", aktiviti: "Ikrar & Persetiaan", guru: "Ahmad Safwan"},
+            // ... tambah sampai 12
+        ];
+
+        data12Siri.forEach((item, index) => {
+            document.write(`
+                <div class="borang-container page-break">
+                    <div class="header">
+                        LAPORAN MINGGUAN KOKURIKULUM (LMK)<br>
+                        SK DOGOTON BANGGI KUDAT - BIL ${item.bil}
+                    </div>
+                    <table>
+                        <tr><td>Tarikh: ${item.tarikh}</td><td>Guru Bertugas: ${item.guru}</td></tr>
+                        <tr><td colspan="2">Aktiviti: ${item.aktiviti}</td></tr>
+                    </table>
+                    <div style="margin-top: 50px;">Tandatangan Guru: _________________</div>
+                </div>
+            `);
+        });
+    </script>
+</div>
+
+</body>
+</html>
