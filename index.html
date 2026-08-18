@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Sistem Kokurikulum - Takwim & Jadual Berasingan</title>
+    <title>Sistem Kokurikulum - Fleksibel Guru Bertugas</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         :root {
@@ -43,6 +43,7 @@
         
         .upload-box { background: #eff6ff; border: 2px dashed #3b82f6; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
         .hidden { display: none; }
+        .notice-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; font-size: 13px; color: #92400e; margin-bottom: 15px; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -53,9 +54,9 @@
     <div class="menu-category">Tetapan Induk (SSOT)</div>
     <div class="menu-item active" onclick="show('modulMurid', event)">👥 Master Murid</div>
     <div class="menu-item" onclick="show('modulKelab', event)">🏢 Master Kelab / Unit</div>
-    <div class="menu-item" onclick="show('modulGuru', event)">👨‍🏫 Master Guru Penasihat</div>
+    <div class="menu-item" onclick="show('modulGuru', event)">👨‍🏫 Master Guru (3 Unit)</div>
     <div class="menu-item" onclick="show('modulTakwim', event)">📅 Takwim Sekolah</div>
-    <div class="menu-item" onclick="show('modulJadual', event)">🕒 Jadual Perjumpaan (Bil 1-12)</div>
+    <div class="menu-item" onclick="show('modulJadual', event)">🕒 Jadual Perjumpaan</div>
     
     <div class="menu-category">Modul Operasi</div>
     <div class="menu-item" onclick="show('laporanKelab', event)">📝 Borang Laporan Guru</div>
@@ -66,15 +67,12 @@
     <!-- 1. MASTER MURID -->
     <div id="modulMurid" class="card">
         <h2>Tetapan Induk — Pangkalan Data Murid</h2>
-        
         <div class="upload-box">
             <h3 style="margin:0 0 10px 0; color:#1d4ed8; font-size:15px;">📂 Muat Naik Fail Excel Senarai Murid</h3>
-            <p style="font-size:12px; color:#64748b; margin-bottom:10px;">Lajur Excel: Nama, Kelas, Jantina, UBB, UKP, USP</p>
             <input type="file" id="excelFile" accept=".xlsx, .xls, .csv" onchange="prosesExcel(event)" style="background:white; display:inline-block; width:auto;">
         </div>
-
         <form onsubmit="simpanMaster('murid', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
-            <div class="form-group"><label>Nama Penuh Murid:</label><input type="text" id="mNama" required></div>
+            <div class="form-group"><label>Nama Penuh:</label><input type="text" id="mNama" required></div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
                 <div class="form-group"><label>Kelas:</label><input type="text" id="mKelas" placeholder="Cth: 6 Terbilang" required></div>
                 <div class="form-group"><label>Jantina:</label><select id="mJantina"><option value="L">L</option><option value="P">P</option></select></div>
@@ -87,7 +85,7 @@
             <button type="submit">Tambah Murid</button>
         </form>
         <table>
-            <thead><tr><th>Nama & Kelas</th><th>Jantina</th><th>Penempatan Kokurikulum</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <thead><tr><th>Nama & Kelas</th><th>Jantina</th><th>Penempatan</th><th style="text-align:center;">Tindakan</th></tr></thead>
             <tbody id="tabel_murid"></tbody>
         </table>
     </div>
@@ -105,77 +103,92 @@
         </table>
     </div>
 
-    <!-- 3. MASTER GURU -->
+    <!-- 3. MASTER GURU (3 UNIT: UBB, UKP, USP) -->
     <div id="modulGuru" class="card hidden">
-        <h2>Tetapan Induk — Senarai Guru Penasihat</h2>
+        <h2>Tetapan Induk — Senarai Guru Penasihat (3 Unit Kokurikulum)</h2>
         <form onsubmit="simpanMaster('guru', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
             <div class="form-group"><label>Nama Guru:</label><input type="text" id="gNama" placeholder="Cth: Cikgu Florynah Bakar" required></div>
-            <div class="form-group"><label>Peranan:</label><select id="gPeranan"><option value="Ketua Guru Penasihat">Ketua Guru Penasihat</option><option value="Guru Penasihat">Guru Penasihat</option></select></div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
+                <div class="form-group"><label>UBB (Beruniform):</label><input type="text" id="gUBB" value="Pengakap"></div>
+                <div class="form-group"><label>UKP (Sukan/Permainan):</label><input type="text" id="gUKP" value="Kelab Catur"></div>
+                <div class="form-group"><label>USP (Persatuan):</label><input type="text" id="gUSP" value="Persatuan BM"></div>
+            </div>
             <button type="submit">Tambah Guru</button>
         </form>
         <table>
-            <thead><tr><th>Nama Guru</th><th>Peranan</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <thead><tr><th>Nama Guru</th><th>Tanggungjawab 3 Unit Kokurikulum</th><th style="text-align:center;">Tindakan</th></tr></thead>
             <tbody id="tabel_guru"></tbody>
         </table>
     </div>
 
-    <!-- 4. TAKWIM SEKOLAH -->
+    <!-- 4. TAKWIM -->
     <div id="modulTakwim" class="card hidden">
         <h2>Tetapan Induk — Takwim Sekolah</h2>
         <form onsubmit="simpanMaster('takwim', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
-            <div class="form-group"><label>Peristiwa / Program Sekolah:</label><input type="text" id="takwimPeristiwa" placeholder="Cth: Cuti Hari Raya / Sukan Sekolah" required></div>
+            <div class="form-group"><label>Peristiwa / Program:</label><input type="text" id="takwimPeristiwa" required></div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                <div class="form-group"><label>Tarikh Mula:</label><input type="date" id="takwimMula" required></div>
-                <div class="form-group"><label>Tarikh Akhir:</label><input type="date" id="takwimAkhir" required></div>
+                <div class="form-group"><label>Mula:</label><input type="date" id="takwimMula" required></div>
+                <div class="form-group"><label>Akhir:</label><input type="date" id="takwimAkhir" required></div>
             </div>
             <button type="submit">Tambah Takwim</button>
         </form>
         <table>
-            <thead><tr><th>Peristiwa / Program</th><th>Tarikh</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <thead><tr><th>Peristiwa</th><th>Tarikh</th><th style="text-align:center;">Tindakan</th></tr></thead>
             <tbody id="tabel_takwim"></tbody>
         </table>
     </div>
 
-    <!-- 5. JADUAL PERJUMPAAN (BIL 1 - 12) DENGAN JULAT MASA -->
+    <!-- 5. JADUAL PERJUMPAAN -->
     <div id="modulJadual" class="card hidden">
-        <h2>Jadual Perjumpaan Mingguan Kokurikulum (Bil 1 - 12)</h2>
+        <h2>Jadual Perjumpaan Mingguan (Bil 1 - 12)</h2>
         <form onsubmit="simpanMaster('jadual', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                <div class="form-group"><label>Siri Perjumpaan:</label><input type="text" id="jBil" placeholder="Cth: Bil 1" required></div>
-                <div class="form-group"><label>Tarikh Rasmi:</label><input type="date" id="jTarikh" required></div>
+                <div class="form-group"><label>Siri:</label><input type="text" id="jBil" placeholder="Bil 1" required></div>
+                <div class="form-group"><label>Tarikh:</label><input type="date" id="jTarikh" required></div>
             </div>
-            <div class="form-group">
-                <label>Julat Masa Perjumpaan:</label>
-                <input type="text" id="jMasa" placeholder="Cth: 11:40 am - 12:40 pm" required>
-            </div>
-            <button type="submit">Tambah Jadual Perjumpaan</button>
+            <div class="form-group"><label>Masa:</label><input type="text" id="jMasa" value="11:40 am - 12:40 pm" required></div>
+            <button type="submit">Tambah Jadual</button>
         </form>
         <table>
-            <thead><tr><th>Siri</th><th>Tarikh Rasmi</th><th>Julat Masa</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <thead><tr><th>Siri</th><th>Tarikh</th><th>Masa</th><th style="text-align:center;">Tindakan</th></tr></thead>
             <tbody id="tabel_jadual"></tbody>
         </table>
     </div>
 
-    <!-- 6. BORANG GURU -->
+    <!-- 6. BORANG GURU (DENGAN FLEKSIBEL GURU BERTUGAS) -->
     <div id="laporanKelab" class="card hidden">
         <h2>Paparan Borang Laporan Rasmi</h2>
+        
+        <div class="notice-box">
+            💡 <b>Nota Fleksibiliti:</b> Sistem mencadangkan nama guru bertugas asal mengikut jadual. Jika berlaku pertukaran (mesyuarat/sukan luar), anda boleh terus menyunting atau menaip nama guru pengganti di ruangan di bawah sebelum menghantar laporan.
+        </div>
+
         <div class="form-group">
             <label>Unit Kokurikulum:</label>
             <input type="text" id="unitDisplay" readonly style="font-weight:bold; color:var(--primary); background:#f1f5f9;">
         </div>
-        <p style="font-size:13px; color:#64748b;">Sistem mengenali unit ini secara automatik berdasarkan pautan yang anda akses.</p>
+
+        <div class="form-group">
+            <label>Nama Guru Bertugas (Boleh Ditukar Jika Ada Pertukaran):</label>
+            <input type="text" id="guruBertugasInput" placeholder="Nama guru bertugas hari ini...">
+        </div>
+
+        <div class="form-group">
+            <label>Catatan / Aktiviti:</label>
+            <textarea rows="4" placeholder="Nyatakan aktiviti perjumpaan..."></textarea>
+        </div>
+
+        <button onclick="alert('Laporan berjaya dihantar dengan rekod guru bertugas terkini!')">Hantar Laporan Rasmi</button>
     </div>
 
 </div>
 
 <script>
     if (!localStorage.getItem('db_murid')) {
-        localStorage.setItem('db_murid', JSON.stringify([
-            { nama: "Mohamad Aznil", kelas: "6 Terbilang", jantina: "L", ubb: "Pengakap", ukp: "Kelab Catur", usp: "Persatuan BM" }
-        ]));
+        localStorage.setItem('db_murid', JSON.stringify([{ nama: "Mohamad Aznil", kelas: "6 Terbilang", jantina: "L", ubb: "Pengakap", ukp: "Kelab Catur", usp: "Persatuan BM" }]));
         localStorage.setItem('db_kelab', JSON.stringify([{ nama: "Kelab Catur" }, { nama: "Pengakap" }]));
-        localStorage.setItem('db_guru', JSON.stringify([{ nama: "Florynah Bakar", peranan: "Ketua Guru Penasihat" }]));
-        localStorage.setItem('db_takwim', JSON.stringify([{ peristiwa: "Mesyuarat Agung Koku", mula: "2026-01-21", akhir: "2026-01-21" }]));
+        localStorage.setItem('db_guru', JSON.stringify([{ nama: "Florynah Bakar", ubb: "Pengakap", ukp: "Kelab Catur", usp: "Persatuan BM" }]));
+        localStorage.setItem('db_takwim', JSON.stringify([{ peristiwa: "Mesyuarat Agung", mula: "2026-01-21", akhir: "2026-01-21" }]));
         localStorage.setItem('db_jadual', JSON.stringify([{ bil: "Bil 1", tarikh: "2026-01-21", masa: "11:40 am - 12:40 pm" }]));
     }
 
@@ -193,6 +206,15 @@
     window.onload = function() {
         document.getElementById('unitDisplay').value = kelabAktif;
         muatSemuaData();
+        
+        // Auto-detect guru bertugas asal untuk kelab ini
+        let dbGuru = JSON.parse(localStorage.getItem('db_guru')) || [];
+        let guruBertemu = dbGuru.find(g => g.ubb === kelabAktif || g.ukp === kelabAktif || g.usp === kelabAktif);
+        if(guruBertemu) {
+            document.getElementById('guruBertugasInput').value = guruBertemu.nama;
+        } else {
+            document.getElementById('guruBertugasInput').value = "Florynah Bakar"; // Default fallback
+        }
     }
 
     function muatSemuaData() {
@@ -212,7 +234,7 @@
         } else if(jenis === 'kelab') {
             dataBaru = { nama: document.getElementById('kNama').value };
         } else if(jenis === 'guru') {
-            dataBaru = { nama: document.getElementById('gNama').value, peranan: document.getElementById('gPeranan').value };
+            dataBaru = { nama: document.getElementById('gNama').value, ubb: document.getElementById('gUBB').value, ukp: document.getElementById('gUKP').value, usp: document.getElementById('gUSP').value };
         } else if(jenis === 'takwim') {
             dataBaru = { peristiwa: document.getElementById('takwimPeristiwa').value, mula: document.getElementById('takwimMula').value, akhir: document.getElementById('takwimAkhir').value };
         } else if(jenis === 'jadual') {
@@ -237,7 +259,7 @@
             } else if(jenis === 'kelab') {
                 html += `<td><b>${item.nama}</b></td>`;
             } else if(jenis === 'guru') {
-                html += `<td><b>${item.nama}</b></td><td>${item.peranan}</td>`;
+                html += `<td><b>${item.nama}</b></td><td><small>UBB: ${item.ubb} <br> UKP: ${item.ukp} <br> USP: ${item.usp}</small></td>`;
             } else if(jenis === 'takwim') {
                 html += `<td><b>${item.peristiwa}</b></td><td>${item.mula} hingga ${item.akhir}</td>`;
             } else if(jenis === 'jadual') {
