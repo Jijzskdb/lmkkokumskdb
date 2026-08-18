@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Sistem Kokurikulum - Agihan Tugas Guru SSOT</title>
+    <title>Sistem Kokurikulum - SSOT Agihan Tugas & Tahun Aktif</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         :root {
@@ -45,17 +45,21 @@
         .hidden { display: none; }
         .notice-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; font-size: 13px; color: #92400e; margin-bottom: 15px; border-radius: 4px; }
         .unit-card { background: #f8fafc; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 10px; }
+        .badge { background: #dbeafe; color: #1d4ed8; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <h3>ADMIN KOKUM 2026</h3>
+    <h3>ADMIN KOKUM <span id="tahunLabelSidebar" style="color:#60a5fa;">2026</span></h3>
     
+    <div class="menu-category">Tetapan Sistem</div>
+    <div class="menu-item active" onclick="show('modulTetapan', event)">⚙️ Tetapan Tahun Aktif</div>
+
     <div class="menu-category">Tetapan Induk (SSOT)</div>
-    <div class="menu-item active" onclick="show('modulMurid', event)">👥 Master Murid</div>
+    <div class="menu-item" onclick="show('modulMurid', event)">👥 Master Murid</div>
     <div class="menu-item" onclick="show('modulKelab', event)">🏢 Master Kelab / Unit</div>
-    <div class="menu-item" onclick="show('modulGuru', event)">👨‍🏫 Master Guru & Jawatan</div>
+    <div class="menu-item" onclick="show('modulGuru', event)">👨‍🏫 Master Guru & Perjawatan</div>
     <div class="menu-item" onclick="show('modulTakwim', event)">📅 Takwim Sekolah</div>
     <div class="menu-item" onclick="show('modulJadual', event)">🕒 Jadual Perjumpaan</div>
     
@@ -66,8 +70,21 @@
 
 <div class="content">
     
+    <!-- 0. TETAPAN TAHUN AKTIF -->
+    <div id="modulTetapan" class="card">
+        <h2>Tetapan Sistem & Tahun Aktif Kokurikulum</h2>
+        <p style="font-size:13px; color:#64748b;">Tentukan tahun sesi persekolahan aktif untuk sistem ini.</p>
+        <form onsubmit="simpanTahunAktif(event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; max-width: 400px;">
+            <div class="form-group">
+                <label>Tahun Sesi Semasa:</label>
+                <input type="text" id="inputTahunAktif" value="2026" required>
+            </div>
+            <button type="submit">Simpan Tahun Aktif</button>
+        </form>
+    </div>
+
     <!-- 1. MASTER MURID -->
-    <div id="modulMurid" class="card">
+    <div id="modulMurid" class="card hidden">
         <h2>Tetapan Induk — Pangkalan Data Murid</h2>
         <div class="upload-box">
             <h3 style="margin:0 0 10px 0; color:#1d4ed8; font-size:15px;">📂 Muat Naik Fail Excel Senarai Murid</h3>
@@ -105,13 +122,25 @@
         </table>
     </div>
 
-    <!-- 3. MASTER GURU & JAWATAN DI BAWAH UNIT -->
+    <!-- 3. MASTER GURU & PERJAWATAN KHAS -->
     <div id="modulGuru" class="card hidden">
-        <h2>Tetapan Induk — Senarai Guru Penasihat & Jawatan Unit</h2>
+        <h2>Tetapan Induk — Senarai Guru, Perjawatan Khas & Unit Kokurikulum</h2>
         <form onsubmit="simpanMaster('guru', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
             <div class="form-group"><label>Nama Guru:</label><input type="text" id="gNama" placeholder="Cth: Cikgu Florynah Bakar" required></div>
             
-            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
+            <div class="form-group">
+                <label>Perjawatan / Penyelarasan Peringkat Sekolah (Jika Ada):</label>
+                <select id="gJawatanKhas">
+                    <option value="-">Tiada (Guru Penasihat Biasa)</option>
+                    <option value="Setiausaha Kokurikulum (SU Kokum)">Setiausaha Kokurikulum (SU Kokum)</option>
+                    <option value="Setiausaha Sukan (SU Sukan)">Setiausaha Sukan (SU Sukan)</option>
+                    <option value="Penyelaras Unit Beruniform">Penyelaras Unit Beruniform</option>
+                    <option value="Penyelaras Sukan & Permainan">Penyelaras Sukan & Permainan</option>
+                    <option value="Penyelaras Persatuan & Kelab">Penyelaras Persatuan & Kelab</option>
+                </select>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px; margin-top:15px;">
                 <div class="unit-card">
                     <label><b>UBB (Beruniform):</b></label>
                     <input type="text" id="gUBB" placeholder="Nama Unit" style="margin-bottom:8px;">
@@ -140,7 +169,7 @@
             <button type="submit" style="margin-top:15px;">Simpan Maklumat Guru</button>
         </form>
         <table>
-            <thead><tr><th>Nama Guru</th><th>Tanggungjawab & Jawatan Mengikut Unit</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <thead><tr><th>Nama Guru</th><th>Jawatan Peringkat Sekolah</th><th>Tanggungjawab Unit (UBB / UKP / USP)</th><th style="text-align:center;">Tindakan</th></tr></thead>
             <tbody id="tabel_guru"></tbody>
         </table>
     </div>
@@ -179,14 +208,15 @@
         </table>
     </div>
 
-    <!-- 6. ANALISIS AGIHAN TUGAS GURU (AUTO DARI SSOT) -->
+    <!-- 6. ANALISIS AGIHAN TUGAS GURU (DENGAN JAWATAN KHAS & UNIT) -->
     <div id="analisisTugas" class="card hidden">
         <h2>Analisis Agihan Tugas Guru Kokurikulum</h2>
-        <p style="font-size:13px; color:#64748b;">Janaan automatik berdasarkan pangkalan data induk guru (SSOT) untuk memantau peranan ketua dan penasihat unit.</p>
+        <p style="font-size:13px; color:#64748b;">Rumusan menyeluruh perjawatan peringkat sekolah (SU Kokum, SU Sukan, Penyelaras) serta penasihat unit berdasarkan 1 SSOT.</p>
         <table>
             <thead>
                 <tr>
                     <th>Nama Guru</th>
+                    <th>Jawatan / Penyelarasan Peringkat Sekolah</th>
                     <th>Unit Beruniform (UBB)</th>
                     <th>Sukan / Permainan (UKP)</th>
                     <th>Persatuan / Kelab (USP)</th>
@@ -213,10 +243,12 @@
 </div>
 
 <script>
-    if (!localStorage.getItem('db_murid')) {
+    // Inisialisasi Data Default jika belum ada
+    if (!localStorage.getItem('db_tetapan')) {
+        localStorage.setItem('db_tetapan', JSON.stringify({ tahun: "2026" }));
         localStorage.setItem('db_murid', JSON.stringify([{ nama: "Mohamad Aznil", kelas: "6 Terbilang", jantina: "L", ubb: "Pengakap", ukp: "Kelab Catur", usp: "Persatuan BM" }]));
         localStorage.setItem('db_kelab', JSON.stringify([{ nama: "Kelab Catur" }, { nama: "Pengakap" }]));
-        localStorage.setItem('db_guru', JSON.stringify([{ nama: "Florynah Bakar", ubb: "Pengakap", jawatanUBB: "Ketua Guru Penasihat", ukp: "Kelab Catur", jawatanUKP: "Guru Penasihat", usp: "Persatuan BM", jawatanUSP: "Guru Penasihat" }]));
+        localStorage.setItem('db_guru', JSON.stringify([{ nama: "Florynah Bakar", jawatanKhas: "Setiausaha Kokurikulum (SU Kokum)", ubb: "Pengakap", jawatanUBB: "Ketua Guru Penasihat", ukp: "Kelab Catur", jawatanUKP: "Guru Penasihat", usp: "Persatuan BM", jawatanUSP: "Guru Penasihat" }]));
         localStorage.setItem('db_takwim', JSON.stringify([{ peristiwa: "Mesyuarat Agung", mula: "2026-01-21", akhir: "2026-01-21" }]));
         localStorage.setItem('db_jadual', JSON.stringify([{ bil: "Bil 1", tarikh: "2026-01-21", masa: "11:40 am - 12:40 pm" }]));
     }
@@ -234,11 +266,26 @@
 
     window.onload = function() {
         document.getElementById('unitDisplay').value = kelabAktif;
+        muatTahunAktif();
         muatSemuaData();
         
         let dbGuru = JSON.parse(localStorage.getItem('db_guru')) || [];
         let guruBertemu = dbGuru.find(g => g.ubb === kelabAktif || g.ukp === kelabAktif || g.usp === kelabAktif);
         document.getElementById('guruBertugasInput').value = guruBertemu ? guruBertemu.nama : "Florynah Bakar";
+    }
+
+    function muatTahunAktif() {
+        let tetapan = JSON.parse(localStorage.getItem('db_tetapan')) || { tahun: "2026" };
+        document.getElementById('tahunLabelSidebar').innerText = tetapan.tahun;
+        document.getElementById('inputTahunAktif').value = tetapan.tahun;
+    }
+
+    function simpanTahunAktif(e) {
+        e.preventDefault();
+        let tahunBaru = document.getElementById('inputTahunAktif').value;
+        localStorage.setItem('db_tetapan', JSON.stringify({ tahun: tahunBaru }));
+        muatTahunAktif();
+        alert("Tahun aktif berjaya dikemaskini kepada " + tahunBaru);
     }
 
     function muatSemuaData() {
@@ -261,6 +308,7 @@
         } else if(jenis === 'guru') {
             dataBaru = { 
                 nama: document.getElementById('gNama').value, 
+                jawatanKhas: document.getElementById('gJawatanKhas').value,
                 ubb: document.getElementById('gUBB').value, jawatanUBB: document.getElementById('gJawatanUBB').value,
                 ukp: document.getElementById('gUKP').value, jawatanUKP: document.getElementById('gJawatanUKP').value,
                 usp: document.getElementById('gUSP').value, jawatanUSP: document.getElementById('gJawatanUSP').value
@@ -290,7 +338,8 @@
             } else if(jenis === 'kelab') {
                 html += `<td><b>${item.nama}</b></td>`;
             } else if(jenis === 'guru') {
-                html += `<td><b>${item.nama}</b></td><td><small><b>UBB:</b> ${item.ubb || '-'} (${item.jawatanUBB || 'Guru Penasihat'})<br><b>UKP:</b> ${item.ukp || '-'} (${item.jawatanUKP || 'Guru Penasihat'})<br><b>USP:</b> ${item.usp || '-'} (${item.jawatanUSP || 'Guru Penasihat'})</small></td>`;
+                let badgeKhas = item.jawatanKhas && item.jawatanKhas !== '-' ? `<br><span class="badge">${item.jawatanKhas}</span>` : '';
+                html += `<td><b>${item.nama}</b>${badgeKhas}</td><td>${item.jawatanKhas || '-'}</td><td><small><b>UBB:</b> ${item.ubb || '-'} (${item.jawatanUBB || 'Guru Penasihat'})<br><b>UKP:</b> ${item.ukp || '-'} (${item.jawatanUKP || 'Guru Penasihat'})<br><b>USP:</b> ${item.usp || '-'} (${item.jawatanUSP || 'Guru Penasihat'})</small></td>`;
             } else if(jenis === 'takwim') {
                 html += `<td><b>${item.peristiwa}</b></td><td>${item.mula} hingga ${item.akhir}</td>`;
             } else if(jenis === 'jadual') {
@@ -302,16 +351,18 @@
         if(el) el.innerHTML = html;
     }
 
-    // Janakan Jadual Analisis Agihan Tugas Guru
+    // Janakan Jadual Analisis Agihan Tugas Guru dengan Perjawatan Khas
     function muatAnalisisTugas() {
         let dbGuru = JSON.parse(localStorage.getItem('db_guru')) || [];
         let html = "";
         if(dbGuru.length === 0) {
-            html = `<tr><td colspan="4" style="text-align:center; color:#94a3b8;">Tiada rekod guru.</td></tr>`;
+            html = `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Tiada rekod guru.</td></tr>`;
         } else {
             dbGuru.forEach(g => {
+                let badgeKhas = g.jawatanKhas && g.jawatanKhas !== '-' ? `<span class="badge">${g.jawatanKhas}</span>` : '<span style="color:#94a3b8;">-</span>';
                 html += `<tr>
                     <td><b>${g.nama}</b></td>
+                    <td>${badgeKhas}</td>
                     <td>${g.ubb ? `${g.ubb} <br><small style="color:#2563eb">${g.jawatanUBB}</small>` : '-'}</td>
                     <td>${g.ukp ? `${g.ukp} <br><small style="color:#2563eb">${g.jawatanUKP}</small>` : '-'}</td>
                     <td>${g.usp ? `${g.usp} <br><small style="color:#2563eb">${g.jawatanUSP}</small>` : '-'}</td>
@@ -355,7 +406,7 @@
             localStorage.setItem('db_murid', JSON.stringify(db));
             alert(jsonRaws.length + " rekod murid berjaya dimuat naik!");
             muatTabel('murid');
-            document.getElementById('excelFile').value = "";
+            document.getElementById('excelFile', '');
         };
         reader.readAsArrayBuffer(file);
     }
