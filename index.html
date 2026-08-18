@@ -2,7 +2,9 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Sistem Kokurikulum - Modul Integrasi</title>
+    <title>Sistem Kokurikulum - Modul Excel Upload</title>
+    <!-- Masukkan Pustaka SheetJS untuk baca Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         :root {
             --primary: #2563eb;
@@ -27,16 +29,17 @@
         
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #475569; }
-        input[type="text"], select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #fff; }
+        input[type="text"], select, textarea, input[type="file"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #fff; }
         input[readonly] { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
         
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
         th, td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: left; }
         th { background: #f1f5f9; color: #1e293b; }
 
-        button { background: var(--primary); color: white; border: none; pading: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; padding: 10px 15px; }
+        button { background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; padding: 10px 15px; }
         button:hover { background: #1d4ed8; }
         
+        .upload-box { background: #eff6ff; border: 2px dashed #3b82f6; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
         .hidden { display: none; }
     </style>
 </head>
@@ -49,51 +52,19 @@
 </div>
 
 <div class="content">
-    <!-- 1. TETAPAN INDUK (ADMIN TAMBAH MURID) -->
+    <!-- 1. TETAPAN INDUK (ADMIN + EXCEL UPLOAD) -->
     <div id="tetapanInduk" class="card">
         <h2>Tetapan Induk — Pangkalan Data Murid</h2>
-        <p style="font-size:13px; color:#64748b;">Admin mendaftarkan maklumat asas murid serta penempatan unit kokurikulum mereka di sini.</p>
         
-        <form onsubmit="simpanMasterMurid(event)">
-            <div class="form-group">
-                <label>Nama Penuh Murid:</label>
-                <input type="text" id="mNama" placeholder="Cth: Mohamad Aznil Bin Noorzain" required>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div class="form-group">
-                    <label>Kelas:</label>
-                    <select id="mKelas">
-                        <option value="6 Terbilang">6 Terbilang</option>
-                        <option value="5 Gemilang">5 Gemilang</option>
-                        <option value="4 Cemerlang">4 Cemerlang</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Jantina:</label>
-                    <select id="mJantina">
-                        <option value="L">Lelaki (L)</option>
-                        <option value="P">Perempuan (P)</option>
-                    </select>
-                </div>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
-                <div class="form-group">
-                    <label>Unit Beruniform (UBB):</label>
-                    <input type="text" id="mUBB" value="Pengakap">
-                </div>
-                <div class="form-group">
-                    <label>Sukan / Permainan (UKP):</label>
-                    <input type="text" id="mUKP" value="Kelab Catur">
-                </div>
-                <div class="form-group">
-                    <label>Persatuan / Kelab (USP):</label>
-                    <input type="text" id="mUSP" value="Persatuan Bahasa Melayu">
-                </div>
-            </div>
-            <button type="submit">+ Tambah ke Pangkalan Master</button>
-        </form>
+        <!-- Kotak Upload Excel -->
+        <div class="upload-box">
+            <h3 style="margin:0 0 10px 0; color:#1d4ed8; font-size:16px;">📂 Muat Naik Fail Excel Senarai Murid</h3>
+            <p style="font-size:13px; color:#64748b; margin-bottom:15px;">Format Lajur Excel yang diperlukan: <b>Nama, Kelas, Jantina, UBB, UKP, USP</b></p>
+            <input type="file" id="excelFile" accept=".xlsx, .xls, .csv" onchange="prosesExcel(event)" style="background:white; display:inline-block; width:auto;">
+        </div>
 
         <h3 style="margin-top:30px; font-size:16px;">Senarai Master Murid Dalam Sistem:</h3>
+        <button onclick="resetData()" style="background:#ef4444; margin-bottom:10px; font-size:12px; padding:6px 12px;">Reset Data</button>
         <table>
             <thead>
                 <tr>
@@ -104,7 +75,7 @@
                 </tr>
             </thead>
             <tbody id="tabelMasterMurid">
-                <!-- Data akan masuk sini secara dinamik -->
+                <!-- Data dimasukkan secara dinamik -->
             </tbody>
         </table>
     </div>
@@ -118,8 +89,6 @@
         </div>
 
         <h3 style="font-size:15px; margin-top:20px;">Tetapan Jawatan AJK & Kehadiran Ahli</h3>
-        <p style="font-size:13px; color:#64748b;">Senarai di bawah ditapis secara automatik untuk ahli yang menyertai unit ini. Guru boleh menetapkan jawatan mereka di sini.</p>
-        
         <table>
             <thead>
                 <tr>
@@ -129,7 +98,7 @@
                 </tr>
             </thead>
             <tbody id="tabelAhliKelab">
-                <!-- Ahli kelab akan dipaparkan di sini -->
+                <!-- Ahli kelab ditapis automatik -->
             </tbody>
         </table>
 
@@ -138,7 +107,7 @@
 </div>
 
 <script>
-    // Data simulasi awal jika localStorage kosong
+    // Data simulasi awal
     if (!localStorage.getItem('masterMurid')) {
         const defaultData = [
             { nama: "Mohamad Aznil Bin Noorzain", kelas: "6 Terbilang", jantina: "L", ubb: "Pengakap", ukp: "Kelab Catur", usp: "Persatuan BM" },
@@ -155,9 +124,8 @@
         if(event) event.currentTarget.classList.add('active');
     }
 
-    // Tangkap Ekor URL & Paparkan Data
     const urlParams = new URLSearchParams(window.location.search);
-    const kelabAktif = urlParams.get('kelab') || 'Kelab Catur'; // Default jika tiada ekor
+    const kelabAktif = urlParams.get('kelab') || 'Kelab Catur';
 
     window.onload = function() {
         document.getElementById('unitDisplay').value = kelabAktif;
@@ -166,26 +134,51 @@
         muatTurunAhliKelab();
     }
 
-    // Fungsi Admin Tambah Murid
-    function simpanMasterMurid(e) {
-        e.preventDefault();
-        const muridBaru = {
-            nama: document.getElementById('mNama').value,
-            kelas: document.getElementById('mKelas').value,
-            jantina: document.getElementById('mJantina').value,
-            ubb: document.getElementById('mUBB').value,
-            ukp: document.getElementById('mUKP').value,
-            usp: document.getElementById('mUSP').value
+    // Fungsi Baca Fail Excel Masuk ke LocalStorage
+    function prosesExcel(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, {type: 'array'});
+            
+            // Ambil sheet pertama
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            
+            // Tukar ke JSON
+            const jsonRaws = XLSX.utils.sheet_to_json(worksheet);
+            
+            if(jsonRaws.length === 0) {
+                alert("Fail Excel kosong atau format tidak sah.");
+                return;
+            }
+
+            // Petakan lajur Excel ke sistem kita
+            let dataMaster = JSON.parse(localStorage.getItem('masterMurid')) || [];
+            
+            jsonRaws.forEach(row => {
+                // Sesuaikan nama kolum Excel anda di sini (cth: Nama, Kelas, Jantina, UBB, UKP, USP)
+                let muridBaru = {
+                    nama: row['Nama'] || row['NAMA'] || 'Tanpa Nama',
+                    kelas: row['Kelas'] || row['KELAS'] || '-',
+                    jantina: row['Jantina'] || row['JANTINA'] || 'L',
+                    ubb: row['UBB'] || '-',
+                    ukp: row['UKP'] || '-',
+                    usp: row['USP'] || '-'
+                };
+                dataMaster.push(muridBaru);
+            });
+
+            localStorage.setItem('masterMurid', JSON.stringify(dataMaster));
+            alert("Berjaya! " + jsonRaws.length + " rekod murid telah dimuat naik dari Excel.");
+            muatTurunDataMaster();
+            muatTurunAhliKelab();
+            document.getElementById('excelFile').value = ""; // Reset input
         };
-
-        let data = JSON.parse(localStorage.getItem('masterMurid')) || [];
-        data.push(muridBaru);
-        localStorage.setItem('masterMurid', JSON.stringify(data));
-
-        alert("Berjaya! Murid telah dimasukkan ke Tetapan Induk.");
-        e.target.reset();
-        muatTurunDataMaster();
-        muatTurunAhliKelab();
+        reader.readAsArrayBuffer(file);
     }
 
     function muatTurunDataMaster() {
@@ -202,17 +195,15 @@
         document.getElementById('tabelMasterMurid').innerHTML = html;
     }
 
-    // Tapis ahli mengikut kelab pada ekor URL
     function muatTurunAhliKelab() {
         let data = JSON.parse(localStorage.getItem('masterMurid')) || [];
-        // Tapis murid yang ada kaitan dengan kelabAktif sama ada di ubb, ukp, atau usp
         let ahliKelab = data.filter(m => m.ubb === kelabAktif || m.ukp === kelabAktif || m.usp === kelabAktif);
 
         let html = "";
         if(ahliKelab.length === 0) {
             html = `<tr><td colspan="3" style="text-align:center; color:#94a3b8;">Tiada murid berdaftar di bawah ${kelabAktif}</td></tr>`;
         } else {
-            ahliKelab.forEach((m, index) => {
+            ahliKelab.forEach(m => {
                 html += `<tr>
                     <td><b>${m.nama}</b><br><small style="color:#64748b">${m.kelas} (${m.jantina})</small></td>
                     <td>
@@ -234,8 +225,15 @@
         document.getElementById('tabelAhliKelab').innerHTML = html;
     }
 
+    function resetData() {
+        if(confirm("Padam semua data master?")) {
+            localStorage.removeItem('masterMurid');
+            location.reload();
+        }
+    }
+
     function simpanLaporanKelab() {
-        alert("Simulasi Berjaya! Kehadiran dan tetapan jawatan untuk " + kelabAktif + " telah dikemas kini.");
+        alert("Simulasi Berjaya! Data laporan dan jawatan untuk " + kelabAktif + " disimpan.");
     }
 </script>
 </body>
