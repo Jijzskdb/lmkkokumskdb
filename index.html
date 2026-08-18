@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Sistem Kokurikulum - Borang LMK Rasmi SSOT</title>
+    <title>Sistem Kokurikulum - Jadual Rasmi Mengikut Slot</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         :root {
@@ -47,7 +47,6 @@
         .badge { background: #dbeafe; color: #1d4ed8; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 3px; }
         .badge-coach { background: #fce7f3; color: #db2777; }
 
-        /* Gaya Khas Borang LMK Rasmi */
         .lmk-container { background: #fff; border: 2px solid #000; padding: 20px; font-family: Arial, sans-serif; color: #000; }
         .lmk-header { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 15px; }
         .lmk-meta { display: grid; grid-template-columns: 150px 1fr; gap: 5px; font-size: 13px; margin-bottom: 15px; }
@@ -66,7 +65,7 @@
     <div class="menu-item" onclick="show('modulKelab', event)">🏢 Master Kelab / Unit</div>
     <div class="menu-item" onclick="show('modulGuru', event)">👨‍🏫 Master Guru & Tugas Khas</div>
     <div class="menu-item" onclick="show('modulTakwim', event)">📅 Takwim Sekolah</div>
-    <div class="menu-item" onclick="show('modulJadual', event)">🕒 Jadual Perjumpaan</div>
+    <div class="menu-item" onclick="show('modulJadual', event)">🕒 Jadual Perjumpaan Rasmi</div>
     
     <div class="menu-category">Analisis & Laporan</div>
     <div class="menu-item" onclick="show('analisisTugas', event)">📊 Analisis Agihan Tugas</div>
@@ -165,19 +164,48 @@
         </table>
     </div>
 
-    <!-- 5. JADUAL PERJUMPAAN -->
+    <!-- 5. JADUAL PERJUMPAAN RASMI MENGIKUT SLOT -->
     <div id="modulJadual" class="card hidden">
-        <h2>Jadual Perjumpaan Mingguan (Bil 1 - 12)</h2>
+        <h2>Jadual Perjumpaan Mingguan Kokurikulum (Mengikut Slot Masa Rasmi)</h2>
         <form onsubmit="simpanMaster('jadual', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                <div class="form-group"><label>Siri:</label><input type="text" id="jBil" placeholder="Bil 1" required></div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
+                <div class="form-group"><label>Minggu:</label><input type="text" id="jMinggu" placeholder="Cth: M2 / M3" required></div>
                 <div class="form-group"><label>Tarikh:</label><input type="date" id="jTarikh" required></div>
+                <div class="form-group"><label>Hari:</label><input type="text" id="jHari" value="RABU" readonly style="background:#f1f5f9;"></div>
             </div>
-            <div class="form-group"><label>Masa:</label><input type="text" id="jMasa" value="11:40 am - 12:40 pm" required></div>
-            <button type="submit">Tambah Jadual</button>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                <div class="form-group">
+                    <label>Jenis Perjumpaan / Slot Unit:</label>
+                    <select id="jJenisUnit">
+                        <option value="UBB (Unit Beruniform)">UBB (Unit Beruniform)</option>
+                        <option value="UKP (Sukan & Permainan)">UKP (Sukan & Permainan)</option>
+                        <option value="USP (Persatuan / Kelab)">USP (Persatuan / Kelab)</option>
+                        <option value="Perhimpunan / Serentak (UBB/UKP/USP)">Perhimpunan / Serentak (UBB/UKP/USP)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Siri Perjumpaan (Cth: UBB 1 / UBB 2):</label>
+                    <input type="text" id="jSiriUnit" placeholder="Cth: UBB 1 / Mesyuarat Agung" required>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                <div class="form-group"><label>Slot Masa:</label><input type="text" id="jMasa" placeholder="Cth: 11:40 AM - 12:40 PM" required></div>
+                <div class="form-group"><label>Catatan / Perkara:</label><input type="text" id="jCatatan" placeholder="Cth: Perlantikan AJK"></div>
+            </div>
+            <button type="submit">Tambah Jadual Slot Perjumpaan</button>
         </form>
         <table>
-            <thead><tr><th>Siri</th><th>Tarikh</th><th>Masa</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Minggu</th>
+                    <th>Tarikh</th>
+                    <th>Hari</th>
+                    <th>Slot / Unit</th>
+                    <th>Siri / Aktiviti</th>
+                    <th>Masa</th>
+                    <th style="text-align:center;">Tindakan</th>
+                </tr>
+            </thead>
             <tbody id="tabel_jadual"></tbody>
         </table>
     </div>
@@ -279,7 +307,7 @@
         localStorage.setItem('db_kelab', JSON.stringify([{ nama: "Kelab Catur" }, { nama: "Pengakap" }]));
         localStorage.setItem('db_guru', JSON.stringify([{ nama: "Kylie N", penyelaras: "Penyelaras Karnival", jurulatih: "Ketua Jurulatih Olahraga", ubb: "Pengakap", jawatanUBB: "Ketua Guru Penasihat", ukp: "Kelab Catur", jawatanUKP: "Guru Penasihat", usp: "Persatuan BM", jawatanUSP: "Guru Penasihat" }]));
         localStorage.setItem('db_takwim', JSON.stringify([{ peristiwa: "Mesyuarat Agung", mula: "2026-01-21", akhir: "2026-01-21" }]));
-        localStorage.setItem('db_jadual', JSON.stringify([{ bil: "Bil 1", tarikh: "2026-01-21", masa: "11:40 am - 12:40 pm" }]));
+        localStorage.setItem('db_jadual', JSON.stringify([{ minggu: "M2", tarikh: "2026-01-21", hari: "RABU", jenis: "Perhimpunan / Serentak (UBB/UKP/USP)", siri: "UBB 1 / UKP 1 / USP 1", masa: "11:40 AM - 1:40 PM", catatan: "Mesyuarat Agung" }]));
     }
 
     function show(id, event) {
@@ -349,7 +377,15 @@
         } else if(jenis === 'takwim') {
             dataBaru = { peristiwa: document.getElementById('takwimPeristiwa').value, mula: document.getElementById('takwimMula').value, akhir: document.getElementById('takwimAkhir').value };
         } else if(jenis === 'jadual') {
-            dataBaru = { bil: document.getElementById('jBil').value, tarikh: document.getElementById('jTarikh').value, masa: document.getElementById('jMasa').value };
+            dataBaru = { 
+                minggu: document.getElementById('jMinggu').value, 
+                tarikh: document.getElementById('jTarikh').value, 
+                hari: document.getElementById('jHari').value,
+                jenis: document.getElementById('jJenisUnit').value,
+                siri: document.getElementById('jSiriUnit').value,
+                masa: document.getElementById('jMasa').value,
+                catatan: document.getElementById('jCatatan').value
+            };
         }
         let db = JSON.parse(localStorage.getItem('db_' + jenis)) || [];
         db.push(dataBaru);
@@ -377,7 +413,7 @@
             } else if(jenis === 'takwim') {
                 html += `<td><b>${item.peristiwa}</b></td><td>${item.mula} hingga ${item.akhir}</td>`;
             } else if(jenis === 'jadual') {
-                html += `<td><b>${item.bil}</b></td><td>${item.tarikh}</td><td>${item.masa}</td>`;
+                html += `<td><b>${item.minggu}</b></td><td>${item.tarikh}</td><td>${item.hari}</td><td><span class="badge">${item.jenis}</span></td><td><b>${item.siri}</b><br><small>${item.catatan || ''}</small></td><td>${item.masa}</td>`;
             }
             html += `<td style="text-align:center;"><button class="btn-delete" onclick="padamData('${jenis}', ${index})">🗑️ Padam</button></td></tr>`;
         });
