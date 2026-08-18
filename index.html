@@ -32,7 +32,7 @@
         input[type="text"], select, textarea, input[type="date"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #fff; }
         
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; }
-        th, td { padding: 8px; border: 1px solid #cbd5e1; text-align: left; }
+        th, td { padding: 8px; border: 1px solid #cbd5e1; text-align: left; vertical-align: top; }
         th { background: #f1f5f9; color: #1e293b; text-align: center; }
 
         button { background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; padding: 10px 15px; }
@@ -128,14 +128,64 @@
 
     <!-- 3. MASTER GURU -->
     <div id="modulGuru" class="card hidden">
-        <h2>Tetapan Induk — Master Guru & Jawatan</h2>
+        <h2>Tetapan Induk — Master Guru & Tugas Khas</h2>
         <form onsubmit="simpanMaster('guru', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
             <div class="form-group"><label>Nama Guru:</label><input type="text" id="gNama" placeholder="Cth: Muhammad Adam Chong" required></div>
-            <div class="form-group"><label>Jawatan / Tugas Khas:</label><input type="text" id="gJawatan" placeholder="Cth: Guru Penasihat / Setiausaha Kokurikulum" required></div>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                <div class="form-group">
+                    <label>Jawatan Peringkat Sekolah:</label>
+                    <select id="gJawatanSekolah">
+                        <option value="Guru Penasihat Biasa">Guru Penasihat Biasa</option>
+                        <option value="SU Sukan">SU Sukan</option>
+                        <option value="SU Kokum">SU Kokum</option>
+                        <option value="Penyelaras UBB">Penyelaras UBB</option>
+                        <option value="Penyelaras UKP">Penyelaras UKP</option>
+                        <option value="Penyelaras USP">Penyelaras USP</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Bidang Kejurulatihan:</label>
+                    <input type="text" id="gKejurulatihan" placeholder="Cth: Jurulatih Olahraga">
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
+                <div class="form-group"><label>Unit UBB Dipegang:</label><input type="text" id="gUBB" placeholder="Cth: Pengakap"></div>
+                <div class="form-group"><label>Unit UKP Dipegang:</label><input type="text" id="gUKP" placeholder="Cth: Bola Sepak"></div>
+                <div class="form-group"><label>Unit USP Dipegang:</label><input type="text" id="gUSP" placeholder="Cth: Kelab Catur"></div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                <div class="form-group">
+                    <label>Rumah Sukan:</label>
+                    <select id="gRumahSukan">
+                        <option value="-">Tiada / Bukan Ahli Rumah Sukan</option>
+                        <option value="Rumah Merah">Rumah Merah</option>
+                        <option value="Rumah Biru">Rumah Biru</option>
+                        <option value="Rumah Hijau">Rumah Hijau</option>
+                        <option value="Rumah Kuning">Rumah Kuning</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Jawatan dalam Rumah Sukan:</label>
+                    <input type="text" id="gJawatanRumah" placeholder="Cth: Ketua Penasihat / Pengurus">
+                </div>
+            </div>
+
             <button type="submit">Simpan Guru</button>
         </form>
         <table>
-            <thead><tr><th>Nama Guru</th><th>Jawatan / Tugas Khas</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Nama Guru</th>
+                    <th>Jawatan Sekolah</th>
+                    <th>Unit Pegangan (UBB / UKP / USP)</th>
+                    <th>Kejurulatihan</th>
+                    <th>Rumah Sukan & Jawatan</th>
+                    <th style="text-align:center;">Tindakan</th>
+                </tr>
+            </thead>
             <tbody id="tabel_guru"></tbody>
         </table>
     </div>
@@ -317,7 +367,15 @@
     <div id="analisisTugas" class="card hidden">
         <h2>Analisis Agihan Tugas Guru</h2>
         <table>
-            <thead><tr><th>Nama Guru</th><th>Jawatan / Tugas Khas</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Nama Guru</th>
+                    <th>Jawatan Sekolah</th>
+                    <th>Unit Pegangan</th>
+                    <th>Kejurulatihan</th>
+                    <th>Rumah Sukan & Jawatan</th>
+                </tr>
+            </thead>
             <tbody id="tabel_analisis_tugas"></tbody>
         </table>
     </div>
@@ -332,7 +390,16 @@
             { nama: "Pengakap", kategori: "UNIT BERUNIFORM (UBB)" },
             { nama: "Kelab Catur", kategori: "UNIT SUKAN DAN PERMAINAN (UKP)" }
         ]));
-        localStorage.setItem('db_guru', JSON.stringify([{ nama: "Muhammad Adam Chong", jawatan: "Guru Penasihat" }]));
+        localStorage.setItem('db_guru', JSON.stringify([{ 
+            nama: "Muhammad Adam Chong", 
+            jawatanSekolah: "SU Sukan", 
+            kejurulatihan: "Jurulatih Olahraga", 
+            ubb: "Pengakap", 
+            ukp: "Bola Sepak", 
+            usp: "-", 
+            rumahSukan: "Rumah Merah", 
+            jawatanRumah: "Ketua Rumah Sukan" 
+        }]));
         localStorage.setItem('db_takwim', JSON.stringify([{ peristiwa: "Mesyuarat Agung", mula: "2026-01-21", akhir: "2026-01-21" }]));
         localStorage.setItem('db_jadual', JSON.stringify([
             { bil: "BIL 1", tarikh: "2026-01-21", aktiviti: "MESYUARAT AGUNG", guru: "MUHAMMAD ADAM CHONG" },
@@ -390,7 +457,16 @@
         } else if(jenis === 'kelab') {
             dataBaru = { nama: document.getElementById('kNama').value, kategori: document.getElementById('kKategori').value };
         } else if(jenis === 'guru') {
-            dataBaru = { nama: document.getElementById('gNama').value, jawatan: document.getElementById('gJawatan').value };
+            dataBaru = { 
+                nama: document.getElementById('gNama').value, 
+                jawatanSekolah: document.getElementById('gJawatanSekolah').value,
+                kejurulatihan: document.getElementById('gKejurulatihan').value,
+                ubb: document.getElementById('gUBB').value,
+                ukp: document.getElementById('gUKP').value,
+                usp: document.getElementById('gUSP').value,
+                rumahSukan: document.getElementById('gRumahSukan').value,
+                jawatanRumah: document.getElementById('gJawatanRumah').value
+            };
         } else if(jenis === 'takwim') {
             dataBaru = { peristiwa: document.getElementById('takwimPeristiwa').value, mula: document.getElementById('takwimMula').value, akhir: document.getElementById('takwimAkhir').value };
         } else if(jenis === 'jadual') {
@@ -414,7 +490,13 @@
             } else if(jenis === 'kelab') {
                 html += `<td><b>${item.nama}</b></td><td><span class="badge">${item.kategori}</span></td>`;
             } else if(jenis === 'guru') {
-                html += `<td><b>${item.nama}</b></td><td>${item.jawatan || '-'}</td>`;
+                html += `
+                    <td><b>${item.nama}</b></td>
+                    <td><span class="badge" style="background:#e0f2fe; color:#0369a1;">${item.jawatanSekolah || '-'}</span></td>
+                    <td><small><b>UBB:</b> ${item.ubb || '-'}<br><b>UKP:</b> ${item.ukp || '-'}<br><b>USP:</b> ${item.usp || '-'}</small></td>
+                    <td>${item.kejurulatihan || '-'}</td>
+                    <td><b>${item.rumahSukan || '-'}</b><br><small>${item.jawatanRumah || '-'}</small></td>
+                `;
             } else if(jenis === 'takwim') {
                 html += `<td><b>${item.peristiwa}</b></td><td>${item.mula} hingga ${item.akhir}</td>`;
             } else if(jenis === 'jadual') {
@@ -574,7 +656,13 @@
         let db = JSON.parse(localStorage.getItem('db_guru')) || [];
         let html = "";
         db.forEach(g => { 
-            html += `<tr><td><b>${g.nama}</b></td><td>${g.jawatan || '-'}</td></tr>`; 
+            html += `<tr>
+                <td><b>${g.nama}</b></td>
+                <td><span class="badge" style="background:#e0f2fe; color:#0369a1;">${g.jawatanSekolah || '-'}</span></td>
+                <td><small><b>UBB:</b> ${g.ubb || '-'}<br><b>UKP:</b> ${g.ukp || '-'}<br><b>USP:</b> ${g.usp || '-'}</small></td>
+                <td>${g.kejurulatihan || '-'}</td>
+                <td><b>${g.rumahSukan || '-'}</b><br><small>${g.jawatanRumah || '-'}</small></td>
+            </tr>`; 
         });
         let el = document.getElementById('tabel_analisis_tugas');
         if(el) el.innerHTML = html;
