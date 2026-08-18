@@ -2,8 +2,7 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Sistem Kokurikulum - Modul Excel Upload</title>
-    <!-- Masukkan Pustaka SheetJS untuk baca Excel -->
+    <title>Sistem Kokurikulum - SSOT 4 Modul</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         :root {
@@ -15,9 +14,10 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; background: var(--bg); color: var(--text); }
         
         /* Sidebar */
-        .sidebar { width: 260px; background: var(--sidebar); color: #cbd5e1; height: 100vh; position: fixed; padding-top: 20px; box-sizing: border-box; }
-        .sidebar h3 { text-align: center; color: #f8fafc; margin-bottom: 30px; letter-spacing: 1px; }
-        .menu-item { padding: 15px 25px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-size: 14px; }
+        .sidebar { width: 260px; background: var(--sidebar); color: #cbd5e1; height: 100vh; position: fixed; padding-top: 20px; box-sizing: border-box; overflow-y: auto; }
+        .sidebar h3 { text-align: center; color: #f8fafc; margin-bottom: 25px; letter-spacing: 1px; font-size: 16px; }
+        .menu-category { font-size: 11px; text-transform: uppercase; color: #94a3b8; padding: 10px 25px 5px; font-weight: bold; }
+        .menu-item { padding: 12px 25px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-size: 14px; }
         .menu-item:hover { background: #334155; color: white; }
         .menu-item.active { background: var(--primary); color: white; font-weight: 600; }
 
@@ -29,8 +29,7 @@
         
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #475569; }
-        input[type="text"], select, textarea, input[type="file"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #fff; }
-        input[readonly] { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
+        input[type="text"], select, textarea, input[type="date"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #fff; }
         
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
         th, td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: left; }
@@ -39,82 +38,119 @@
         button { background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; padding: 10px 15px; }
         button:hover { background: #1d4ed8; }
         
-        .upload-box { background: #eff6ff; border: 2px dashed #3b82f6; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
+        .btn-edit { background: #eab308; color: white; padding: 5px 10px; font-size: 12px; }
+        .btn-delete { background: #ef4444; color: white; padding: 5px 10px; font-size: 12px; }
+        
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <h3>KOKUM 2026</h3>
-    <div class="menu-item active" onclick="show('tetapanInduk', event)">⚙️ Tetapan Induk (Admin)</div>
-    <div class="menu-item" onclick="show('laporanKelab', event)">📝 Laporan & AJK Kelab</div>
+    <h3>ADMIN KOKUM 2026</h3>
+    
+    <div class="menu-category">Modul Tetapan Induk</div>
+    <div class="menu-item active" onclick="show('modulMurid', event)">👥 Master Murid</div>
+    <div class="menu-item" onclick="show('modulKelab', event)">🏢 Master Kelab / Unit</div>
+    <div class="menu-item" onclick="show('modulGuru', event)">👨‍🏫 Master Guru Penasihat</div>
+    <div class="menu-item" onclick="show('modulTakwim', event)">📅 Takwim & Perjumpaan</div>
+    
+    <div class="menu-category">Modul Operasi</div>
+    <div class="menu-item" onclick="show('laporanKelab', event)">📝 Paparan Borang Guru</div>
 </div>
 
 <div class="content">
-    <!-- 1. TETAPAN INDUK (ADMIN + EXCEL UPLOAD) -->
-    <div id="tetapanInduk" class="card">
+    
+    <!-- 1. MASTER MURID -->
+    <div id="modulMurid" class="card">
         <h2>Tetapan Induk — Pangkalan Data Murid</h2>
-        
-        <!-- Kotak Upload Excel -->
-        <div class="upload-box">
-            <h3 style="margin:0 0 10px 0; color:#1d4ed8; font-size:16px;">📂 Muat Naik Fail Excel Senarai Murid</h3>
-            <p style="font-size:13px; color:#64748b; margin-bottom:15px;">Format Lajur Excel yang diperlukan: <b>Nama, Kelas, Jantina, UBB, UKP, USP</b></p>
-            <input type="file" id="excelFile" accept=".xlsx, .xls, .csv" onchange="prosesExcel(event)" style="background:white; display:inline-block; width:auto;">
-        </div>
-
-        <h3 style="margin-top:30px; font-size:16px;">Senarai Master Murid Dalam Sistem:</h3>
-        <button onclick="resetData()" style="background:#ef4444; margin-bottom:10px; font-size:12px; padding:6px 12px;">Reset Data</button>
+        <form onsubmit="simpanMaster('murid', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
+            <input type="hidden" id="editIndex_murid" value="-1">
+            <div class="form-group">
+                <label>Nama Penuh Murid:</label>
+                <input type="text" id="mNama" required>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                <div class="form-group"><label>Kelas:</label><input type="text" id="mKelas" placeholder="Cth: 6 Terbilang" required></div>
+                <div class="form-group"><label>Jantina:</label><select id="mJantina"><option value="L">L</option><option value="P">P</option></select></div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
+                <div class="form-group"><label>UBB:</label><input type="text" id="mUBB" value="Pengakap"></div>
+                <div class="form-group"><label>UKP:</label><input type="text" id="mUKP" value="Kelab Catur"></div>
+                <div class="form-group"><label>USP:</label><input type="text" id="mUSP" value="Persatuan BM"></div>
+            </div>
+            <button type="submit">Simpan Rekod Murid</button>
+        </form>
         <table>
-            <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>Kelas</th>
-                    <th>Jantina</th>
-                    <th>UBB / UKP / USP</th>
-                </tr>
-            </thead>
-            <tbody id="tabelMasterMurid">
-                <!-- Data dimasukkan secara dinamik -->
-            </tbody>
+            <thead><tr><th>Nama & Kelas</th><th>Jantina</th><th>Penempatan Kokurikulum</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <tbody id="tabel_murid"></tbody>
         </table>
     </div>
 
-    <!-- 2. LAPORAN & JAWATAN MENGIKUT KELAB -->
+    <!-- 2. MASTER KELAB -->
+    <div id="modulKelab" class="card hidden">
+        <h2>Tetapan Induk — Senarai Kelab / Unit</h2>
+        <form onsubmit="simpanMaster('kelab', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
+            <input type="hidden" id="editIndex_kelab" value="-1">
+            <div class="form-group"><label>Nama Kelab / Unit Sukan / Beruniform:</label><input type="text" id="kNama" placeholder="Cth: Kelab Catur" required></div>
+            <button type="submit">Tambah Kelab</button>
+        </form>
+        <table>
+            <thead><tr><th>Nama Kelab / Unit</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <tbody id="tabel_kelab"></tbody>
+        </table>
+    </div>
+
+    <!-- 3. MASTER GURU -->
+    <div id="modulGuru" class="card hidden">
+        <h2>Tetapan Induk — Senarai Guru Penasihat</h2>
+        <form onsubmit="simpanMaster('guru', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
+            <input type="hidden" id="editIndex_guru" value="-1">
+            <div class="form-group"><label>Nama Guru:</label><input type="text" id="gNama" placeholder="Cth: Cikgu Florynah Bakar" required></div>
+            <div class="form-group"><label>Peranan:</label><select id="gPeranan"><option value="Ketua Guru Penasihat">Ketua Guru Penasihat</option><option value="Guru Penasihat">Guru Penasihat</option></select></div>
+            <button type="submit">Tambah Guru</button>
+        </form>
+        <table>
+            <thead><tr><th>Nama Guru</th><th>Peranan</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <tbody id="tabel_guru"></tbody>
+        </table>
+    </div>
+
+    <!-- 4. TAKWIM & PERJUMPAAN -->
+    <div id="modulTakwim" class="card hidden">
+        <h2>Tetapan Induk — Takwim & Jadual Perjumpaan (Bil 1 - 12)</h2>
+        <form onsubmit="simpanMaster('takwim', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
+            <input type="hidden" id="editIndex_takwim" value="-1">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                <div class="form-group"><label>Siri Perjumpaan:</label><input type="text" id="tBil" placeholder="Cth: Bil 1" required></div>
+                <div class="form-group"><label>Tarikh Rasmi:</label><input type="date" id="tTarikh" required></div>
+            </div>
+            <button type="submit">Tambah Takwim</button>
+        </form>
+        <table>
+            <thead><tr><th>Siri Perjumpaan</th><th>Tarikh</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <tbody id="tabel_takwim"></tbody>
+        </table>
+    </div>
+
+    <!-- 5. BORANG GURU -->
     <div id="laporanKelab" class="card hidden">
-        <h2 id="tajukKelabView">Laporan & AJK Kelab</h2>
-        <div class="form-group">
-            <label>Unit Semasa (Dibaca dari Ekor URL):</label>
-            <input type="text" id="unitDisplay" readonly style="font-weight:bold; color:var(--primary);">
-        </div>
-
-        <h3 style="font-size:15px; margin-top:20px;">Tetapan Jawatan AJK & Kehadiran Ahli</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th width="40%">Nama Murid (Kelas)</th>
-                    <th width="30%">Jawatan dalam Kelab</th>
-                    <th width="30%" style="text-align:center;">Status Hadir (Bil 1)</th>
-                </tr>
-            </thead>
-            <tbody id="tabelAhliKelab">
-                <!-- Ahli kelab ditapis automatik -->
-            </tbody>
-        </table>
-
-        <button style="margin-top:20px;" onclick="simpanLaporanKelab()">Hantar Laporan Rasmi</button>
+        <h2>Paparan Borang Guru (Mengikut Ekor URL Kelab)</h2>
+        <div class="form-group"><label>Unit Semasa:</label><input type="text" id="unitDisplay" readonly style="font-weight:bold; color:var(--primary);"></div>
+        <p>Sistem akan menarik senarai ahli dan guru bertugas secara automatik dari tetapan induk di atas.</p>
     </div>
+
 </div>
 
 <script>
-    // Data simulasi awal
-    if (!localStorage.getItem('masterMurid')) {
-        const defaultData = [
-            { nama: "Mohamad Aznil Bin Noorzain", kelas: "6 Terbilang", jantina: "L", ubb: "Pengakap", ukp: "Kelab Catur", usp: "Persatuan BM" },
-            { nama: "Anissah Suraya Binti Zamal", kelas: "6 Terbilang", jantina: "P", ubb: "PBSM", ukp: "Kelab Catur", usp: "Persatuan BI" },
-            { nama: "Ifti Adirah Binti Herman", kelas: "4 Cemerlang", jantina: "P", ubb: "Pengakap", ukp: "Kelab Bola Sepak", usp: "Persatuan Sains" }
-        ];
-        localStorage.setItem('masterMurid', JSON.stringify(defaultData));
+    // Data Default Simulasi
+    if (!localStorage.getItem('db_murid')) {
+        localStorage.setItem('db_murid', JSON.stringify([
+            { nama: "Mohamad Aznil", kelas: "6 Terbilang", jantina: "L", ubb: "Pengakap", ukp: "Kelab Catur", usp: "Persatuan BM" }
+        ]));
+        localStorage.setItem('db_kelab', JSON.stringify([{ nama: "Kelab Catur" }, { nama: "Pengakap" }]));
+        localStorage.setItem('db_guru', JSON.stringify([{ nama: "Florynah Bakar", peranan: "Ketua Guru Penasihat" }]));
+        localStorage.setItem('db_takwim', JSON.stringify([{ bil: "Bil 1", tarikh: "2026-01-21" }]));
     }
 
     function show(id, event) {
@@ -122,6 +158,7 @@
         document.getElementById(id).classList.remove('hidden');
         document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
         if(event) event.currentTarget.classList.add('active');
+        muatSemuaData();
     }
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -129,111 +166,70 @@
 
     window.onload = function() {
         document.getElementById('unitDisplay').value = kelabAktif;
-        document.getElementById('tajukKelabView').innerText = "Pengurusan — " + kelabAktif;
-        muatTurunDataMaster();
-        muatTurunAhliKelab();
+        muatSemuaData();
     }
 
-    // Fungsi Baca Fail Excel Masuk ke LocalStorage
-    function prosesExcel(e) {
-        const file = e.target.files[0];
-        if (!file) return;
+    function muatSemuaData() {
+        muatTabel('murid');
+        muatTabel('kelab');
+        muatTabel('guru');
+        muatTabel('takwim');
+    }
 
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, {type: 'array'});
-            
-            // Ambil sheet pertama
-            const firstSheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[firstSheetName];
-            
-            // Tukar ke JSON
-            const jsonRaws = XLSX.utils.sheet_to_json(worksheet);
-            
-            if(jsonRaws.length === 0) {
-                alert("Fail Excel kosong atau format tidak sah.");
-                return;
+    function simpanMaster(jenis, e) {
+        e.preventDefault();
+        let index = document.getElementById('editIndex_' + jenis).value;
+        let dataBaru = {};
+
+        if(jenis === 'murid') {
+            dataBaru = { nama: document.getElementById('mNama').value, kelas: document.getElementById('mKelas').value, jantina: document.getElementById('mJantina').value, ubb: document.getElementById('mUBB').value, ukp: document.getElementById('mUKP').value, usp: document.getElementById('mUSP').value };
+        } else if(jenis === 'kelab') {
+            dataBaru = { nama: document.getElementById('kNama').value };
+        } else if(jenis === 'guru') {
+            dataBaru = { nama: document.getElementById('gNama').value, peranan: document.getElementById('gPeranan').value };
+        } else if(jenis === 'takwim') {
+            dataBaru = { bil: document.getElementById('tBil').value, tarikh: document.getElementById('tTarikh').value };
+        }
+
+        let db = JSON.parse(localStorage.getItem('db_' + jenis)) || [];
+        if(index === "-1") { db.push(dataBaru); } else { db[index] = dataBaru; }
+        
+        localStorage.setItem('db_' + jenis, JSON.stringify(db));
+        e.target.reset();
+        document.getElementById('editIndex_' + jenis).value = "-1";
+        muatTabel(jenis);
+        alert("Berjaya disimpan!");
+    }
+
+    function muatTabel(jenis) {
+        let db = JSON.parse(localStorage.getItem('db_' + jenis)) || [];
+        let html = "";
+        db.forEach((item, index) => {
+            html += `<tr>`;
+            if(jenis === 'murid') {
+                html += `<td><b>${item.nama}</b><br><small>${item.kelas}</small></td><td>${item.jantina}</td><td><small>UBB:${item.ubb} | UKP:${item.ukp}</small></td>`;
+            } else if(jenis === 'kelab') {
+                html += `<td><b>${item.nama}</b></td>`;
+            } else if(jenis === 'guru') {
+                html += `<td><b>${item.nama}</b></td><td>${item.peranan}</td>`;
+            } else if(jenis === 'takwim') {
+                html += `<td><b>${item.bil}</b></td><td>${item.tarikh}</td>`;
             }
-
-            // Petakan lajur Excel ke sistem kita
-            let dataMaster = JSON.parse(localStorage.getItem('masterMurid')) || [];
-            
-            jsonRaws.forEach(row => {
-                // Sesuaikan nama kolum Excel anda di sini (cth: Nama, Kelas, Jantina, UBB, UKP, USP)
-                let muridBaru = {
-                    nama: row['Nama'] || row['NAMA'] || 'Tanpa Nama',
-                    kelas: row['Kelas'] || row['KELAS'] || '-',
-                    jantina: row['Jantina'] || row['JANTINA'] || 'L',
-                    ubb: row['UBB'] || '-',
-                    ukp: row['UKP'] || '-',
-                    usp: row['USP'] || '-'
-                };
-                dataMaster.push(muridBaru);
-            });
-
-            localStorage.setItem('masterMurid', JSON.stringify(dataMaster));
-            alert("Berjaya! " + jsonRaws.length + " rekod murid telah dimuat naik dari Excel.");
-            muatTurunDataMaster();
-            muatTurunAhliKelab();
-            document.getElementById('excelFile').value = ""; // Reset input
-        };
-        reader.readAsArrayBuffer(file);
-    }
-
-    function muatTurunDataMaster() {
-        let data = JSON.parse(localStorage.getItem('masterMurid')) || [];
-        let html = "";
-        data.forEach(m => {
-            html += `<tr>
-                <td>${m.nama}</td>
-                <td>${m.kelas}</td>
-                <td>${m.jantina}</td>
-                <td><small>UBB: ${m.ubb} | UKP: ${m.ukp} | USP: ${m.usp}</small></td>
-            </tr>`;
+            html += `<td style="text-align:center;">
+                <button class="btn-delete" onclick="padamData('${jenis}', ${index})">🗑️ Padam</button>
+            </td></tr>`;
         });
-        document.getElementById('tabelMasterMurid').innerHTML = html;
+        let el = document.getElementById('tabel_' + jenis);
+        if(el) el.innerHTML = html;
     }
 
-    function muatTurunAhliKelab() {
-        let data = JSON.parse(localStorage.getItem('masterMurid')) || [];
-        let ahliKelab = data.filter(m => m.ubb === kelabAktif || m.ukp === kelabAktif || m.usp === kelabAktif);
-
-        let html = "";
-        if(ahliKelab.length === 0) {
-            html = `<tr><td colspan="3" style="text-align:center; color:#94a3b8;">Tiada murid berdaftar di bawah ${kelabAktif}</td></tr>`;
-        } else {
-            ahliKelab.forEach(m => {
-                html += `<tr>
-                    <td><b>${m.nama}</b><br><small style="color:#64748b">${m.kelas} (${m.jantina})</small></td>
-                    <td>
-                        <select style="padding:6px; font-size:13px;">
-                            <option value="Ahli Biasa">Ahli Biasa</option>
-                            <option value="Pengerusi">Pengerusi</option>
-                            <option value="Naib Pengerusi">Naib Pengerusi</option>
-                            <option value="Setiausaha">Setiausaha</option>
-                            <option value="Bendahari">Bendahari</option>
-                            <option value="AJK">AJK</option>
-                        </select>
-                    </td>
-                    <td style="text-align:center;">
-                        <input type="checkbox" checked style="width:18px; height:18px; cursor:pointer;">
-                    </td>
-                </tr>`;
-            });
+    function padamData(jenis, index) {
+        if(confirm("Padam rekod ini?")) {
+            let db = JSON.parse(localStorage.getItem('db_' + jenis)) || [];
+            db.splice(index, 1);
+            localStorage.setItem('db_' + jenis, JSON.stringify(db));
+            muatTabel(jenis);
         }
-        document.getElementById('tabelAhliKelab').innerHTML = html;
-    }
-
-    function resetData() {
-        if(confirm("Padam semua data master?")) {
-            localStorage.removeItem('masterMurid');
-            location.reload();
-        }
-    }
-
-    function simpanLaporanKelab() {
-        alert("Simulasi Berjaya! Data laporan dan jawatan untuk " + kelabAktif + " disimpan.");
     }
 </script>
 </body>
