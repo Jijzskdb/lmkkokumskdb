@@ -267,6 +267,13 @@
     <!-- 5. JADUAL INDUK MATRIKS -->
     <div id="modulJadual" class="card hidden">
         <h2>Tetapan Jadual Induk Matriks Mingguan</h2>
+        
+        <div style="margin-bottom: 20px; background: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 8px;">
+            <h3 style="margin-top:0; color:#1e40af; font-size:15px;">⚡ Enjin Automasi SSOT</h3>
+            <p style="font-size:13px; color:#1e3a8a; margin-bottom: 10px;">Tekan butang di bawah untuk menyusun dan mengagihkan nama guru bertugas secara sama rata (giliran) merentasi semua minggu berdasarkan data unit yang didaftarkan dalam <b>Master Guru</b>.</p>
+            <button type="button" onclick="janaJadualAutomatikSSOT()" style="background:#f59e0b;">⚡ Jana Jadual Automatik (SSOT)</button>
+        </div>
+
         <form onsubmit="simpanMaster('jadual', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
                 <div class="form-group"><label>Minggu:</label><input type="text" id="jMinggu" placeholder="Cth: M2" required></div>
@@ -296,7 +303,7 @@
                 <div class="form-group"><label>Guru KBB:</label><input type="text" id="jKbb" placeholder="Nama Guru"></div>
             </div>
 
-            <button type="submit" style="margin-top: 10px;">Simpan Baris Jadual</button>
+            <button type="submit" id="btnSimpanJadual" style="margin-top: 10px;">Simpan Baris Jadual</button>
         </form>
         
         <div class="table-matrix-container">
@@ -489,6 +496,8 @@
 </div>
 
 <script>
+    let editIndexJadual = -1;
+
     if (!localStorage.getItem('db_tetapan')) {
         localStorage.setItem('db_tetapan', JSON.stringify({ tahun: "2026" }));
         localStorage.setItem('db_murid', JSON.stringify([{ 
@@ -539,6 +548,83 @@
                 infoUSP: "-", kc: "-", kbs: "-", kbb: "-" 
             }
         ]));
+    }
+
+    // FUNGSI SSOT: AGIHAN TUGAS GURU SECARA AUTOMATIK (GILIRAN / ROUND-ROBIN)
+    function janaJadualAutomatikSSOT() {
+        let guruList = JSON.parse(localStorage.getItem('db_guru')) || [];
+        let jadualList = JSON.parse(localStorage.getItem('db_jadual')) || [];
+
+        if (guruList.length === 0) {
+            alert("Sila daftar maklumat guru terlebih dahulu di modul Master Guru!");
+            return;
+        }
+        if (jadualList.length === 0) {
+            alert("Sila masukkan jadual perjumpaan/minggu terlebih dahulu di Jadual Induk Matriks!");
+            return;
+        }
+
+        const unitMapping = [
+            { key: 'pengakap', prop: 'ubb', nameCheck: 'PENGAKAP' },
+            { key: 'tkrs', prop: 'ubb', nameCheck: 'TKRS' },
+            { key: 'pai', prop: 'ukp', nameCheck: 'PAI' },
+            { key: 'pbi', prop: 'ukp', nameCheck: 'PBI' },
+            { key: 'kpa', prop: 'ukp', nameCheck: 'KPA' },
+            { key: 'kc', prop: 'usp', nameCheck: 'KC' },
+            { key: 'kbs', prop: 'usp', nameCheck: 'KBS' },
+            { key: 'kbb', prop: 'usp', nameCheck: 'KBB' }
+        ];
+
+        let unitTeachers = {};
+        unitMapping.forEach(u => {
+            unitTeachers[u.key] = guruList.filter(g => {
+                let val = (g[u.prop] || "").toUpperCase();
+                return val.includes(u.nameCheck);
+            });
+        });
+
+        // Agih sama rata mengikut baris minggu (giliran)
+        jadualList.forEach((row, rowIndex) => {
+            unitMapping.forEach(u => {
+                let teachers = unitTeachers[u.key];
+                if (teachers && teachers.length > 0) {
+                    let assignedTeacher = teachers[rowIndex % teachers.length];
+                    row[u.key] = assignedTeacher.nama;
+                } else {
+                    if (!row[u.key]) row[u.key] = '-';
+                }
+            });
+        });
+
+        localStorage.setItem('db_jadual', JSON.stringify(jadualList));
+        muatSemuaData();
+        alert("⚡ Jadual berjaya dijana secara automatik! Tugas telah diagihkan sama rata mengikut Master Guru (SSOT). Anda boleh klik butang Edit pada mana-mana baris jika perlu menukar guru yang bertugas di luar.");
+    }
+
+    function editJadual(index) {
+        let db = JSON.parse(localStorage.getItem('db_jadual')) || [];
+        let item = db[index];
+        if (!item) return;
+
+        document.getElementById('jMinggu').value = item.minggu || '';
+        document.getElementById('jTarikh').value = item.tarikh || '';
+        document.getElementById('jInfoUBB').value = item.infoUBB || '';
+        document.getElementById('jPengakap').value = item.pengakap || '';
+        document.getElementById('jTkrs').value = item.tkrs || '';
+        document.getElementById('jInfoUKP').value = item.infoUKP || '';
+        document.getElementById('jPai').value = item.pai || '';
+        document.getElementById('jPbi').value = item.pbi || '';
+        document.getElementById('jKpa').value = item.kpa || '';
+        document.getElementById('jInfoUSP').value = item.infoUSP || '';
+        document.getElementById('jKc').value = item.kc || '';
+        document.getElementById('jKbs').value = item.kbs || '';
+        document.getElementById('jKbb').value = item.kbb || '';
+
+        editIndexJadual = index;
+        let submitBtn = document.getElementById('btnSimpanJadual');
+        if (submitBtn) submitBtn.innerText = "Kemaskini Baris Jadual";
+        
+        document.getElementById('jMinggu').scrollIntoView({ behavior: 'smooth' });
     }
 
     function show(id, event) {
@@ -629,7 +715,22 @@
                 kbs: document.getElementById('jKbs').value || '-', 
                 kbb: document.getElementById('jKbb').value || '-'
             };
+            let db = JSON.parse(localStorage.getItem('db_jadual')) || [];
+            if (editIndexJadual >= 0) {
+                db[editIndexJadual] = dataBaru;
+                editIndexJadual = -1;
+                let submitBtn = document.getElementById('btnSimpanJadual');
+                if (submitBtn) submitBtn.innerText = "Simpan Baris Jadual";
+            } else {
+                db.push(dataBaru);
+            }
+            localStorage.setItem('db_jadual', JSON.stringify(db));
+            e.target.reset();
+            muatSemuaData();
+            alert("Berjaya disimpan!");
+            return;
         }
+
         let db = JSON.parse(localStorage.getItem('db_' + jenis)) || [];
         db.push(dataBaru);
         localStorage.setItem('db_' + jenis, JSON.stringify(db));
@@ -695,7 +796,10 @@
                 <td>${item.kc}</td>
                 <td>${item.kbs}</td>
                 <td>${item.kbb}</td>
-                <td style="text-align:center;"><button class="btn-delete" onclick="padamData('jadual', ${index})">🗑️ Padam</button></td>
+                <td style="text-align:center; white-space:nowrap;">
+                    <button type="button" onclick="editJadual(${index})" style="background:#2563eb; padding:5px 8px; font-size:10px; margin-right:3px;">✏️ Edit</button>
+                    <button type="button" class="btn-delete" onclick="padamData('jadual', ${index})">🗑️ Padam</button>
+                </td>
             </tr>`;
         });
         let el = document.getElementById('tabel_jadual');
