@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Sistem Kokurikulum - Dinamik Unit SSOT</title>
+    <title>Sistem Kokurikulum - Semakan Tugas Guru SSOT</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         :root {
@@ -47,6 +47,7 @@
 
         .report-container { background: #fff; border: 2px solid #000; padding: 25px; font-family: Arial, sans-serif; color: #000; margin-bottom: 20px; }
         .report-header { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 15px; line-height: 1.5; }
+        .notice-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; font-size: 13px; color: #92400e; margin-bottom: 15px; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -65,6 +66,7 @@
     <div class="menu-item" onclick="show('modulJadual', event)">🕒 Jadual Perjumpaan Rasmi</div>
     
     <div class="menu-category">Modul Pelaporan & RAT</div>
+    <div class="menu-item" onclick="show('jadualTugasGuru', event)">📌 Jadual Tugas & Semakan</div>
     <div class="menu-item" onclick="show('modulRAT', event)">📋 RAT (Rancangan Aktiviti)</div>
     <div class="menu-item" onclick="show('laporanMingguan', event)">📝 Laporan Mingguan (LMK)</div>
     <div class="menu-item" onclick="show('laporanTahunan', event)">📈 Laporan Tahunan (12 Siri)</div>
@@ -127,7 +129,7 @@
 
     <!-- 3. MASTER GURU -->
     <div id="modulGuru" class="card hidden">
-        <h2>Tetapan Induk — Master Guru, Penyelaras & Jurulatih</h2>
+        <h2>Tetapan Induk — Master Guru</h2>
         <form onsubmit="simpanMaster('guru', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
             <div class="form-group"><label>Nama Guru:</label><input type="text" id="gNama" placeholder="Cth: Muhammad Adam Chong" required></div>
             <button type="submit">Simpan Guru</button>
@@ -176,6 +178,25 @@
         </table>
     </div>
 
+    <!-- NEW: 5.1 JADUAL TUGAS & SEMAKAN GURU (Papar Semua 12 Siri) -->
+    <div id="jadualTugasGuru" class="card">
+        <h2>📌 Semakan Jadual Tugas & Siri Perjumpaan (Bil 1 - 12)</h2>
+        <div class="notice-box">
+            💡 <b>Panduan Guru:</b> Anda boleh menyemak senarai penuh tarikh dan aktiviti di bawah untuk mengetahui pada <b>Bil / Siri</b> berapa anda dipertanggungjawabkan sebagai Guru Bertugas. Selepas tahu, anda boleh pergi ke menu <b>Laporan Mingguan (LMK)</b> untuk mencetak borang mengikut Bil tersebut.
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:80px;">BIL</th>
+                    <th style="width:120px;">TARIKH</th>
+                    <th>AKTIVITI / TAJUK PERJUMPAAN</th>
+                    <th style="width:250px;">GURU BERTUGAS</th>
+                </tr>
+            </thead>
+            <tbody id="tabel_jadual_tugas_view"></tbody>
+        </table>
+    </div>
+
     <!-- 6. RAT (RANCANGAN AKTIVITI TAHUNAN) -->
     <div id="modulRAT" class="card hidden">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
@@ -202,7 +223,7 @@
         </div>
     </div>
 
-    <!-- 7. LAPORAN MINGGUAN (LMK) - DINAMIK UNIT -->
+    <!-- 7. LAPORAN MINGGUAN (LMK) -->
     <div id="laporanMingguan" class="card hidden">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
             <h2>Pilih Bil Perjumpaan & Unit untuk Cetak LMK</h2>
@@ -216,8 +237,8 @@
         <div class="report-container">
             <div class="report-header" id="lmkHeaderKategori">
                 PELAPORAN KOKURIKULUM<br>
-                LAPORAN MINGGUAN KOKURIKULUM<br>
-                UNIT SUKAN DAN PERMAINAN<br>
+                LAPORAN MINGGUAN KOKURIKULUM (LMK)<br>
+                UNIT KOKURIKULUM<br>
                 SK DOGOTON BANGGI KUDAT
             </div>
             <div style="display:grid; grid-template-columns: 150px 1fr; gap:5px; font-size:13px; margin-bottom:15px;">
@@ -239,7 +260,7 @@
                     <tr>
                         <td style="text-align:center;" id="lmk_tabel_bil">1</td>
                         <td id="lmk_tabel_unit_cell">PENGAKAP</td>
-                        <td id="lmk_tabel_aktiviti">MESYUARAT AGUNG (PELANTIKAN AJK)</td>
+                        <td id="lmk_tabel_aktiviti">MESYUARAT AGUNG</td>
                         <td id="lmk_tabel_guru">MUHAMMAD ADAM CHONG</td>
                     </tr>
                 </tbody>
@@ -305,7 +326,8 @@
         localStorage.setItem('db_takwim', JSON.stringify([{ peristiwa: "Mesyuarat Agung", mula: "2026-01-21", akhir: "2026-01-21" }]));
         localStorage.setItem('db_jadual', JSON.stringify([
             { bil: "BIL 1", tarikh: "2026-01-21", aktiviti: "MESYUARAT AGUNG", guru: "MUHAMMAD ADAM CHONG" },
-            { bil: "BIL 2", tarikh: "2026-01-28", aktiviti: "LATIHAN KAWAD", guru: "MUHAMMAD ADAM CHONG" }
+            { bil: "BIL 2", tarikh: "2026-01-28", aktiviti: "LATIHAN KAWAD", guru: "AHMAD SAFWAN" },
+            { bil: "BIL 3", tarikh: "2026-02-04", aktiviti: "MENYANYIKAN LAGU PENGAKAP", guru: "MUHAMMAD ADAM CHONG" }
         ]));
     }
 
@@ -342,6 +364,7 @@
         muatTabel('guru');
         muatTabel('takwim');
         muatTabel('jadual');
+        muatJadualTugasGuru();
         muatRAT();
         muatDropdownUnitDanBil();
         muatLaporanTahunan();
@@ -393,8 +416,21 @@
         if(el) el.innerHTML = html;
     }
 
+    function muatJadualTugasGuru() {
+        let db = JSON.parse(localStorage.getItem('db_jadual')) || [];
+        let html = "";
+        db.forEach(item => {
+            html += `<tr>
+                <td style="text-align:center;"><b>${item.bil}</b></td>
+                <td>${item.tarikh}</td>
+                <td>${item.aktiviti}</td>
+                <td><b>${item.guru}</b></td>
+            </tr>`;
+        });
+        document.getElementById('tabel_jadual_tugas_view').innerHTML = html;
+    }
+
     function muatDropdownUnitDanBil() {
-        // Dropdown Kelab
         let dbKelab = JSON.parse(localStorage.getItem('db_kelab')) || [];
         let selectKelab = document.getElementById('pilihKelabCetak');
         selectKelab.innerHTML = "";
@@ -405,14 +441,13 @@
             selectKelab.appendChild(opt);
         });
 
-        // Dropdown Bil
         let dbJadual = JSON.parse(localStorage.getItem('db_jadual')) || [];
         let selectBil = document.getElementById('pilihBilCetak');
         selectBil.innerHTML = "";
         dbJadual.forEach((item, index) => {
             let opt = document.createElement('option');
             opt.value = index;
-            opt.innerText = item.bil + " (" + item.tarikh + ")";
+            opt.innerText = item.bil + " (" + item.tarikh + " - " + item.guru + ")";
             selectBil.appendChild(opt);
         });
 
@@ -427,7 +462,6 @@
         let kelabObj = dbKelab.find(k => k.nama === kelabPilih);
         let kategoriUnit = kelabObj ? kelabObj.kategori : "UNIT KOKURIKULUM";
 
-        // Kemaskini Header LMK secara dinamik tanpa hardcoded
         document.getElementById('lmkHeaderKategori').innerHTML = `
             PELAPORAN KOKURIKULUM<br>
             LAPORAN MINGGUAN KOKURIKULUM (LMK)<br>
@@ -485,7 +519,7 @@
         let db = JSON.parse(localStorage.getItem('db_guru')) || [];
         let html = "";
         db.forEach(g => { html += `<tr><td><b>${g.nama}</b></td></tr>`; });
-        document.getElementById('tabel_analisis_tugas').innerHTML = html;
+        document.getElementById('analisisTugas').querySelector('tbody').innerHTML = html;
     }
 
     function padamData(jenis, index) {
