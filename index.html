@@ -70,7 +70,7 @@
     <div class="menu-item" onclick="show('jadualTugasGuru', event)">📌 Jadual Tugas & Semakan</div>
     <div class="menu-item" onclick="show('modulRAT', event)">📋 RAT (Rancangan Aktiviti)</div>
     <div class="menu-item" onclick="show('laporanMingguan', event)">📝 Laporan Mingguan (LMK)</div>
-    <div class="menu-item" onclick="show('laporanTahunan', event)">📈 Laporan Tahunan (12 Siri)</div>
+    <div class="menu-item" onclick="show('laporanTahunan', event)">📈 Laporan Tahunan (Siri)</div>
     <div class="menu-item" onclick="show('laporanPemantauan', event)">📊 Laporan Pemantauan</div>
     <div class="menu-item" onclick="show('analisisTugas', event)">📊 Analisis Agihan Tugas</div>
 </div>
@@ -98,11 +98,36 @@
                 <div class="form-group"><label>Kelas:</label><input type="text" id="mKelas" placeholder="Cth: 6 Terbilang" required></div>
                 <div class="form-group"><label>Jantina:</label><select id="mJantina"><option value="L">L</option><option value="P">P</option></select></div>
             </div>
-            <div class="form-group"><label>Unit / Kelab:</label><input type="text" id="mUBB" value="Pengakap"></div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
+                <div class="form-group"><label>Unit Beruniform (UBB):</label><input type="text" id="mUBB" placeholder="Cth: Pengakap"></div>
+                <div class="form-group"><label>Sukan & Permainan (UKP):</label><input type="text" id="mUKP" placeholder="Cth: Bola Sepak"></div>
+                <div class="form-group"><label>Persatuan / Kelab (USP):</label><input type="text" id="mUSP" placeholder="Cth: Kelab Catur"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Rumah Sukan:</label>
+                <select id="mRumahSukan">
+                    <option value="-">Tiada / Bukan Ahli Rumah Sukan</option>
+                    <option value="Rumah Merah">Rumah Merah</option>
+                    <option value="Rumah Biru">Rumah Biru</option>
+                    <option value="Rumah Hijau">Rumah Hijau</option>
+                    <option value="Rumah Kuning">Rumah Kuning</option>
+                </select>
+            </div>
+
             <button type="submit">Tambah Murid</button>
         </form>
         <table>
-            <thead><tr><th>Nama & Kelas</th><th>Jantina</th><th>Unit</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Nama & Kelas</th>
+                    <th>Jantina</th>
+                    <th>Unit Kokurikulum (UBB / UKP / USP)</th>
+                    <th>Rumah Sukan</th>
+                    <th style="text-align:center;">Tindakan</th>
+                </tr>
+            </thead>
             <tbody id="tabel_murid"></tbody>
         </table>
     </div>
@@ -466,7 +491,15 @@
 <script>
     if (!localStorage.getItem('db_tetapan')) {
         localStorage.setItem('db_tetapan', JSON.stringify({ tahun: "2026" }));
-        localStorage.setItem('db_murid', JSON.stringify([{ nama: "Mohamad Aznil", kelas: "6 Terbilang", ubb: "Pengakap" }]));
+        localStorage.setItem('db_murid', JSON.stringify([{ 
+            nama: "Mohamad Aznil", 
+            kelas: "6 Terbilang", 
+            jantina: "L", 
+            ubb: "Pengakap", 
+            ukp: "Bola Sepak", 
+            usp: "Kelab Catur", 
+            rumahSukan: "Rumah Merah" 
+        }]));
         localStorage.setItem('db_kelab', JSON.stringify([
             { nama: "Pengakap", kategori: "UNIT BERUNIFORM (UBB)" },
             { nama: "TKRS", kategori: "UNIT BERUNIFORM (UBB)" },
@@ -492,7 +525,6 @@
         }]));
         localStorage.setItem('db_takwim', JSON.stringify([{ peristiwa: "Mesyuarat Agung", mula: "2026-01-21", akhir: "2026-01-21" }]));
         
-        // Contoh Data Jadual Matriks Seiras Gambar Rujukan
         localStorage.setItem('db_jadual', JSON.stringify([
             { 
                 minggu: "M2", tarikh: "2026-01-21", 
@@ -505,12 +537,6 @@
                 infoUBB: "UBB 2", pengakap: "AHMAD SAFWAN BIN JAMALUDIN", tkrs: "FLORYNAH BAKAR", 
                 infoUKP: "UKP 2", pai: "AHMAD SAFWAN BIN JAMALUDIN", pbi: "RACHEL MANJIL", kpa: "FLORYNAH BAKAR", 
                 infoUSP: "-", kc: "-", kbs: "-", kbb: "-" 
-            },
-            { 
-                minggu: "M4", tarikh: "2026-04-04", 
-                infoUBB: "UBB 3", pengakap: "SHIRAH SYATIKAH BINTI RAMLEE", tkrs: "MOHD AZMIN BIN SUDIRMAN", 
-                infoUKP: "-", pai: "-", pbi: "-", kpa: "-", 
-                infoUSP: "USP 2", kc: "MUHAMMAD ADAM CHONG", kbs: "AHMAD SAFWAN BIN JAMALUDIN", kbb: "SHIRAH SYATIKAH BINTI RAMLEE" 
             }
         ]));
     }
@@ -560,7 +586,15 @@
         e.preventDefault();
         let dataBaru = {};
         if(jenis === 'murid') {
-            dataBaru = { nama: document.getElementById('mNama').value, kelas: document.getElementById('mKelas').value, ubb: document.getElementById('mUBB').value };
+            dataBaru = { 
+                nama: document.getElementById('mNama').value, 
+                kelas: document.getElementById('mKelas').value, 
+                jantina: document.getElementById('mJantina').value,
+                ubb: document.getElementById('mUBB').value || '-', 
+                ukp: document.getElementById('mUKP').value || '-', 
+                usp: document.getElementById('mUSP').value || '-', 
+                rumahSukan: document.getElementById('mRumahSukan').value || '-'
+            };
         } else if(jenis === 'kelab') {
             dataBaru = { nama: document.getElementById('kNama').value, kategori: document.getElementById('kKategori').value };
         } else if(jenis === 'guru') {
@@ -610,7 +644,16 @@
         db.forEach((item, index) => {
             html += `<tr>`;
             if(jenis === 'murid') {
-                html += `<td><b>${item.nama}</b><br><small>${item.kelas}</small></td><td>${item.jantina || '-'}</td><td>${item.ubb}</td>`;
+                html += `
+                    <td><b>${item.nama}</b><br><small>${item.kelas}</small></td>
+                    <td>${item.jantina || '-'}</td>
+                    <td><small>
+                        <b>UBB:</b> ${item.ubb || '-'}<br>
+                        <b>UKP:</b> ${item.ukp || '-'}<br>
+                        <b>USP:</b> ${item.usp || '-'}
+                    </small></td>
+                    <td><b>${item.rumahSukan || '-'}</b></td>
+                `;
             } else if(jenis === 'kelab') {
                 html += `<td><b>${item.nama}</b></td><td><span class="badge">${item.kategori}</span></td>`;
             } else if(jenis === 'guru') {
@@ -751,7 +794,6 @@
             document.getElementById('lmk_tabel_bil').innerText = item.minggu;
             document.getElementById('lmk_tabel_unit_cell').innerText = kelabPilih;
             
-            // Tentukan aktiviti & guru mengikut kelab yang dipilih
             let aktiviti = "-";
             let guru = "-";
             let kUpper = kelabPilih.toUpperCase();
