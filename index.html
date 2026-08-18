@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Sistem Kokurikulum - Modul Admin</title>
+    <title>Sistem Kokurikulum - Modul Integrasi</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -21,17 +21,20 @@
 
         /* Content Area */
         .content { margin-left: 260px; padding: 40px; width: calc(100% - 260px); box-sizing: border-box; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; margin-bottom: 20px; }
         
         h2 { margin-top: 0; color: #1e293b; font-size: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; }
         
-        /* Form Styling supaya tersusun ke bawah dengan kemas */
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #475569; }
-        input[type="text"], textarea, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #fff; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #475569; }
+        input[type="text"], select, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #fff; }
         input[readonly] { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
         
-        button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; transition: background 0.2s; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        th, td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: left; }
+        th { background: #f1f5f9; color: #1e293b; }
+
+        button { background: var(--primary); color: white; border: none; pading: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; padding: 10px 15px; }
         button:hover { background: #1d4ed8; }
         
         .hidden { display: none; }
@@ -41,41 +44,110 @@
 
 <div class="sidebar">
     <h3>KOKUM 2026</h3>
-    <div class="menu-item" onclick="show('dashboard', event)">🏠 Dashboard</div>
-    <div class="menu-item" onclick="show('pengurusan', event)">⚙️ Tetapan Induk</div>
-    <div class="menu-item active" onclick="show('laporan', event)">📝 Laporan Mingguan</div>
+    <div class="menu-item active" onclick="show('tetapanInduk', event)">⚙️ Tetapan Induk (Admin)</div>
+    <div class="menu-item" onclick="show('laporanKelab', event)">📝 Laporan & AJK Kelab</div>
 </div>
 
 <div class="content">
-    <div id="dashboard" class="card hidden">
-        <h2>Selamat Datang, Admin</h2>
-        <p>Sistem pengurusan kokurikulum sekolah anda dalam mod dry-run.</p>
-    </div>
-
-    <div id="pengurusan" class="card hidden">
-        <h2>Tetapan Induk (SSOT)</h2>
-        <p>Urus data master sekolah di sini.</p>
-        <button type="button">+ Tambah Murid Baru</button>
-    </div>
-
-    <div id="laporan" class="card">
-        <h2 id="laporanTitle">Laporan Mingguan</h2>
+    <!-- 1. TETAPAN INDUK (ADMIN TAMBAH MURID) -->
+    <div id="tetapanInduk" class="card">
+        <h2>Tetapan Induk — Pangkalan Data Murid</h2>
+        <p style="font-size:13px; color:#64748b;">Admin mendaftarkan maklumat asas murid serta penempatan unit kokurikulum mereka di sini.</p>
         
+        <form onsubmit="simpanMasterMurid(event)">
+            <div class="form-group">
+                <label>Nama Penuh Murid:</label>
+                <input type="text" id="mNama" placeholder="Cth: Mohamad Aznil Bin Noorzain" required>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label>Kelas:</label>
+                    <select id="mKelas">
+                        <option value="6 Terbilang">6 Terbilang</option>
+                        <option value="5 Gemilang">5 Gemilang</option>
+                        <option value="4 Cemerlang">4 Cemerlang</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Jantina:</label>
+                    <select id="mJantina">
+                        <option value="L">Lelaki (L)</option>
+                        <option value="P">Perempuan (P)</option>
+                    </select>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label>Unit Beruniform (UBB):</label>
+                    <input type="text" id="mUBB" value="Pengakap">
+                </div>
+                <div class="form-group">
+                    <label>Sukan / Permainan (UKP):</label>
+                    <input type="text" id="mUKP" value="Kelab Catur">
+                </div>
+                <div class="form-group">
+                    <label>Persatuan / Kelab (USP):</label>
+                    <input type="text" id="mUSP" value="Persatuan Bahasa Melayu">
+                </div>
+            </div>
+            <button type="submit">+ Tambah ke Pangkalan Master</button>
+        </form>
+
+        <h3 style="margin-top:30px; font-size:16px;">Senarai Master Murid Dalam Sistem:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Kelas</th>
+                    <th>Jantina</th>
+                    <th>UBB / UKP / USP</th>
+                </tr>
+            </thead>
+            <tbody id="tabelMasterMurid">
+                <!-- Data akan masuk sini secara dinamik -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 2. LAPORAN & JAWATAN MENGIKUT KELAB -->
+    <div id="laporanKelab" class="card hidden">
+        <h2 id="tajukKelabView">Laporan & AJK Kelab</h2>
         <div class="form-group">
-            <label>Unit Kokurikulum (Auto dari Ekor URL):</label>
-            <input type="text" id="unitDisplay" readonly>
+            <label>Unit Semasa (Dibaca dari Ekor URL):</label>
+            <input type="text" id="unitDisplay" readonly style="font-weight:bold; color:var(--primary);">
         </div>
 
-        <div class="form-group">
-            <label for="aktiviti">Aktiviti / Catatan Perjumpaan:</label>
-            <textarea id="aktiviti" rows="5" placeholder="Nyatakan aktiviti hari ini..."></textarea>
-        </div>
+        <h3 style="font-size:15px; margin-top:20px;">Tetapan Jawatan AJK & Kehadiran Ahli</h3>
+        <p style="font-size:13px; color:#64748b;">Senarai di bawah ditapis secara automatik untuk ahli yang menyertai unit ini. Guru boleh menetapkan jawatan mereka di sini.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th width="40%">Nama Murid (Kelas)</th>
+                    <th width="30%">Jawatan dalam Kelab</th>
+                    <th width="30%" style="text-align:center;">Status Hadir (Bil 1)</th>
+                </tr>
+            </thead>
+            <tbody id="tabelAhliKelab">
+                <!-- Ahli kelab akan dipaparkan di sini -->
+            </tbody>
+        </table>
 
-        <button type="button" onclick="simpanDryRun()">Simpan Laporan (Dry Run)</button>
+        <button style="margin-top:20px;" onclick="simpanLaporanKelab()">Hantar Laporan Rasmi</button>
     </div>
 </div>
 
 <script>
+    // Data simulasi awal jika localStorage kosong
+    if (!localStorage.getItem('masterMurid')) {
+        const defaultData = [
+            { nama: "Mohamad Aznil Bin Noorzain", kelas: "6 Terbilang", jantina: "L", ubb: "Pengakap", ukp: "Kelab Catur", usp: "Persatuan BM" },
+            { nama: "Anissah Suraya Binti Zamal", kelas: "6 Terbilang", jantina: "P", ubb: "PBSM", ukp: "Kelab Catur", usp: "Persatuan BI" },
+            { nama: "Ifti Adirah Binti Herman", kelas: "4 Cemerlang", jantina: "P", ubb: "Pengakap", ukp: "Kelab Bola Sepak", usp: "Persatuan Sains" }
+        ];
+        localStorage.setItem('masterMurid', JSON.stringify(defaultData));
+    }
+
     function show(id, event) {
         document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
@@ -83,16 +155,87 @@
         if(event) event.currentTarget.classList.add('active');
     }
 
-    // Baca ekor URL untuk tentukan kelab
+    // Tangkap Ekor URL & Paparkan Data
+    const urlParams = new URLSearchParams(window.location.search);
+    const kelabAktif = urlParams.get('kelab') || 'Kelab Catur'; // Default jika tiada ekor
+
     window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const kelab = urlParams.get('kelab') || 'Kelab Catur';
-        document.getElementById('unitDisplay').value = kelab;
-        document.getElementById('laporanTitle').innerText = "Laporan Mingguan — " + kelab;
+        document.getElementById('unitDisplay').value = kelabAktif;
+        document.getElementById('tajukKelabView').innerText = "Pengurusan — " + kelabAktif;
+        muatTurunDataMaster();
+        muatTurunAhliKelab();
     }
 
-    function simpanDryRun() {
-        alert("Simulasi Berjaya! Data untuk " + document.getElementById('unitDisplay').value + " disimpan sementara.");
+    // Fungsi Admin Tambah Murid
+    function simpanMasterMurid(e) {
+        e.preventDefault();
+        const muridBaru = {
+            nama: document.getElementById('mNama').value,
+            kelas: document.getElementById('mKelas').value,
+            jantina: document.getElementById('mJantina').value,
+            ubb: document.getElementById('mUBB').value,
+            ukp: document.getElementById('mUKP').value,
+            usp: document.getElementById('mUSP').value
+        };
+
+        let data = JSON.parse(localStorage.getItem('masterMurid')) || [];
+        data.push(muridBaru);
+        localStorage.setItem('masterMurid', JSON.stringify(data));
+
+        alert("Berjaya! Murid telah dimasukkan ke Tetapan Induk.");
+        e.target.reset();
+        muatTurunDataMaster();
+        muatTurunAhliKelab();
+    }
+
+    function muatTurunDataMaster() {
+        let data = JSON.parse(localStorage.getItem('masterMurid')) || [];
+        let html = "";
+        data.forEach(m => {
+            html += `<tr>
+                <td>${m.nama}</td>
+                <td>${m.kelas}</td>
+                <td>${m.jantina}</td>
+                <td><small>UBB: ${m.ubb} | UKP: ${m.ukp} | USP: ${m.usp}</small></td>
+            </tr>`;
+        });
+        document.getElementById('tabelMasterMurid').innerHTML = html;
+    }
+
+    // Tapis ahli mengikut kelab pada ekor URL
+    function muatTurunAhliKelab() {
+        let data = JSON.parse(localStorage.getItem('masterMurid')) || [];
+        // Tapis murid yang ada kaitan dengan kelabAktif sama ada di ubb, ukp, atau usp
+        let ahliKelab = data.filter(m => m.ubb === kelabAktif || m.ukp === kelabAktif || m.usp === kelabAktif);
+
+        let html = "";
+        if(ahliKelab.length === 0) {
+            html = `<tr><td colspan="3" style="text-align:center; color:#94a3b8;">Tiada murid berdaftar di bawah ${kelabAktif}</td></tr>`;
+        } else {
+            ahliKelab.forEach((m, index) => {
+                html += `<tr>
+                    <td><b>${m.nama}</b><br><small style="color:#64748b">${m.kelas} (${m.jantina})</small></td>
+                    <td>
+                        <select style="padding:6px; font-size:13px;">
+                            <option value="Ahli Biasa">Ahli Biasa</option>
+                            <option value="Pengerusi">Pengerusi</option>
+                            <option value="Naib Pengerusi">Naib Pengerusi</option>
+                            <option value="Setiausaha">Setiausaha</option>
+                            <option value="Bendahari">Bendahari</option>
+                            <option value="AJK">AJK</option>
+                        </select>
+                    </td>
+                    <td style="text-align:center;">
+                        <input type="checkbox" checked style="width:18px; height:18px; cursor:pointer;">
+                    </td>
+                </tr>`;
+            });
+        }
+        document.getElementById('tabelAhliKelab').innerHTML = html;
+    }
+
+    function simpanLaporanKelab() {
+        alert("Simulasi Berjaya! Kehadiran dan tetapan jawatan untuk " + kelabAktif + " telah dikemas kini.");
     }
 </script>
 </body>
