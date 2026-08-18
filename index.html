@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistem Kokurikulum - Dry Run</title>
+    <style>
+        body { font-family: sans-serif; display: flex; margin: 0; background: #f4f6f9; }
+        .sidebar { width: 250px; background: #2c3e50; color: white; height: 100vh; position: fixed; }
+        .menu-item { padding: 15px; cursor: pointer; border-bottom: 1px solid #3e5871; }
+        .menu-item:hover { background: #34495e; }
+        .content { margin-left: 250px; padding: 20px; width: 100%; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h3 style="text-align:center">MODUL ADMIN</h3>
+    <div class="menu-item" onclick="show('dashboard')">🏠 Dashboard</div>
+    <div class="menu-item" onclick="show('pengurusan')">⚙️ Pengurusan Master (Admin)</div>
+    <div class="menu-item" onclick="show('laporan')">📝 Laporan Mingguan</div>
+</div>
+
+<div class="content">
+    <!-- PENGURUSAN MASTER -->
+    <div id="pengurusan" class="card hidden">
+        <h2>Tetapan Induk (SSOT)</h2>
+        <p>Gunakan bahagian ini untuk tambah Kelab, Murid, Guru & Kalendar (Simulasi Simpanan)</p>
+        <button onclick="addData('murid')">+ Tambah Murid Baru</button>
+        <div id="muridList"></div>
+    </div>
+
+    <!-- LAPORAN MINGGUAN -->
+    <div id="laporan" class="card">
+        <h2 id="laporanTitle">Laporan Mingguan</h2>
+        <form onsubmit="simpanLaporan(event)">
+            <label>Unit:</label><input type="text" id="unitDisplay" readonly>
+            <label>Aktiviti:</label><textarea id="aktiviti"></textarea>
+            <button type="submit">Simpan Laporan (Dry Run)</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Logik Simulasi
+    function show(id) {
+        document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    window.onload = () => {
+        // Ambil ekor URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const kelab = urlParams.get('kelab') || 'Kelab Catur';
+        document.getElementById('unitDisplay').value = kelab;
+        document.getElementById('laporanTitle').innerText = "Laporan - " + kelab;
+    }
+
+    function simpanLaporan(e) {
+        e.preventDefault();
+        alert("Simulasi: Data laporan untuk " + document.getElementById('unitDisplay').value + " berjaya disimpan dalam localStorage!");
+    }
+</script>
+</body>
+</html>
