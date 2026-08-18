@@ -128,13 +128,14 @@
 
     <!-- 3. MASTER GURU -->
     <div id="modulGuru" class="card hidden">
-        <h2>Tetapan Induk — Master Guru</h2>
+        <h2>Tetapan Induk — Master Guru & Jawatan</h2>
         <form onsubmit="simpanMaster('guru', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
             <div class="form-group"><label>Nama Guru:</label><input type="text" id="gNama" placeholder="Cth: Muhammad Adam Chong" required></div>
+            <div class="form-group"><label>Jawatan / Tugas Khas:</label><input type="text" id="gJawatan" placeholder="Cth: Guru Penasihat / Setiausaha Kokurikulum" required></div>
             <button type="submit">Simpan Guru</button>
         </form>
         <table>
-            <thead><tr><th>Nama Guru</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <thead><tr><th>Nama Guru</th><th>Jawatan / Tugas Khas</th><th style="text-align:center;">Tindakan</th></tr></thead>
             <tbody id="tabel_guru"></tbody>
         </table>
     </div>
@@ -316,7 +317,7 @@
     <div id="analisisTugas" class="card hidden">
         <h2>Analisis Agihan Tugas Guru</h2>
         <table>
-            <thead><tr><th>Nama Guru</th></tr></thead>
+            <thead><tr><th>Nama Guru</th><th>Jawatan / Tugas Khas</th></tr></thead>
             <tbody id="tabel_analisis_tugas"></tbody>
         </table>
     </div>
@@ -331,7 +332,7 @@
             { nama: "Pengakap", kategori: "UNIT BERUNIFORM (UBB)" },
             { nama: "Kelab Catur", kategori: "UNIT SUKAN DAN PERMAINAN (UKP)" }
         ]));
-        localStorage.setItem('db_guru', JSON.stringify([{ nama: "Muhammad Adam Chong" }]));
+        localStorage.setItem('db_guru', JSON.stringify([{ nama: "Muhammad Adam Chong", jawatan: "Guru Penasihat" }]));
         localStorage.setItem('db_takwim', JSON.stringify([{ peristiwa: "Mesyuarat Agung", mula: "2026-01-21", akhir: "2026-01-21" }]));
         localStorage.setItem('db_jadual', JSON.stringify([
             { bil: "BIL 1", tarikh: "2026-01-21", aktiviti: "MESYUARAT AGUNG", guru: "MUHAMMAD ADAM CHONG" },
@@ -389,7 +390,7 @@
         } else if(jenis === 'kelab') {
             dataBaru = { nama: document.getElementById('kNama').value, kategori: document.getElementById('kKategori').value };
         } else if(jenis === 'guru') {
-            dataBaru = { nama: document.getElementById('gNama').value };
+            dataBaru = { nama: document.getElementById('gNama').value, jawatan: document.getElementById('gJawatan').value };
         } else if(jenis === 'takwim') {
             dataBaru = { peristiwa: document.getElementById('takwimPeristiwa').value, mula: document.getElementById('takwimMula').value, akhir: document.getElementById('takwimAkhir').value };
         } else if(jenis === 'jadual') {
@@ -413,7 +414,7 @@
             } else if(jenis === 'kelab') {
                 html += `<td><b>${item.nama}</b></td><td><span class="badge">${item.kategori}</span></td>`;
             } else if(jenis === 'guru') {
-                html += `<td><b>${item.nama}</b></td>`;
+                html += `<td><b>${item.nama}</b></td><td>${item.jawatan || '-'}</td>`;
             } else if(jenis === 'takwim') {
                 html += `<td><b>${item.peristiwa}</b></td><td>${item.mula} hingga ${item.akhir}</td>`;
             } else if(jenis === 'jadual') {
@@ -518,7 +519,6 @@
         
         let dbKelab = JSON.parse(localStorage.getItem('db_kelab')) || [];
         let kelabObj = dbKelab.find(k => k.nama === kelabPilih);
-        let kategoriUnit = kelabObj ? kelabObj.kategori : "UNIT KOKURIKULUM";
 
         document.getElementById('ratHeaderTitle').innerHTML = `
             RANCANGAN AKTIVITI TAHUNAN (RAT)<br>
@@ -573,7 +573,9 @@
     function muatAnalisisTugas() {
         let db = JSON.parse(localStorage.getItem('db_guru')) || [];
         let html = "";
-        db.forEach(g => { html += `<tr><td><b>${g.nama}</b></td></tr>`; });
+        db.forEach(g => { 
+            html += `<tr><td><b>${g.nama}</b></td><td>${g.jawatan || '-'}</td></tr>`; 
+        });
         let el = document.getElementById('tabel_analisis_tugas');
         if(el) el.innerHTML = html;
     }
