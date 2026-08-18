@@ -126,7 +126,7 @@
     <div id="modulGuru" class="card hidden">
         <h2>Tetapan Induk — Master Guru, Penyelaras Program & Jurulatih</h2>
         <form onsubmit="simpanMaster('guru', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
-            <div class="form-group"><label>Nama Guru:</label><input type="text" id="gNama" placeholder="Cth: Cikgu Florynah Bakar" required></div>
+            <div class="form-group"><label>Nama Guru:</label><input type="text" id="gNama" placeholder="Cth: Cikgu Kylie N" required></div>
             
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
                 <div class="form-group">
@@ -246,7 +246,7 @@
         localStorage.setItem('db_tetapan', JSON.stringify({ tahun: "2026" }));
         localStorage.setItem('db_murid', JSON.stringify([{ nama: "Mohamad Aznil", kelas: "6 Terbilang", jantina: "L", ubb: "Pengakap", ukp: "Kelab Catur", usp: "Persatuan BM" }]));
         localStorage.setItem('db_kelab', JSON.stringify([{ nama: "Kelab Catur" }, { nama: "Pengakap" }]));
-        localStorage.setItem('db_guru', JSON.stringify([{ nama: "Florynah Bakar", penyelaras: "Penyelaras Karnival Kokurikulum", jurulatih: "Ketua Jurulatih Olahraga", ubb: "Pengakap", jawatanUBB: "Ketua Guru Penasihat", ukp: "Kelab Catur", jawatanUKP: "Guru Penasihat", usp: "Persatuan BM", jawatanUSP: "Guru Penasihat" }]));
+        localStorage.setItem('db_guru', JSON.stringify([{ nama: "Kylie N", penyelaras: "Penyelaras Karnival Kokurikulum", jurulatih: "Ketua Jurulatih Olahraga", ubb: "Pengakap", jawatanUBB: "Ketua Guru Penasihat", ukp: "Kelab Catur", jawatanUKP: "Guru Penasihat", usp: "Persatuan BM", jawatanUSP: "Guru Penasihat" }]));
         localStorage.setItem('db_takwim', JSON.stringify([{ peristiwa: "Mesyuarat Agung", mula: "2026-01-21", akhir: "2026-01-21" }]));
         localStorage.setItem('db_jadual', JSON.stringify([{ bil: "Bil 1", tarikh: "2026-01-21", masa: "11:40 am - 12:40 pm" }]));
     }
@@ -269,7 +269,7 @@
         
         let dbGuru = JSON.parse(localStorage.getItem('db_guru')) || [];
         let guruBertemu = dbGuru.find(g => g.ubb === kelabAktif || g.ukp === kelabAktif || g.usp === kelabAktif);
-        document.getElementById('guruBertugasInput').value = guruBertemu ? guruBertemu.nama : "Florynah Bakar";
+        document.getElementById('guruBertugasInput').value = guruBertemu ? guruBertemu.nama : "Kylie N";
     }
 
     function muatTahunAktif() {
