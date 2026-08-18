@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Sistem Kokurikulum - SSOT 4 Modul</title>
+    <title>Sistem Kokurikulum - Takwim & Jadual Berasingan</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         :root {
@@ -54,7 +54,8 @@
     <div class="menu-item active" onclick="show('modulMurid', event)">👥 Master Murid</div>
     <div class="menu-item" onclick="show('modulKelab', event)">🏢 Master Kelab / Unit</div>
     <div class="menu-item" onclick="show('modulGuru', event)">👨‍🏫 Master Guru Penasihat</div>
-    <div class="menu-item" onclick="show('modulTakwim', event)">📅 Takwim & Perjumpaan</div>
+    <div class="menu-item" onclick="show('modulTakwim', event)">📅 Takwim Sekolah</div>
+    <div class="menu-item" onclick="show('modulJadual', event)">🕒 Jadual Perjumpaan (Bil 1-12)</div>
     
     <div class="menu-category">Modul Operasi</div>
     <div class="menu-item" onclick="show('laporanKelab', event)">📝 Borang Laporan Guru</div>
@@ -118,23 +119,44 @@
         </table>
     </div>
 
-    <!-- 4. TAKWIM -->
+    <!-- 4. TAKWIM SEKOLAH -->
     <div id="modulTakwim" class="card hidden">
-        <h2>Tetapan Induk — Takwim & Jadual Perjumpaan (Bil 1 - 12)</h2>
+        <h2>Tetapan Induk — Takwim Sekolah</h2>
         <form onsubmit="simpanMaster('takwim', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
+            <div class="form-group"><label>Peristiwa / Program Sekolah:</label><input type="text" id="takwimPeristiwa" placeholder="Cth: Cuti Hari Raya / Sukan Sekolah" required></div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                <div class="form-group"><label>Siri Perjumpaan:</label><input type="text" id="tBil" placeholder="Cth: Bil 1" required></div>
-                <div class="form-group"><label>Tarikh Rasmi:</label><input type="date" id="tTarikh" required></div>
+                <div class="form-group"><label>Tarikh Mula:</label><input type="date" id="takwimMula" required></div>
+                <div class="form-group"><label>Tarikh Akhir:</label><input type="date" id="takwimAkhir" required></div>
             </div>
             <button type="submit">Tambah Takwim</button>
         </form>
         <table>
-            <thead><tr><th>Siri Perjumpaan</th><th>Tarikh</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <thead><tr><th>Peristiwa / Program</th><th>Tarikh</th><th style="text-align:center;">Tindakan</th></tr></thead>
             <tbody id="tabel_takwim"></tbody>
         </table>
     </div>
 
-    <!-- 5. BORANG GURU -->
+    <!-- 5. JADUAL PERJUMPAAN (BIL 1 - 12) DENGAN JULAT MASA -->
+    <div id="modulJadual" class="card hidden">
+        <h2>Jadual Perjumpaan Mingguan Kokurikulum (Bil 1 - 12)</h2>
+        <form onsubmit="simpanMaster('jadual', event)" style="background:#f8fafc; padding:20px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:20px;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                <div class="form-group"><label>Siri Perjumpaan:</label><input type="text" id="jBil" placeholder="Cth: Bil 1" required></div>
+                <div class="form-group"><label>Tarikh Rasmi:</label><input type="date" id="jTarikh" required></div>
+            </div>
+            <div class="form-group">
+                <label>Julat Masa Perjumpaan:</label>
+                <input type="text" id="jMasa" placeholder="Cth: 11:40 am - 12:40 pm" required>
+            </div>
+            <button type="submit">Tambah Jadual Perjumpaan</button>
+        </form>
+        <table>
+            <thead><tr><th>Siri</th><th>Tarikh Rasmi</th><th>Julat Masa</th><th style="text-align:center;">Tindakan</th></tr></thead>
+            <tbody id="tabel_jadual"></tbody>
+        </table>
+    </div>
+
+    <!-- 6. BORANG GURU -->
     <div id="laporanKelab" class="card hidden">
         <h2>Paparan Borang Laporan Rasmi</h2>
         <div class="form-group">
@@ -153,7 +175,8 @@
         ]));
         localStorage.setItem('db_kelab', JSON.stringify([{ nama: "Kelab Catur" }, { nama: "Pengakap" }]));
         localStorage.setItem('db_guru', JSON.stringify([{ nama: "Florynah Bakar", peranan: "Ketua Guru Penasihat" }]));
-        localStorage.setItem('db_takwim', JSON.stringify([{ bil: "Bil 1", tarikh: "2026-01-21" }]));
+        localStorage.setItem('db_takwim', JSON.stringify([{ peristiwa: "Mesyuarat Agung Koku", mula: "2026-01-21", akhir: "2026-01-21" }]));
+        localStorage.setItem('db_jadual', JSON.stringify([{ bil: "Bil 1", tarikh: "2026-01-21", masa: "11:40 am - 12:40 pm" }]));
     }
 
     function show(id, event) {
@@ -177,6 +200,7 @@
         muatTabel('kelab');
         muatTabel('guru');
         muatTabel('takwim');
+        muatTabel('jadual');
     }
 
     function simpanMaster(jenis, e) {
@@ -190,7 +214,9 @@
         } else if(jenis === 'guru') {
             dataBaru = { nama: document.getElementById('gNama').value, peranan: document.getElementById('gPeranan').value };
         } else if(jenis === 'takwim') {
-            dataBaru = { bil: document.getElementById('tBil').value, tarikh: document.getElementById('tTarikh').value };
+            dataBaru = { peristiwa: document.getElementById('takwimPeristiwa').value, mula: document.getElementById('takwimMula').value, akhir: document.getElementById('takwimAkhir').value };
+        } else if(jenis === 'jadual') {
+            dataBaru = { bil: document.getElementById('jBil').value, tarikh: document.getElementById('jTarikh').value, masa: document.getElementById('jMasa').value };
         }
 
         let db = JSON.parse(localStorage.getItem('db_' + jenis)) || [];
@@ -213,7 +239,9 @@
             } else if(jenis === 'guru') {
                 html += `<td><b>${item.nama}</b></td><td>${item.peranan}</td>`;
             } else if(jenis === 'takwim') {
-                html += `<td><b>${item.bil}</b></td><td>${item.tarikh}</td>`;
+                html += `<td><b>${item.peristiwa}</b></td><td>${item.mula} hingga ${item.akhir}</td>`;
+            } else if(jenis === 'jadual') {
+                html += `<td><b>${item.bil}</b></td><td>${item.tarikh}</td><td>${item.masa}</td>`;
             }
             html += `<td style="text-align:center;"><button class="btn-delete" onclick="padamData('${jenis}', ${index})">🗑️ Padam</button></td></tr>`;
         });
