@@ -10,38 +10,44 @@
             --sidebar: #1e293b;
             --text: #334155;
         }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; background: var(--bg); color: var(--text); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; background: var(--bg); color: var(--text); }
         
-        /* Sidebar Moden */
-        .sidebar { width: 260px; background: var(--sidebar); color: #cbd5e1; height: 100vh; position: fixed; padding-top: 20px; }
+        /* Sidebar */
+        .sidebar { width: 260px; background: var(--sidebar); color: #cbd5e1; height: 100vh; position: fixed; padding-top: 20px; box-sizing: border-box; }
         .sidebar h3 { text-align: center; color: #f8fafc; margin-bottom: 30px; letter-spacing: 1px; }
-        .menu-item { padding: 15px 25px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
+        .menu-item { padding: 15px 25px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-size: 14px; }
         .menu-item:hover { background: #334155; color: white; }
-        .menu-item.active { background: var(--primary); color: white; }
+        .menu-item.active { background: var(--primary); color: white; font-weight: 600; }
 
         /* Content Area */
-        .content { margin-left: 260px; padding: 40px; width: calc(100% - 260px); }
+        .content { margin-left: 260px; padding: 40px; width: calc(100% - 260px); box-sizing: border-box; }
         .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
         
-        h2 { margin-top: 0; color: #1e293b; }
-        button { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        h2 { margin-top: 0; color: #1e293b; font-size: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; }
+        
+        /* Form Styling supaya tersusun ke bawah dengan kemas */
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #475569; }
+        input[type="text"], textarea, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; background: #fff; }
+        input[readonly] { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
+        
+        button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; transition: background 0.2s; }
         button:hover { background: #1d4ed8; }
         
         .hidden { display: none; }
-        textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 5px; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
     <h3>KOKUM 2026</h3>
-    <div class="menu-item active" onclick="show('dashboard')">🏠 Dashboard</div>
-    <div class="menu-item" onclick="show('pengurusan')">⚙️ Tetapan Induk</div>
-    <div class="menu-item" onclick="show('laporan')">📝 Laporan Mingguan</div>
+    <div class="menu-item" onclick="show('dashboard', event)">🏠 Dashboard</div>
+    <div class="menu-item" onclick="show('pengurusan', event)">⚙️ Tetapan Induk</div>
+    <div class="menu-item active" onclick="show('laporan', event)">📝 Laporan Mingguan</div>
 </div>
 
 <div class="content">
-    <div id="dashboard" class="card">
+    <div id="dashboard" class="card hidden">
         <h2>Selamat Datang, Admin</h2>
         <p>Sistem pengurusan kokurikulum sekolah anda dalam mod dry-run.</p>
     </div>
@@ -49,27 +55,45 @@
     <div id="pengurusan" class="card hidden">
         <h2>Tetapan Induk (SSOT)</h2>
         <p>Urus data master sekolah di sini.</p>
-        <button>+ Tambah Murid Baru</button>
+        <button type="button">+ Tambah Murid Baru</button>
     </div>
 
-    <div id="laporan" class="card hidden">
-        <h2>Laporan Mingguan</h2>
-        <label>Unit:</label><input type="text" id="unitDisplay" readonly style="margin-bottom:15px">
-        <label>Aktiviti:</label><textarea rows="5"></textarea>
-        <button style="margin-top:15px">Simpan Laporan</button>
+    <div id="laporan" class="card">
+        <h2 id="laporanTitle">Laporan Mingguan</h2>
+        
+        <div class="form-group">
+            <label>Unit Kokurikulum (Auto dari Ekor URL):</label>
+            <input type="text" id="unitDisplay" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="aktiviti">Aktiviti / Catatan Perjumpaan:</label>
+            <textarea id="aktiviti" rows="5" placeholder="Nyatakan aktiviti hari ini..."></textarea>
+        </div>
+
+        <button type="button" onclick="simpanDryRun()">Simpan Laporan (Dry Run)</button>
     </div>
 </div>
 
 <script>
-    function show(id) {
+    function show(id, event) {
         document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
         document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        if(event) event.currentTarget.classList.add('active');
     }
-    // Ekor URL
-    const urlParams = new URLSearchParams(window.location.search);
-    document.getElementById('unitDisplay').value = urlParams.get('kelab') || 'Kelab Catur';
+
+    // Baca ekor URL untuk tentukan kelab
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const kelab = urlParams.get('kelab') || 'Kelab Catur';
+        document.getElementById('unitDisplay').value = kelab;
+        document.getElementById('laporanTitle').innerText = "Laporan Mingguan — " + kelab;
+    }
+
+    function simpanDryRun() {
+        alert("Simulasi Berjaya! Data untuk " + document.getElementById('unitDisplay').value + " disimpan sementara.");
+    }
 </script>
 </body>
 </html>
