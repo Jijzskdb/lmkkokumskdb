@@ -2,65 +2,74 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Sistem Kokurikulum - Dry Run</title>
+    <title>Sistem Kokurikulum - Modul Admin</title>
     <style>
-        body { font-family: sans-serif; display: flex; margin: 0; background: #f4f6f9; }
-        .sidebar { width: 250px; background: #2c3e50; color: white; height: 100vh; position: fixed; }
-        .menu-item { padding: 15px; cursor: pointer; border-bottom: 1px solid #3e5871; }
-        .menu-item:hover { background: #34495e; }
-        .content { margin-left: 250px; padding: 20px; width: 100%; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --sidebar: #1e293b;
+            --text: #334155;
+        }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; background: var(--bg); color: var(--text); }
+        
+        /* Sidebar Moden */
+        .sidebar { width: 260px; background: var(--sidebar); color: #cbd5e1; height: 100vh; position: fixed; padding-top: 20px; }
+        .sidebar h3 { text-align: center; color: #f8fafc; margin-bottom: 30px; letter-spacing: 1px; }
+        .menu-item { padding: 15px 25px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
+        .menu-item:hover { background: #334155; color: white; }
+        .menu-item.active { background: var(--primary); color: white; }
+
+        /* Content Area */
+        .content { margin-left: 260px; padding: 40px; width: calc(100% - 260px); }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+        
+        h2 { margin-top: 0; color: #1e293b; }
+        button { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        button:hover { background: #1d4ed8; }
+        
         .hidden { display: none; }
+        textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 5px; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <h3 style="text-align:center">MODUL ADMIN</h3>
-    <div class="menu-item" onclick="show('dashboard')">🏠 Dashboard</div>
-    <div class="menu-item" onclick="show('pengurusan')">⚙️ Pengurusan Master (Admin)</div>
+    <h3>KOKUM 2026</h3>
+    <div class="menu-item active" onclick="show('dashboard')">🏠 Dashboard</div>
+    <div class="menu-item" onclick="show('pengurusan')">⚙️ Tetapan Induk</div>
     <div class="menu-item" onclick="show('laporan')">📝 Laporan Mingguan</div>
 </div>
 
 <div class="content">
-    <!-- PENGURUSAN MASTER -->
-    <div id="pengurusan" class="card hidden">
-        <h2>Tetapan Induk (SSOT)</h2>
-        <p>Gunakan bahagian ini untuk tambah Kelab, Murid, Guru & Kalendar (Simulasi Simpanan)</p>
-        <button onclick="addData('murid')">+ Tambah Murid Baru</button>
-        <div id="muridList"></div>
+    <div id="dashboard" class="card">
+        <h2>Selamat Datang, Admin</h2>
+        <p>Sistem pengurusan kokurikulum sekolah anda dalam mod dry-run.</p>
     </div>
 
-    <!-- LAPORAN MINGGUAN -->
-    <div id="laporan" class="card">
-        <h2 id="laporanTitle">Laporan Mingguan</h2>
-        <form onsubmit="simpanLaporan(event)">
-            <label>Unit:</label><input type="text" id="unitDisplay" readonly>
-            <label>Aktiviti:</label><textarea id="aktiviti"></textarea>
-            <button type="submit">Simpan Laporan (Dry Run)</button>
-        </form>
+    <div id="pengurusan" class="card hidden">
+        <h2>Tetapan Induk (SSOT)</h2>
+        <p>Urus data master sekolah di sini.</p>
+        <button>+ Tambah Murid Baru</button>
+    </div>
+
+    <div id="laporan" class="card hidden">
+        <h2>Laporan Mingguan</h2>
+        <label>Unit:</label><input type="text" id="unitDisplay" readonly style="margin-bottom:15px">
+        <label>Aktiviti:</label><textarea rows="5"></textarea>
+        <button style="margin-top:15px">Simpan Laporan</button>
     </div>
 </div>
 
 <script>
-    // Logik Simulasi
     function show(id) {
         document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
+        document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+        event.currentTarget.classList.add('active');
     }
-
-    window.onload = () => {
-        // Ambil ekor URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const kelab = urlParams.get('kelab') || 'Kelab Catur';
-        document.getElementById('unitDisplay').value = kelab;
-        document.getElementById('laporanTitle').innerText = "Laporan - " + kelab;
-    }
-
-    function simpanLaporan(e) {
-        e.preventDefault();
-        alert("Simulasi: Data laporan untuk " + document.getElementById('unitDisplay').value + " berjaya disimpan dalam localStorage!");
-    }
+    // Ekor URL
+    const urlParams = new URLSearchParams(window.location.search);
+    document.getElementById('unitDisplay').value = urlParams.get('kelab') || 'Kelab Catur';
 </script>
 </body>
 </html>
