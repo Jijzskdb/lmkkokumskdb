@@ -3,11 +3,11 @@
 <head>
 <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>SPKOKUM LMK — Prototype V2</title>
+<title>SPKOKUM LMK — Prototype V7.1</title>
 <style>
 :root{--nav:#102a43;--nav2:#173f60;--blue:#2563eb;--bg:#f4f7fb;--card:#fff;--text:#172b4d;--muted:#6b7c93;--line:#e5eaf0;--green:#16855b;--greenbg:#e8f7f0;--amber:#b7791f;--amberbg:#fff7df;--red:#c53030;--redbg:#fff0f0;--shadow:0 8px 24px rgba(16,42,67,.07)}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--text)}button,select,input,textarea{font:inherit}button{cursor:pointer}
-.app{display:flex;min-height:100vh}.sidebar{width:248px;background:linear-gradient(180deg,var(--nav),#0b2034);color:#fff;padding:22px 15px;position:fixed;inset:0 auto 0 0}.brand{display:flex;gap:11px;align-items:center;padding:5px 9px 24px}.logo{width:42px;height:42px;border-radius:12px;background:#fff;color:var(--nav);display:grid;place-items:center;font-weight:800}.brand b{display:block;font-size:15px}.brand span{font-size:11px;opacity:.65}.nav{display:grid;gap:5px}.nav button{background:transparent;color:#dce7f2;text-align:left;padding:11px 13px;border-radius:10px}.nav button:hover,.nav button.active{background:rgba(255,255,255,.11);color:#fff}.nav .section{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:#8ea7bd;padding:18px 13px 5px}
+.app{display:flex;min-height:100vh}.sidebar{width:248px;background:linear-gradient(180deg,var(--nav),#0b2034);color:#fff;padding:22px 15px;position:fixed;inset:0 auto 0 0;z-index:1000;box-sizing:border-box}.brand{display:flex;gap:11px;align-items:center;padding:5px 9px 24px}.logo{width:42px;height:42px;border-radius:12px;background:#fff;color:var(--nav);display:grid;place-items:center;font-weight:800}.brand b{display:block;font-size:15px}.brand span{font-size:11px;opacity:.65}.nav{display:grid;gap:5px}.nav button{background:transparent;color:#dce7f2;text-align:left;padding:11px 13px;border-radius:10px}.nav button:hover,.nav button.active{background:rgba(255,255,255,.11);color:#fff}.nav .section{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:#8ea7bd;padding:18px 13px 5px}
 .main{margin-left:248px;width:calc(100% - 248px);padding:26px 30px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.top h1{font-size:24px;margin:0 0 5px}.top p{margin:0;color:var(--muted);font-size:13px}.actions{display:flex;gap:9px}.btn{padding:10px 14px;border-radius:9px;background:#fff;border:1px solid var(--line);color:var(--text);font-weight:650}.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px}.stat .label{font-size:12px;color:var(--muted)}.stat .num{font-size:28px;font-weight:800;margin-top:8px}.stat .small{font-size:11px;color:var(--muted);margin-top:5px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:27px 0 12px}.section-title h2{font-size:16px;margin:0}.filters{display:flex;gap:8px;flex-wrap:wrap}.filters select,.filters input,.field input,.field textarea{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 11px;color:var(--text)}
 .table-wrap{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}table{border-collapse:separate;border-spacing:0;width:100%;min-width:900px}th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font-size:12px;white-space:nowrap}th{background:#f8fafc;color:#66788a;font-size:10px;text-transform:uppercase;letter-spacing:.4px}tr:last-child td{border-bottom:0}.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:750}.green{background:var(--greenbg);color:var(--green)}.amber{background:var(--amberbg);color:var(--amber)}.red{background:var(--redbg);color:var(--red)}.blue{background:#eaf1ff;color:#2458c4}
@@ -16,7 +16,37 @@
 .toast{position:fixed;right:24px;bottom:24px;background:#12263a;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow);display:none;font-size:12px}
 @media(max-width:900px){.sidebar{width:72px}.brand div:not(.logo),.nav button span,.nav .section{display:none}.main{margin-left:72px;width:calc(100% - 72px);padding:20px}.grid,.unit-grid,.checklist{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.grid,.unit-grid,.checklist,.two{grid-template-columns:1fr}.top{align-items:flex-start;gap:12px;flex-direction:column}}
 </style>
-</head>
+
+<style>
+/* V7.1 sidebar scroll */
+.sidebar{
+  height:100vh;
+  max-height:100vh;
+  overflow-y:auto;
+  overflow-x:hidden;
+  position:fixed;
+  top:0;
+  left:0;
+  bottom:0;
+  scrollbar-width:thin;
+  z-index:1000;
+  box-sizing:border-box;
+}
+.sidebar nav, .sidebar .nav, .sidebar .menu{
+  min-height:0;
+}
+@media (max-height:760px){
+  .sidebar{overflow-y:auto}
+}
+</style>
+<style>
+/* V7.1 sidebar visibility */
+.sidebar{display:block;overscroll-behavior:contain}
+.sidebar::-webkit-scrollbar{width:8px}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.28);border-radius:8px}
+.sidebar::-webkit-scrollbar-track{background:rgba(255,255,255,.05)}
+.main{position:relative;z-index:1}
+</style></head>
 <body>
 <div class="app">
 <aside class="sidebar">
@@ -28,7 +58,7 @@
 <button data-page="lmk">▤ <span>LMK</span></button>
 <button data-page="kehadiran">☑ <span>Kehadiran</span></button>
 <button data-page="analisis-kehadiran">▥ <span>Analisis Kehadiran</span></button>
-<button data-page="lmkeditor">◉ <span>Pratonton LMK</span></button>
+<button data-page="lmkeditor">◉ <span>LMK — 12 Perjumpaan</span></button>
 <div class="section">Analitik Raw Data</div>
 <button data-page="lpp">◈ <span>LPP — Penglibatan & Pencapaian</span></button>
 <div class="section">Proses & Output</div>
@@ -45,7 +75,7 @@
 <main class="main">
 <div class="top">
 <div><h1 id="pageTitle">Dashboard LMK</h1><p id="pageDesc">Satu sistem untuk LMK dan LPP — semua unit, semua tahun.</p></div>
-<div class="actions"><select><option>2026</option><option>2027</option></select><button class="btn">Profil</button></div>
+<div class="actions"><select class="year-select" data-source="years"><option>2026</option><option>2027</option></select><button class="btn">Profil</button></div>
 </div>
 
 <section id="dashboard" class="page active">
@@ -74,7 +104,7 @@
         </div>
       </div>
       <div class="actions">
-        <select><option>2026</option><option>2027</option></select>
+        <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
         <button class="btn">↻ Susun Ikut Tarikh</button>
         <button class="btn">+ Tambah / Edit Jadual</button>
       </div>
@@ -244,7 +274,92 @@
 <div class="card" style="background:#f8fafc;margin-bottom:15px"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><b>Arkib LMK</b><div style="font-size:11px;color:var(--muted);margin-top:4px">12 perjumpaan digabungkan menjadi satu fail PDF bagi kelab dan tahun.</div></div><span class="badge blue">1 KELAB = 1 PDF</span></div></div>
 <div class="grid"><div class="card stat"><div class="label">Lengkap</div><div class="num">9</div></div><div class="card stat"><div class="label">Sebahagian</div><div class="num">2</div></div><div class="card stat"><div class="label">Belum</div><div class="num">1</div></div><div class="card stat"><div class="label">Minimum evidens</div><div class="num">2</div><div class="small">gambar / LMK</div></div></div>
 <div class="section-title"><h2>Senarai LMK</h2></div>
-<div class="table-wrap"><table><thead><tr><th>Bil</th><th>Tarikh</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status</th><th>Tindakan</th></tr></thead><tbody id="lmkRows"></tbody></table></div>
+<div class="table-wrap">
+<div data-v8-lmk-entry class="card" style="background:#f8fafc;margin-bottom:14px">
+  <div class="section-title">
+    <div>
+      <b>Isi LMK Mengikut Perjumpaan</b>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">
+        Pilih perjumpaan untuk membuka borang LMK. Maklumat tarikh, unit dan guru bertugas akan ditarik daripada Master Jadual.
+      </div>
+    </div>
+    <button class="btn primary" onclick="document.querySelector('[data-page=&quot;lmkeditor&quot;]')?.click()">+ Isi LMK</button>
+  </div>
+</div>
+
+<div data-v9-lmk-groups class="card" style="background:#f8fafc;margin-bottom:14px">
+  <div class="section-title">
+    <div>
+      <b>LMK — Tugasan Saya</b>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">
+        Semua unit/kelab yang telah ditetapkan kepada guru dipaparkan terus. Filter hanya pilihan untuk memudahkan carian.
+      </div>
+    </div>
+    <div class="filters">
+      <select id="lmkUnitFilter">
+        <option>Semua Unit</option>
+        <option>UBB</option>
+        <option>UKP</option>
+        <option>USP</option>
+        <option>Pengakap</option>
+        <option>TKRS</option>
+        <option>Catur</option>
+        <option>Bola Sepak</option>
+        <option>Bola Baling</option>
+      </select>
+      <select id="lmkStatusFilter">
+        <option>Semua Status</option>
+        <option>BELUM</option>
+        <option>DRAF</option>
+        <option>LENGKAP</option>
+      </select>
+      <input id="lmkSearch" placeholder="Cari tarikh / guru">
+    </div>
+  </div>
+
+  <div class="lmk-group" data-unit="UBB">
+    <div class="section-title" style="margin-top:8px"><h3>UBB — Pengakap</h3></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bil</th><th>Tarikh</th><th>Guru Bertugas</th><th>Kehadiran</th><th>Status LMK</th><th>Tindakan</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>21/01/2026</td><td>Rachel</td><td><span class="badge green">ADA</span></td><td><span class="badge amber">BELUM</span></td><td><button class="btn primary">Isi LMK</button></td></tr>
+          <tr><td>2</td><td>28/01/2026</td><td>Ahmad Safwan</td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td><td><button class="btn">Semak</button></td></tr>
+          <tr><td>3</td><td>04/02/2026</td><td>Florynah Bakar</td><td><span class="badge green">ADA</span></td><td><span class="badge amber">DRAF</span></td><td><button class="btn primary">Sambung</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="lmk-group" data-unit="UKP">
+    <div class="section-title" style="margin-top:18px"><h3>UKP — Catur</h3></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bil</th><th>Tarikh</th><th>Guru Bertugas</th><th>Kehadiran</th><th>Status LMK</th><th>Tindakan</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>21/01/2026</td><td>Rachel</td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td><td><button class="btn">Semak</button></td></tr>
+          <tr><td>2</td><td>28/01/2026</td><td>Ahmad Safwan</td><td><span class="badge green">ADA</span></td><td><span class="badge amber">BELUM</span></td><td><button class="btn primary">Isi LMK</button></td></tr>
+          <tr><td>3</td><td>04/02/2026</td><td>Florynah Bakar</td><td><span class="badge green">ADA</span></td><td><span class="badge amber">BELUM</span></td><td><button class="btn primary">Isi LMK</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="lmk-group" data-unit="USP">
+    <div class="section-title" style="margin-top:18px"><h3>USP — Bola Sepak</h3></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bil</th><th>Tarikh</th><th>Guru Bertugas</th><th>Kehadiran</th><th>Status LMK</th><th>Tindakan</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>21/01/2026</td><td>Florynah Bakar</td><td><span class="badge green">ADA</span></td><td><span class="badge amber">BELUM</span></td><td><button class="btn primary">Isi LMK</button></td></tr>
+          <tr><td>2</td><td>28/01/2026</td><td>Rachel</td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td><td><button class="btn">Semak</button></td></tr>
+          <tr><td>3</td><td>04/02/2026</td><td>Ahmad Safwan</td><td><span class="badge green">ADA</span></td><td><span class="badge amber">BELUM</span></td><td><button class="btn primary">Isi LMK</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<table><thead><tr><th>Bil</th><th>Tarikh</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status</th><th>Tindakan</th></tr></thead><tbody id="lmkRows"></tbody></table></div>
 </div>
 </section>
 
@@ -359,6 +474,13 @@
 <h4>Kehadiran Guru</h4>
 <div style="font-size:11px;color:var(--muted);margin-bottom:10px">
   Guru penasihat ditarik daripada Master Guru. Semua ditanda hadir secara lalai; uncheck hanya guru yang tidak hadir.
+</div>
+
+<div data-v8-lmk-flow class="card" style="background:#f8fafc;margin-bottom:14px">
+  <div style="font-size:12px;font-weight:700">Aliran LMK</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:6px">
+    ① Tarik maklumat perjumpaan → ② Semak/tanda kehadiran → ③ Isi pelaporan → ④ Muat naik sekurang-kurangnya 2 gambar → ⑤ Pratonton → ⑥ Simpan/Jana PDF
+  </div>
 </div>
 <div class="card" style="background:#f8fafc;margin-bottom:10px">
   <div class="two">
@@ -498,7 +620,7 @@
         </div>
       </div>
       <div class="actions">
-        <select><option>2026</option><option>2027</option></select>
+        <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
         <button class="btn">↻ Susun Ikut Tarikh</button>
         <button class="btn primary">+ Tambah Program</button>
       </div>
@@ -552,6 +674,76 @@
 
 
 
+
+<section id="tetapan" class="page">
+  <div class="card">
+    <div class="section-title">
+      <div>
+        <h2>Master Tetapan Sekolah</h2>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">
+          Maklumat asas sekolah dan sistem yang digunakan oleh semua paparan serta output.
+        </div>
+      </div>
+      <button class="btn primary">💾 Simpan Tetapan</button>
+    </div>
+
+    <div class="section-title" style="margin-top:12px"><h2>Maklumat Sekolah</h2></div>
+    <div class="two">
+      <div class="card">
+        <label>Nama Sekolah</label>
+        <input value="SK Dogoton Banggi">
+      </div>
+      <div class="card">
+        <label>Kod Sekolah</label>
+        <input value="—">
+      </div>
+    </div>
+    <div class="two">
+      <div class="card">
+        <label>Logo Sekolah</label>
+        <div class="photo" style="min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <b>Logo Sekolah</b><small>Digunakan pada PDF LMK, LPP, OPPM, Jadual dan Takwim</small>
+          <button class="btn" style="margin-top:10px">+ Muat naik logo</button>
+        </div>
+      </div>
+      <div class="card">
+        <label>Alamat Sekolah</label>
+        <textarea style="width:100%;min-height:100px" placeholder="Alamat untuk digunakan pada output PDF"></textarea>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:20px"><h2>Tahun Sistem</h2></div>
+    <div class="card" style="background:#f8fafc">
+      <div class="two">
+        <div>
+          <label>Tahun Semasa</label>
+          <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
+          <small>Dalam sistem sebenar, pilihan tahun akan dibaca secara dinamik daripada data Google Sheets.</small><div style="font-size:10px;color:var(--muted);margin-top:6px">Tahun akan datang akan muncul automatik apabila wujud dalam Google Sheets.</div>
+        </div>
+        <div>
+          <label>Pengurusan Tahun</label>
+          <button class="btn">+ Buka Tahun Baharu</button>
+          <small>Tiada tahun akan di-hard-code; tahun baharu boleh diwujudkan tanpa mengubah frontend.</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:20px"><h2>Folder Evidens</h2></div>
+    <div class="card" style="background:#f8fafc">
+      <div class="two">
+        <div>
+          <label>Folder Tahun Semasa</label>
+          <input value="2026">
+        </div>
+        <div>
+          <label>Status Sambungan</label><br>
+          <span class="badge amber">BELUM DISAMBUNG — PROTOTYPE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="oppm" class="page">
   <div class="card">
     <div class="section-title">
@@ -562,7 +754,7 @@
         </div>
       </div>
       <div class="actions">
-        <select><option>2026</option><option>2027</option></select>
+        <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
         <button class="btn">📄 Jana PDF OPPM</button>
       </div>
     </div>
@@ -639,7 +831,7 @@
         </div>
       </div>
       <div class="actions">
-        <select><option>2026</option><option>2027</option></select>
+        <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
       </div>
     </div>
 
@@ -758,7 +950,7 @@ const pages = {
   lmk: ["LMK — 12 Perjumpaan", "Satu template LMK untuk semua kelab dan tahun."],
   kehadiran: ["Kehadiran Murid", "Semua murid ditanda hadir; uncheck hanya yang tidak hadir."],
   "analisis-kehadiran": ["Analisis Kehadiran", "Ringkasan keseluruhan kehadiran UBB, UKP dan USP."],
-  lmkeditor: ["Pratonton / Edit LMK", "Semak kandungan, kehadiran dan minimum 2 gambar evidens."],
+  lmkeditor: ["Isi / Edit LMK", "Semak kandungan, kehadiran dan minimum 2 gambar evidens."],
   lpp: ["LPP — Penglibatan & Pencapaian", "Satu master data yang terus digunakan oleh Looker Studio."],
   pemantauan: ["Laporan Pemantauan", "Semakan kelengkapan dokumentasi mengikut perjumpaan dan guru bertugas."],
   arkib: ["Pelaporan & Arkib", "Gabungkan pelaporan lengkap satu kelab + satu tahun menjadi satu PDF."],
@@ -848,6 +1040,32 @@ function filterTakwim(){
   rows.forEach(r=>r.style.display=!q||r.textContent.toLowerCase().includes(q)?"":"none");
 }
 document.addEventListener("input",e=>{if(e.target.closest("#takwim"))filterTakwim();});
+
+function filterLMKGroupsV9(){
+  const unit=(document.getElementById("lmkUnitFilter")?.value||"Semua Unit").toLowerCase();
+  const status=(document.getElementById("lmkStatusFilter")?.value||"Semua Status").toLowerCase();
+  const q=(document.getElementById("lmkSearch")?.value||"").toLowerCase();
+  document.querySelectorAll("#lmk [data-v9-lmk-groups] .lmk-group").forEach(g=>{
+    const unitText=(g.dataset.unit||"").toLowerCase();
+    const groupMatch=unit==="semua unit"||unitText===unit||g.textContent.toLowerCase().includes(unit);
+    let visibleRows=0;
+    g.querySelectorAll("tbody tr").forEach(r=>{
+      const txt=r.textContent.toLowerCase();
+      const statusMatch=status==="semua status"||txt.includes(status);
+      const searchMatch=!q||txt.includes(q);
+      const show=groupMatch&&statusMatch&&searchMatch;
+      r.style.display=show?"":"none";
+      if(show) visibleRows++;
+    });
+    g.style.display=visibleRows?"":"none";
+  });
+}
+document.addEventListener("change",e=>{
+  if(["lmkUnitFilter","lmkStatusFilter"].includes(e.target.id)) filterLMKGroupsV9();
+});
+document.addEventListener("input",e=>{
+  if(e.target.id==="lmkSearch") filterLMKGroupsV9();
+});
 </script>
 </body>
 </html>
