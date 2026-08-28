@@ -3,62 +3,47 @@
 <head>
 <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>SPKOKUM LMK — Prototype V7.1</title>
+<title>SPKOKUM LMK — Prototype V7.5 Full Complete</title>
 <!-- Pustaka SheetJS untuk membaca fail Excel (.xlsx) secara terus -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{--nav:#102a43;--nav2:#173f60;--blue:#2563eb;--bg:#f4f7fb;--card:#fff;--text:#172b4d;--muted:#6b7c93;--line:#e5eaf0;--green:#16855b;--greenbg:#e8f7f0;--amber:#b7791f;--amberbg:#fff7df;--red:#c53030;--redbg:#fff0f0;--shadow:0 8px 24px rgba(16,42,67,.07)}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--text)}button,select,input,textarea{font:inherit}button{cursor:pointer}
-.app{display:flex;min-height:100vh}.sidebar{width:248px;background:linear-gradient(180deg,var(--nav),#0b2034);color:#fff;padding:22px 15px;position:fixed;inset:0 auto 0 0;z-index:1000;box-sizing:border-box}.brand{display:flex;gap:11px;align-items:center;padding:5px 9px 24px}.logo{width:42px;height:42px;border-radius:12px;background:#fff;color:var(--nav);display:grid;place-items:center;font-weight:800}.brand b{display:block;font-size:15px}.brand span{font-size:11px;opacity:.65}.nav{display:grid;gap:5px}.nav button{background:transparent;color:#dce7f2;text-align:left;padding:11px 13px;border-radius:10px}.nav button:hover,.nav button.active{background:rgba(255,255,255,.11);color:#fff}.nav .section{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:#8ea7bd;padding:18px 13px 5px}
-.main{margin-left:248px;width:calc(100% - 248px);padding:26px 30px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.top h1{font-size:24px;margin:0 0 5px}.top p{margin:0;color:var(--muted);font-size:13px}.actions{display:flex;gap:9px}.btn{padding:10px 14px;border-radius:9px;background:#fff;border:1px solid var(--line);color:var(--text);font-weight:650}.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px}.stat .label{font-size:12px;color:var(--muted)}.stat .num{font-size:28px;font-weight:800;margin-top:8px}.stat .small{font-size:11px;color:var(--muted);margin-top:5px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:27px 0 12px}.section-title h2{font-size:16px;margin:0}.filters{display:flex;gap:8px;flex-wrap:wrap}.filters select,.filters input,.field input,.field textarea{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 11px;color:var(--text)}
-.table-wrap{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}table{border-collapse:separate;border-spacing:0;width:100%;min-width:900px}th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font-size:12px;white-space:nowrap}th{background:#f8fafc;color:#66788a;font-size:10px;text-transform:uppercase;letter-spacing:.4px}tr:last-child td{border-bottom:0}.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:750}.green{background:var(--greenbg);color:var(--green)}.amber{background:var(--amberbg);color:var(--amber)}.red{background:var(--redbg);color:var(--red)}.blue{background:#eaf1ff;color:#2458c4}
-.page{display:none}.page.active{display:block}.unit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.unit{padding:16px}.unit h3{margin:0 0 4px;font-size:14px}.unit p{margin:0;color:var(--muted);font-size:11px}.unit .row{display:flex;justify-content:space-between;margin-top:15px;font-size:11px}
-.preview{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:30px;max-width:900px;margin:auto}.preview h2{text-align:center;margin:0 0 4px}.preview .sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:25px}.preview-block{border:1px solid var(--line);border-radius:10px;padding:15px;margin:12px 0}.preview-block h4{margin:0 0 10px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.photo{border:1px dashed #b8c4d0;border-radius:10px;padding:24px;text-align:center;background:#fafcfe}.photo small{display:block;color:var(--muted);margin:7px}.checklist{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.checkitem{border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff}.checkitem b{display:block;margin-bottom:6px}.empty{padding:45px;text-align:center;color:var(--muted)}
+.app{display:flex;min-height:100vh}
+.sidebar{width:248px;background:linear-gradient(180deg,var(--nav),#0b2034);color:#fff;padding:22px 15px;position:fixed;inset:0 auto 0 0;z-index:1000;box-sizing:border-box;height:100vh;overflow-y:auto;scrollbar-width:thin}
+.sidebar::-webkit-scrollbar{width:6px}.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:4px}
+.brand{display:flex;gap:11px;align-items:center;padding:5px 9px 24px}.logo{width:42px;height:42px;border-radius:12px;background:#fff;color:var(--nav);display:grid;place-items:center;font-weight:800}.brand b{display:block;font-size:15px}.brand span{font-size:11px;opacity:.65}
+.nav{display:grid;gap:5px}.nav button{background:transparent;color:#dce7f2;text-align:left;padding:11px 13px;border-radius:10px;border:none;width:100%}
+.nav button:hover,.nav button.active{background:rgba(255,255,255,.11);color:#fff}.nav .section{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:#8ea7bd;padding:18px 13px 5px}
+.main{margin-left:248px;width:calc(100% - 248px);padding:26px 30px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.top h1{font-size:24px;margin:0 0 5px}.top p{margin:0;color:var(--muted);font-size:13px}
+.actions{display:flex;gap:9px}.btn{padding:10px 14px;border-radius:9px;background:#fff;border:1px solid var(--line);color:var(--text);font-weight:650}.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.btn.danger{background:var(--redbg);color:var(--red);border-color:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px}
+.stat .label{font-size:12px;color:var(--muted)}.stat .num{font-size:28px;font-weight:800;margin-top:8px}.stat .small{font-size:11px;color:var(--muted);margin-top:5px}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:27px 0 12px}.section-title h2{font-size:16px;margin:0}
+.filters{display:flex;gap:8px;flex-wrap:wrap}.filters select,.filters input,.field input,.field textarea{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 11px;color:var(--text)}
+.table-wrap{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}table{border-collapse:separate;border-spacing:0;width:100%;min-width:900px}
+th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font-size:12px;white-space:nowrap}th{background:#f8fafc;color:#66788a;font-size:10px;text-transform:uppercase;letter-spacing:.4px}tr:last-child td{border-bottom:0}
+.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:750}.green{background:var(--greenbg);color:var(--green)}.amber{background:var(--amberbg);color:var(--amber)}.red{background:var(--redbg);color:var(--red)}.blue{background:#eaf1ff;color:#2458c4}
+.page{display:none}.page.active{display:block}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.preview{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:30px;max-width:900px;margin:auto}.preview h2{text-align:center;margin:0 0 4px}.preview .sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:25px}
+.preview-block{border:1px solid var(--line);border-radius:10px;padding:15px;margin:12px 0}.preview-block h4{margin:0 0 10px}
+.photo{border:1px dashed #b8c4d0;border-radius:10px;padding:24px;text-align:center;background:#fafcfe}.photo small{display:block;color:var(--muted);margin:7px}
+.checklist{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.checkitem{border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff}.checkitem b{display:block;margin-bottom:6px}
 .toast{position:fixed;right:24px;bottom:24px;background:#12263a;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow);display:none;font-size:12px;z-index:9999}
 
-/* Styling untuk Modal Borang */
+/* Modal Styling */
 .modal-overlay{position:fixed;inset:0;background:rgba(16,42,67,0.6);display:none;justify-content:center;align-items:center;z-index:2000;backdrop-filter:blur(2px)}
-.modal-box{background:var(--card);padding:24px;border-radius:16px;width:100%;max-width:480px;box-shadow:0 12px 32px rgba(0,0,0,0.15)}
+.modal-box{background:var(--card);padding:24px;border-radius:16px;width:100%;max-width:650px;max-height:90vh;overflow-y:auto;box-shadow:0 12px 32px rgba(0,0,0,0.15)}
 .modal-box h3{margin:0 0 16px;font-size:18px;color:var(--text)}
-.form-group{margin-bottom:14px}
-.form-group label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px}
-.form-group input, .form-group select{width:100%;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 12px;color:var(--text);font:inherit}
-.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:22px}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.form-group input, .form-group select{width:100%;border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px;color:var(--text);font:inherit}
+.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}
 
-@media(max-width:900px){.sidebar{width:72px}.brand div:not(.logo),.nav button span,.nav .section{display:none}.main{margin-left:72px;width:calc(100% - 72px);padding:20px}.grid,.unit-grid,.checklist{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.grid,.unit-grid,.checklist,.two{grid-template-columns:1fr}.top{align-items:flex-start;gap:12px;flex-direction:column}}
+@media(max-width:900px){.sidebar{width:72px}.brand div:not(.logo),.nav button span,.nav .section{display:none}.main{margin-left:72px;width:calc(100% - 72px);padding:20px}}
 </style>
-
-<style>
-/* V7.1 sidebar scroll */
-.sidebar{
-  height:100vh;
-  max-height:100vh;
-  overflow-y:auto;
-  overflow-x:hidden;
-  position:fixed;
-  top:0;
-  left:0;
-  bottom:0;
-  scrollbar-width:thin;
-  z-index:1000;
-  box-sizing:border-box;
-}
-.sidebar nav, .sidebar .nav, .sidebar .menu{
-  min-height:0;
-}
-@media (max-height:760px){
-  .sidebar{overflow-y:auto}
-}
-</style>
-<style>
-/* V7.1 sidebar visibility */
-.sidebar{display:block;overscroll-behavior:contain}
-.sidebar::-webkit-scrollbar{width:8px}
-.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.28);border-radius:8px}
-.sidebar::-webkit-scrollbar-track{background:rgba(255,255,255,.05)}
-.main{position:relative;z-index:1}
-</style></head>
+</head>
 <body>
 <div class="app">
 <aside class="sidebar">
@@ -94,6 +79,7 @@
 </div>
 </div>
 
+<!-- 1. DASHBOARD -->
 <section id="dashboard" class="page active">
 <div class="grid">
 <div class="card stat"><div class="label">Unit / Kelab</div><div class="num">8</div><div class="small">Contoh sesi 2026</div></div>
@@ -109,6 +95,7 @@
 </tbody></table></div>
 </section>
 
+<!-- 2. JADUAL -->
 <section id="jadual" class="page">
   <div class="card">
     <div class="section-title">
@@ -301,6 +288,7 @@
   </div>
 </section>
 
+<!-- 3. LMK -->
 <section id="lmk" class="page">
 <div class="card">
 <div class="section-title"><h2>LMK — 12 Perjumpaan</h2><div class="filters"><select><option>Kelab Catur</option><option>Bola Sepak</option><option>Bola Baling</option></select></div></div>
@@ -396,10 +384,11 @@
 </div>
 </section>
 
+<!-- 4. KEHADIRAN -->
 <section id="kehadiran" class="page">
 <div class="card"><div class="section-title"><h2>Kehadiran Murid</h2><div class="filters"><select><option>Kelab Catur — Bil 2</option><option>Bola Sepak — Bil 2</option></select></div></div>
 <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px"><button class="btn primary" onclick="toggleAll(true)">☑ Tandakan Semua Hadir</button><button class="btn" onclick="toggleAll(false)">Kosongkan</button><span style="font-size:12px;color:var(--muted)">Uncheck hanya murid yang tidak hadir.</span></div>
-<div class="table-wrap"><thead><tr><th>Hadir</th><th>Bil</th><th>Nama Murid</th><th>Kelas</th><th>Jawatan</th></tr></thead><tbody id="studentRows"></tbody></table></div>
+<div class="table-wrap"><table><thead><tr><th>Hadir</th><th>Bil</th><th>Nama Murid</th><th>Kelas</th><th>Jawatan</th></tr></thead><tbody id="studentRows"></tbody></table></div>
 <div style="display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-top:15px;padding-top:15px;border-top:1px solid var(--line)">
   <div style="font-size:12px;color:var(--muted)">
     <b style="color:var(--text)">Jumlah ahli: 6</b> &nbsp;•&nbsp; <b style="color:var(--green)">Hadir: <span id="presentCount">6</span></b> &nbsp;•&nbsp; <b style="color:var(--red)">Tidak hadir: <span id="absentCount">0</span></b>
@@ -413,6 +402,7 @@
 </div>
 </section>
 
+<!-- 5. ANALISIS KEHADIRAN -->
 <section id="analisis-kehadiran" class="page">
 <div class="card">
   <div class="section-title">
@@ -497,6 +487,7 @@
 </div>
 </section>
 
+<!-- 6. LMK EDITOR -->
 <section id="lmkeditor" class="page">
 <div class="preview">
 <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap"><div><h2>LMK BIL 2 / 2026</h2><div class="sub">Kelab Catur • Rabu • 28 Januari 2026 • 11:40 pagi – 12:40 tengah hari</div></div><span class="badge amber">DRAF</span></div>
@@ -566,6 +557,7 @@
 </div>
 </section>
 
+<!-- 7. LPP -->
 <section id="lpp" class="page">
 <div class="card"><div class="section-title"><div><h2>LPP — Penglibatan & Pencapaian</h2><div style="font-size:11px;color:var(--muted);margin-top:4px">Raw data dikekalkan mengikut master sedia ada supaya terus boleh dibaca Looker Studio.</div></div><div class="actions"><button class="btn">Import Pukal</button><button class="btn primary">+ Rekod</button></div></div>
 <div class="filters" style="margin-bottom:14px"><select><option>2026</option><option>2025</option></select><select><option>Semua Unit</option><option>Olahraga</option><option>Catur</option><option>Bola Sepak</option></select><select><option>Semua Pencapaian</option><option>PENYERTAAN</option><option>EMAS</option><option>PERAK</option><option>GANGSA</option></select><input placeholder="Cari nama pelajar / pertandingan"></div>
@@ -576,15 +568,17 @@
 </tbody></table></div></div>
 </section>
 
+<!-- 8. PEMANTAUAN -->
 <section id="pemantauan" class="page">
 <div class="card"><div class="section-title"><h2>Laporan Pemantauan Dokumentasi</h2><div class="filters"><select><option>Semua Unit</option><option>Catur</option><option>Bola Sepak</option></select></div></div>
-<div class="table-wrap"><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status Dokumentasi</th></tr></thead><tbody>
+<div class="table-wrap"><table><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status Dokumentasi</th></tr></thead><tbody>
 <tr><td>1</td><td>21/1/2026</td><td>Catur</td><td><b>Ahmad Safwan</b></td><td><span class="badge green">ADA</span></td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td></tr>
 <tr><td>2</td><td>28/1/2026</td><td>Catur</td><td><b>Rachel</b></td><td><span class="badge green">ADA</span></td><td><span class="badge red">BELUM</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
 <tr><td>3</td><td>4/2/2026</td><td>Bola Sepak</td><td><b>Muhamad Hisham</b></td><td><span class="badge red">BELUM</span></td><td><span class="badge green">ADA</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
 </tbody></table></div></div>
 </section>
 
+<!-- 9. ARKIB -->
 <section id="arkib" class="page">
 <div class="card"><div class="section-title"><h2>Pelaporan & Arkib</h2><div class="filters"><select><option>2026</option><option>2025</option></select><select><option>Kelab Catur</option><option>Semua Unit</option></select></div></div>
 <div class="preview">
@@ -604,7 +598,7 @@
 </div></div>
 </section>
 
-
+<!-- 10. AGIHAN -->
 <section id="agihan" class="page">
 <div class="card">
   <div class="section-title">
@@ -642,7 +636,7 @@
 </div>
 </section>
 
-
+<!-- 11. TAKWIM -->
 <section id="takwim" class="page">
   <div class="card">
     <div class="section-title">
@@ -705,6 +699,7 @@
   </div>
 </section>
 
+<!-- 12. OPPM -->
 <section id="oppm" class="page">
   <div class="card">
     <div class="section-title">
@@ -782,13 +777,14 @@
   </div>
 </section>
 
+<!-- 13. MASTER TETAPAN -->
 <section id="master" class="page">
   <div class="card">
     <div class="section-title">
       <div>
         <h2>Master Data & Tetapan</h2>
         <div style="font-size:11px;color:var(--muted);margin-top:4px">
-          Pusat SSOT untuk data guru, murid, pendaftaran kelab, keahlian, dan pangkalan Google Sheets.
+          Pusat SSOT untuk data guru, murid, pendaftaran kelab, dan pangkalan Google Sheets.
         </div>
       </div>
       <div class="actions">
@@ -803,7 +799,7 @@
       <div class="card stat"><div class="label">JADUAL</div><div class="num">36</div><div class="small">Perjumpaan tahun semasa</div></div>
     </div>
 
-    <!-- 1. PENDAFTARAN KELAB / UNIT RASMI -->
+    <!-- Pendaftaran Kelab / Unit Rasmi -->
     <div class="section-title" style="margin-top:28px">
       <div>
         <h2>Pendaftaran Kelab / Unit Rasmi (UBB, UKP, USP)</h2>
@@ -841,7 +837,6 @@
       </table>
     </div>
 
-    <!-- 2. MASTER GURU -->
     <div class="section-title" style="margin-top:28px"><h2>Master Guru</h2></div>
     <div class="table-wrap">
       <table id="tableMasterGuru">
@@ -859,38 +854,37 @@
       <button class="btn">Import Pukal Guru</button><button class="btn primary">+ Tambah Guru</button>
     </div>
 
-    <!-- 3. MASTER MURID -->
-    <div class="section-title" style="margin-top:28px"><h2>Master Murid</h2></div>
+    <!-- MASTER MURID TERPUSAT DENGAN EDIT & PADAM -->
+    <div class="section-title" style="margin-top:28px">
+      <div>
+        <h2>Master Murid & Keahlian Terpusat</h2>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Mengandungi profil murid, unit kokum dan jawatan dalam satu tempat. Boleh Edit dan Padam terus.</div>
+      </div>
+      <div class="actions">
+        <input type="file" id="importExcelInput" accept=".xlsx, .xls" style="display:none" onchange="handleExcelUpload(event)">
+        <button class="btn" onclick="document.getElementById('importExcelInput').click()">📥 Import Pukal Excel</button>
+        <button class="btn primary" onclick="bukaModalMurid('tambah')">+ Tambah Murid</button>
+      </div>
+    </div>
+
     <div class="table-wrap">
-      <table id="tableMasterMurid">
-        <thead><tr><th>ID</th><th>Nama Murid</th><th>Jantina</th><th>Kelas</th><th>Tahun</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td colspan="6" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
+      <table style="min-width:1300px">
+        <thead>
+          <tr>
+            <th>ID</th><th>Nama Murid</th><th>Jantina</th><th>Tahun</th><th>Kelas</th>
+            <th>UBB</th><th>Jawatan UBB</th>
+            <th>UKP</th><th>Jawatan UKP</th>
+            <th>USP</th><th>Jawatan USP</th>
+            <th>Rumah Sukan</th><th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyMasterMurid">
+          <tr><td colspan="14" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
         </tbody>
       </table>
     </div>
-    <div class="actions" style="margin-top:12px">
-      <input type="file" id="importExcelInput" accept=".xlsx, .xls" style="display:none" onchange="handleExcelUpload(event)">
-      <button class="btn" onclick="document.getElementById('importExcelInput').click()">Import Pukal Excel</button>
-      <button class="btn primary" onclick="bukaModalMurid()">+ Tambah Murid</button>
-    </div>
 
-    <!-- 4. MASTER KEAHLIAN & JAWATAN MURID -->
-    <div class="section-title" style="margin-top:28px"><h2>Master Keahlian & Jawatan Murid</h2></div>
-    <div class="table-wrap">
-      <table id="tableMasterKeahlian">
-        <thead><tr><th>Nama Murid</th><th>UBB</th><th>Jawatan UBB</th><th>UKP</th><th>Jawatan UKP</th><th>USP</th><th>Jawatan USP</th><th>Rumah Sukan</th><th>Jawatan Rumah</th></tr></thead>
-        <tbody id="tbodyMasterKeahlian">
-          <tr><td colspan="9" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="actions" style="margin-top:12px">
-      <button class="btn">Import Pukal Keahlian</button>
-      <button class="btn primary" onclick="bukaModalKeahlian()">+ Tetapkan Jawatan</button>
-    </div>
-
-    <!-- 5. MASTER JADUAL -->
     <div class="section-title" style="margin-top:28px">
       <div>
         <h2>Master Jadual Perjumpaan</h2>
@@ -923,7 +917,6 @@
       <button class="btn primary">↻ Susun Ikut Tarikh</button>
     </div>
 
-    <!-- 6. MASTER TAKWIM -->
     <div class="section-title" style="margin-top:28px"><h2>Master Takwim</h2></div>
     <div class="table-wrap">
       <table>
@@ -943,114 +936,51 @@
 
 </main></div>
 
-<!-- MODAL BORANG TAMBAH MURID -->
-<div class="modal-overlay" id="modalTambahMurid">
+<!-- MODAL TAMBAH / EDIT MURID -->
+<div class="modal-overlay" id="modalMurid">
   <div class="modal-box">
-    <h3>Tambah Murid Baharu</h3>
-    <div class="form-group">
-      <label>ID Murid</label>
-      <input id="inputID" placeholder="Contoh: 004">
+    <h3 id="modalMuridTitle">Tambah Murid Baharu</h3>
+    <input type="hidden" id="editOriginalID">
+    <div class="two">
+      <div class="form-group"><label>ID Murid</label><input id="mID" placeholder="001"></div>
+      <div class="form-group"><label>Nama Penuh</label><input id="mNama" placeholder="Nama murid"></div>
     </div>
-    <div class="form-group">
-      <label>Nama Penuh Murid</label>
-      <input id="inputNama" placeholder="Nama penuh seperti dalam dokumen">
+    <div class="two">
+      <div class="form-group"><label>Jantina</label><select id="mJantina"><option value="L">L</option><option value="P">P</option></select></div>
+      <div class="form-group"><label>Tahun</label><input id="mTahun" value="2026"></div>
     </div>
-    <div class="form-group">
-      <label>Jantina</label>
-      <select id="inputJantina">
-        <option value="L">L — Lelaki</option>
-        <option value="P">P — Perempuan</option>
-      </select>
+    <div class="form-group"><label>Kelas</label><input id="mKelas" placeholder="5 Amanah"></div>
+    <div class="two">
+      <div class="form-group"><label>UBB</label><input id="mUBB" placeholder="Pengakap"></div>
+      <div class="form-group"><label>Jawatan UBB</label>
+        <select id="mJawatanUBB">
+          <option value="Ahli Aktif">Ahli Aktif</option><option value="Pengerusi">Pengerusi</option><option value="Timbalan Pengerusi">Timbalan Pengerusi</option><option value="Setiausaha">Setiausaha</option><option value="Penolong Setiausaha">Penolong Setiausaha</option><option value="Bendahari">Bendahari</option><option value="Penolong Bendahari">Penolong Bendahari</option><option value="AJK Tahun 6">AJK Tahun 6</option><option value="AJK Tahun 5">AJK Tahun 5</option><option value="AJK Tahun 4">AJK Tahun 4</option>
+        </select>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Tahun</label>
-      <input id="inputTahun" value="2026">
+    <div class="two">
+      <div class="form-group"><label>UKP</label><input id="mUKP" placeholder="Kelab Catur"></div>
+      <div class="form-group"><label>Jawatan UKP</label>
+        <select id="mJawatanUKP">
+          <option value="Ahli Aktif">Ahli Aktif</option><option value="Pengerusi">Pengerusi</option><option value="Timbalan Pengerusi">Timbalan Pengerusi</option><option value="Setiausaha">Setiausaha</option><option value="Penolong Setiausaha">Penolong Setiausaha</option><option value="Bendahari">Bendahari</option><option value="Penolong Bendahari">Penolong Bendahari</option><option value="AJK Tahun 6">AJK Tahun 6</option><option value="AJK Tahun 5">AJK Tahun 5</option><option value="AJK Tahun 4">AJK Tahun 4</option>
+        </select>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Kelas</label>
-      <input id="inputKelas" placeholder="Contoh: 5 Amanah">
+    <div class="two">
+      <div class="form-group"><label>USP</label><input id="mUSP" placeholder="Bola Sepak"></div>
+      <div class="form-group"><label>Jawatan USP</label>
+        <select id="mJawatanUSP">
+          <option value="Ahli Aktif">Ahli Aktif</option><option value="Pengerusi">Pengerusi</option><option value="Timbalan Pengerusi">Timbalan Pengerusi</option><option value="Setiausaha">Setiausaha</option><option value="Penolong Setiausaha">Penolong Setiausaha</option><option value="Bendahari">Bendahari</option><option value="Penolong Bendahari">Penolong Bendahari</option><option value="AJK Tahun 6">AJK Tahun 6</option><option value="AJK Tahun 5">AJK Tahun 5</option><option value="AJK Tahun 4">AJK Tahun 4</option>
+        </select>
+      </div>
+    </div>
+    <div class="two">
+      <div class="form-group"><label>Rumah Sukan</label><input id="mRumah" placeholder="Merah"></div>
+      <div class="form-group"><label>Status</label><select id="mStatus"><option value="AKTIF">AKTIF</option><option value="TIDAK AKTIF">TIDAK AKTIF</option></select></div>
     </div>
     <div class="modal-actions">
       <button class="btn" onclick="tutupModalMurid()">Batal</button>
-      <button class="btn primary" onclick="hantarMuridBaru()">Simpan ke Sheets</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL BORANG TETAPKAN KEAHLIAN & JAWATAN -->
-<div class="modal-overlay" id="modalKeahlian">
-  <div class="modal-box" style="max-width:540px;">
-    <h3>Tetapkan Keahlian & Jawatan Murid</h3>
-    <div class="form-group">
-      <label>Nama Penuh Murid</label>
-      <input id="kNamaMurid" placeholder="Contoh: Mohamad Aznil">
-    </div>
-    <div class="two">
-      <div class="form-group">
-        <label>UBB (Unit Beruniform)</label>
-        <input id="kUBB" placeholder="Contoh: Pengakap">
-      </div>
-      <div class="form-group">
-        <label>Jawatan UBB</label>
-        <select id="kJawatanUBB">
-          <option value="Ahli">Ahli</option>
-          <option value="Pengerusi">Pengerusi</option>
-          <option value="Setiausaha">Setiausaha</option>
-          <option value="Bendahari">Bendahari</option>
-          <option value="AJK">AJK</option>
-        </select>
-      </div>
-    </div>
-    <div class="two">
-      <div class="form-group">
-        <label>UKP (Kelab / Persatuan)</label>
-        <input id="kUKP" placeholder="Contoh: Kelab Catur">
-      </div>
-      <div class="form-group">
-        <label>Jawatan UKP</label>
-        <select id="kJawatanUKP">
-          <option value="Ahli">Ahli</option>
-          <option value="Pengerusi">Pengerusi</option>
-          <option value="Setiausaha">Setiausaha</option>
-          <option value="Bendahari">Bendahari</option>
-          <option value="AJK">AJK</option>
-        </select>
-      </div>
-    </div>
-    <div class="two">
-      <div class="form-group">
-        <label>USP (Sukan / Permainan)</label>
-        <input id="kUSP" placeholder="Contoh: Bola Sepak">
-      </div>
-      <div class="form-group">
-        <label>Jawatan USP</label>
-        <select id="kJawatanUSP">
-          <option value="Ahli">Ahli</option>
-          <option value="Pengerusi">Pengerusi</option>
-          <option value="Setiausaha">Setiausaha</option>
-          <option value="Bendahari">Bendahari</option>
-          <option value="AJK">AJK</option>
-        </select>
-      </div>
-    </div>
-    <div class="two">
-      <div class="form-group">
-        <label>Rumah Sukan</label>
-        <input id="kRumah" placeholder="Contoh: Merah">
-      </div>
-      <div class="form-group">
-        <label>Jawatan Rumah Sukan</label>
-        <select id="kJawatanRumah">
-          <option value="Ahli">Ahli</option>
-          <option value="Ketua">Ketua</option>
-          <option value="Penolong Ketua">Penolong Ketua</option>
-          <option value="AJK">AJK</option>
-        </select>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="tutupModalKeahlian()">Batal</button>
-      <button class="btn primary" onclick="simpanKeahlian()">Simpan ke Sheets</button>
+      <button class="btn primary" onclick="simpanDataMurid()">Simpan ke Sheets</button>
     </div>
   </div>
 </div>
@@ -1077,9 +1007,7 @@ async function fetchSheetData(sheetName) {
 async function loadLiveData() {
   toast("Menarik data langsung dari Google Sheets...");
   
-  // Muat senarai kelab dan keahlian
   loadKelabList();
-  loadKeahlianList();
 
   // Master Guru
   const guruList = await fetchSheetData("Master_Guru");
@@ -1104,23 +1032,8 @@ async function loadLiveData() {
     guruTbody.innerHTML = `<tr><td colspan="11" style="text-align:center; color:var(--muted);">Tiada rekod dijumpai dalam Google Sheets.</td></tr>`;
   }
 
-  // Master Murid
-  const muridList = await fetchSheetData("Master_Murid");
-  const muridTbody = document.querySelector("#tableMasterMurid tbody");
-  if (muridList.length > 0) {
-    muridTbody.innerHTML = muridList.map(m => `
-      <tr>
-        <td>${m["ID_Murid"] || ""}</td>
-        <td><b>${m["Nama_Murid"] || ""}</b></td>
-        <td>${m["Jantina"] || ""}</td>
-        <td>${m["Kelas"] || ""}</td>
-        <td>${m["Tahun"] || ""}</td>
-        <td><span class="badge green">${m["Status"] || "AKTIF"}</span></td>
-      </tr>
-    `).join("");
-  } else {
-    muridTbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--muted);">Tiada rekod dijumpai dalam Google Sheets.</td></tr>`;
-  }
+  // Master Murid Terpusat
+  loadMasterMurid();
 
   toast("Penyelarasan Google Sheets selesai!");
 }
@@ -1168,6 +1081,7 @@ async function tambahUnitKelab() {
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         sheet: "Master_Kelab",
+        action: "add",
         row: [kategori, namaUnit, "AKTIF"]
       })
     });
@@ -1186,75 +1100,129 @@ async function tambahUnitKelab() {
   }
 }
 
-// Fungsi Tarik Master Keahlian dari Google Sheets
-async function loadKeahlianList() {
-  const keahlianList = await fetchSheetData("Master_Keahlian");
-  const tbody = document.getElementById("tbodyMasterKeahlian");
-  if (!tbody) return;
+// Master Murid Cache & Papar
+let cachedMuridList = [];
 
-  if (keahlianList && keahlianList.length > 0) {
-    tbody.innerHTML = keahlianList.map(k => `
-      <tr>
-        <td><b>${k["Nama Murid"] || k["Nama_Murid"] || ""}</b></td>
-        <td>${k["UBB"] || "—"}</td>
-        <td>${k["Jawatan UBB"] || "—"}</td>
-        <td>${k["UKP"] || "—"}</td>
-        <td>${k["Jawatan UKP"] || "—"}</td>
-        <td>${k["USP"] || "—"}</td>
-        <td>${k["Jawatan USP"] || "—"}</td>
-        <td>${k["Rumah Sukan"] || "—"}</td>
-        <td>${k["Jawatan Rumah"] || "—"}</td>
-      </tr>
-    `).join("");
+async function loadMasterMurid() {
+  cachedMuridList = await fetchSheetData("Master_Murid");
+  const tbody = document.getElementById("tbodyMasterMurid");
+  if (cachedMuridList.length > 0) {
+    tbody.innerHTML = cachedMuridList.map(m => {
+      const id = m["ID_Murid"] || "";
+      return `
+        <tr>
+          <td>${id}</td>
+          <td><b>${m["Nama_Murid"] || ""}</b></td>
+          <td>${m["Jantina"] || ""}</td>
+          <td>${m["Tahun"] || ""}</td>
+          <td>${m["Kelas"] || ""}</td>
+          <td>${m["UBB"] || "—"}</td>
+          <td>${m["Jawatan_UBB"] || "Ahli Aktif"}</td>
+          <td>${m["UKP"] || "—"}</td>
+          <td>${m["Jawatan_UKP"] || "Ahli Aktif"}</td>
+          <td>${m["USP"] || "—"}</td>
+          <td>${m["Jawatan_USP"] || "Ahli Aktif"}</td>
+          <td>${m["Rumah_Sukan"] || "—"}</td>
+          <td><span class="badge green">${m["Status"] || "AKTIF"}</span></td>
+          <td>
+            <button class="btn" style="padding:4px 8px;font-size:11px;" onclick="bukaModalMurid('edit', '${id}')">Edit</button>
+            <button class="btn danger" style="padding:4px 8px;font-size:11px;" onclick="padamMurid('${id}')">Padam</button>
+          </td>
+        </tr>
+      `;
+    }).join("");
   } else {
-    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:var(--muted);">Tiada rekod keahlian dalam tab Master_Keahlian. Sila tetapkan jawatan murid.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;color:var(--muted)">Tiada rekod murid dijumpai dalam Google Sheets.</td></tr>`;
   }
 }
 
-// Fungsi Kawalan Modal Keahlian
-function bukaModalKeahlian() {
-  document.getElementById("modalKeahlian").style.display = "flex";
-}
-function tutupModalKeahlian() {
-  document.getElementById("modalKeahlian").style.display = "none";
+let modeModal = "tambah";
+function bukaModalMurid(mode, id = "") {
+  modeModal = mode;
+  document.getElementById("modalMurid").style.display = "flex";
+  if (mode === "tambah") {
+    document.getElementById("modalMuridTitle").textContent = "Tambah Murid Baharu";
+    document.getElementById("editOriginalID").value = "";
+    document.getElementById("mID").value = "";
+    document.getElementById("mNama").value = "";
+    document.getElementById("mJantina").value = "L";
+    document.getElementById("mTahun").value = "2026";
+    document.getElementById("mKelas").value = "";
+    document.getElementById("mUBB").value = "";
+    document.getElementById("mJawatanUBB").value = "Ahli Aktif";
+    document.getElementById("mUKP").value = "";
+    document.getElementById("mJawatanUKP").value = "Ahli Aktif";
+    document.getElementById("mUSP").value = "";
+    document.getElementById("mJawatanUSP").value = "Ahli Aktif";
+    document.getElementById("mRumah").value = "";
+    document.getElementById("mStatus").value = "AKTIF";
+  } else {
+    document.getElementById("modalMuridTitle").textContent = "Edit Maklumat Murid";
+    const murid = cachedMuridList.find(x => String(x["ID_Murid"]) === String(id));
+    if (murid) {
+      document.getElementById("editOriginalID").value = murid["ID_Murid"];
+      document.getElementById("mID").value = murid["ID_Murid"] || "";
+      document.getElementById("mNama").value = murid["Nama_Murid"] || "";
+      document.getElementById("mJantina").value = murid["Jantina"] || "L";
+      document.getElementById("mTahun").value = murid["Tahun"] || "2026";
+      document.getElementById("mKelas").value = murid["Kelas"] || "";
+      document.getElementById("mUBB").value = murid["UBB"] || "";
+      document.getElementById("mJawatanUBB").value = murid["Jawatan_UBB"] || "Ahli Aktif";
+      document.getElementById("mUKP").value = murid["UKP"] || "";
+      document.getElementById("mJawatanUKP").value = murid["Jawatan_UKP"] || "Ahli Aktif";
+      document.getElementById("mUSP").value = murid["USP"] || "";
+      document.getElementById("mJawatanUSP").value = murid["Jawatan_USP"] || "Ahli Aktif";
+      document.getElementById("mRumah").value = murid["Rumah_Sukan"] || "";
+      document.getElementById("mStatus").value = murid["Status"] || "AKTIF";
+    }
+  }
 }
 
-async function simpanKeahlian() {
-  const nama = document.getElementById("kNamaMurid").value.trim();
-  if (!nama) {
-    alert("Sila masukkan nama murid.");
+function tutupModalMurid() {
+  document.getElementById("modalMurid").style.display = "none";
+}
+
+async function simpanDataMurid() {
+  const rowData = [
+    document.getElementById("mID").value.trim(),
+    document.getElementById("mNama").value.trim(),
+    document.getElementById("mJantina").value,
+    document.getElementById("mTahun").value.trim(),
+    document.getElementById("mKelas").value.trim(),
+    document.getElementById("mUBB").value.trim(),
+    document.getElementById("mJawatanUBB").value,
+    document.getElementById("mUKP").value.trim(),
+    document.getElementById("mJawatanUKP").value,
+    document.getElementById("mUSP").value.trim(),
+    document.getElementById("mJawatanUSP").value,
+    document.getElementById("mRumah").value.trim(),
+    document.getElementById("mStatus").value
+  ];
+
+  if (!rowData[0] || !rowData[1]) {
+    alert("Sila masukkan ID dan Nama Murid.");
     return;
   }
-  const ubb = document.getElementById("kUBB").value.trim();
-  const jUBB = document.getElementById("kJawatanUBB").value;
-  const ukp = document.getElementById("kUKP").value.trim();
-  const jUKP = document.getElementById("kJawatanUKP").value;
-  const usp = document.getElementById("kUSP").value.trim();
-  const jUSP = document.getElementById("kJawatanUSP").value;
-  const rumah = document.getElementById("kRumah").value.trim();
-  const jRumah = document.getElementById("kJawatanRumah").value;
 
-  tutupModalKeahlian();
-  toast("Menyimpan rekod keahlian ke Google Sheets...");
+  tutupModalMurid();
+  toast("Menghantar data ke Google Sheets...");
 
+  const actionType = modeModal === "edit" ? "update" : "add";
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
-        sheet: "Master_Keahlian",
-        row: [nama, ubb, jUBB, ukp, jUKP, usp, jUSP, rumah, jRumah]
+        sheet: "Master_Murid",
+        action: actionType,
+        id: rowData[0],
+        row: rowData
       })
     });
     const result = await response.json();
     if (result.success) {
-      toast("Keahlian & jawatan berjaya disimpan!");
-      document.getElementById("kNamaMurid").value = "";
-      document.getElementById("kUBB").value = "";
-      document.getElementById("kUKP").value = "";
-      document.getElementById("kUSP").value = "";
-      document.getElementById("kRumah").value = "";
-      loadKeahlianList();
+      toast("Berjaya disimpan!");
+      loadMasterMurid();
     } else {
       toast("Gagal menyimpan: " + result.message);
     }
@@ -1264,49 +1232,25 @@ async function simpanKeahlian() {
   }
 }
 
-// 2. Fungsi Kawalan Modal Borang Tambah Murid
-function bukaModalMurid() {
-  document.getElementById("modalTambahMurid").style.display = "flex";
-}
-
-function tutupModalMurid() {
-  document.getElementById("modalTambahMurid").style.display = "none";
-}
-
-async function hantarMuridBaru() {
-  const id = document.getElementById("inputID").value.trim();
-  const nama = document.getElementById("inputNama").value.trim();
-  const jantina = document.getElementById("inputJantina").value;
-  const tahun = document.getElementById("inputTahun").value.trim();
-  const kelas = document.getElementById("inputKelas").value.trim();
-
-  if (!id || !nama || !kelas) {
-    alert("Sila lengkapkan ID, Nama dan Kelas murid.");
-    return;
-  }
-
-  tutupModalMurid();
-  toast("Menghantar data murid baharu ke Google Sheets...");
-
+async function padamMurid(id) {
+  if (!confirm(`Adakah anda pasti mahu memadam murid dengan ID: ${id}?`)) return;
+  toast("Memadam rekod...");
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         sheet: "Master_Murid",
-        row: [id, nama, jantina, tahun, kelas, "AKTIF"]
+        action: "delete",
+        id: id
       })
     });
-    
     const result = await response.json();
     if (result.success) {
-      toast("Murid berjaya ditambah! Memuat semula senarai...");
-      document.getElementById("inputID").value = "";
-      document.getElementById("inputNama").value = "";
-      document.getElementById("inputKelas").value = "";
-      loadLiveData();
+      toast("Rekod berjaya dipadam!");
+      loadMasterMurid();
     } else {
-      toast("Gagal menyimpan: " + result.message);
+      toast("Gagal memadam.");
     }
   } catch (err) {
     console.error(err);
@@ -1337,35 +1281,33 @@ async function handleExcelUpload(event) {
       let successCount = 0;
 
       for (let i = 1; i < rows.length; i++) {
-        const row = rows[i];
-        if (row && row.length >= 5) {
-          const id = row[0] ? String(row[0]).trim() : "";
-          const nama = row[1] ? String(row[1]).trim() : "";
-          const jantina = row[2] ? String(row[2]).trim() : "L";
-          const tahun = row[3] ? String(row[3]).trim() : "2026";
-          const kelas = row[4] ? String(row[4]).trim() : "";
-
-          if (id && nama) {
-            try {
-              const response = await fetch(API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({
-                  sheet: "Master_Murid",
-                  row: [id, nama, jantina, tahun, kelas, "AKTIF"]
-                })
-              });
-              const result = await response.json();
-              if (result.success) successCount++;
-            } catch (err) {
-              console.error("Ralat pada baris Excel:", i, err);
-            }
+        const r = rows[i];
+        if (r && r[0] && r[1]) {
+          const rowData = [
+            String(r[0]), String(r[1]), String(r[2]||"L"), String(r[3]||"2026"), String(r[4]||""),
+            String(r[5]||""), String(r[6]||"Ahli Aktif"), String(r[7]||""), String(r[8]||"Ahli Aktif"),
+            String(r[9]||""), String(r[10]||"Ahli Aktif"), String(r[11]||""), String(r[12]||"AKTIF")
+          ];
+          try {
+            const response = await fetch(API_URL, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify({
+                sheet: "Master_Murid",
+                action: "add",
+                row: rowData
+              })
+            });
+            const result = await response.json();
+            if (result.success) successCount++;
+          } catch (err) {
+            console.error("Ralat pada baris Excel:", i, err);
           }
         }
       }
 
       toast(`Import Pukal Excel Selesai! Berjaya masukkan ${successCount} murid.`);
-      loadLiveData();
+      loadMasterMurid();
       event.target.value = "";
     } catch (err) {
       console.error(err);
@@ -1392,7 +1334,7 @@ const pages = {
   "agihan": ["Agihan Tugas Guru Unit Kokum", "Rujukan agihan guru UBB, UKP, USP dan tugas sokongan."],
   takwim: ["Master Takwim Sekolah", "Takwim digabung daripada Master Jadual dan program admin."],
   tetapan: ["Master Tetapan Sekolah", "Maklumat asas sekolah dan konfigurasi sistem."],
-  master: ["Master Data & Tetapan", "Pusat SSOT untuk data guru, murid, pendaftaran kelab, keahlian, dan pangkalan Google Sheets."],
+  master: ["Master Data & Tetapan", "Pusat SSOT untuk data guru, murid, pendaftaran kelab, dan pangkalan Google Sheets."],
   oppm: ["OPPM", "One Page Project Manager."]
 };
 
