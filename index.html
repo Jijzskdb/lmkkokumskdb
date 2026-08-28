@@ -3,7 +3,7 @@
 <head>
 <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>SPKOKUM LMK — Prototype V7.1 Live</title>
+<title>SPKOKUM LMK — Prototype V7.1</title>
 <style>
 :root{--nav:#102a43;--nav2:#173f60;--blue:#2563eb;--bg:#f4f7fb;--card:#fff;--text:#172b4d;--muted:#6b7c93;--line:#e5eaf0;--green:#16855b;--greenbg:#e8f7f0;--amber:#b7791f;--amberbg:#fff7df;--red:#c53030;--redbg:#fff0f0;--shadow:0 8px 24px rgba(16,42,67,.07)}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--text)}button,select,input,textarea{font:inherit}button{cursor:pointer}
@@ -11,17 +11,42 @@
 .main{margin-left:248px;width:calc(100% - 248px);padding:26px 30px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.top h1{font-size:24px;margin:0 0 5px}.top p{margin:0;color:var(--muted);font-size:13px}.actions{display:flex;gap:9px}.btn{padding:10px 14px;border-radius:9px;background:#fff;border:1px solid var(--line);color:var(--text);font-weight:650}.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:18px}.stat .label{font-size:12px;color:var(--muted)}.stat .num{font-size:28px;font-weight:800;margin-top:8px}.stat .small{font-size:11px;color:var(--muted);margin-top:5px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:27px 0 12px}.section-title h2{font-size:16px;margin:0}.filters{display:flex;gap:8px;flex-wrap:wrap}.filters select,.filters input,.field input,.field textarea{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 11px;color:var(--text)}
 .table-wrap{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}table{border-collapse:separate;border-spacing:0;width:100%;min-width:900px}th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font-size:12px;white-space:nowrap}th{background:#f8fafc;color:#66788a;font-size:10px;text-transform:uppercase;letter-spacing:.4px}tr:last-child td{border-bottom:0}.badge{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:10px;font-weight:750}.green{background:var(--greenbg);color:var(--green)}.amber{background:var(--amberbg);color:var(--amber)}.red{background:var(--redbg);color:var(--red)}.blue{background:#eaf1ff;color:#2458c4}
-.page{display:none}.page.active{display:block}
-.preview{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:30px;max-width:900px;margin:auto}.preview h2{text-align:center;margin:0 0 4px}.preview .sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:25px}.preview-block{border:1px solid var(--line);border-radius:10px;padding:15px;margin:12px 0}.preview-block h4{margin:0 0 10px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.page{display:none}.page.active{display:block}.unit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.unit{padding:16px}.unit h3{margin:0 0 4px;font-size:14px}.unit p{margin:0;color:var(--muted);font-size:11px}.unit .row{display:flex;justify-content:space-between;margin-top:15px;font-size:11px}
+.preview{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:30px;max-width:900px;margin:auto}.preview h2{text-align:center;margin:0 0 4px}.preview .sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:25px}.preview-block{border:1px solid var(--line);border-radius:10px;padding:15px;margin:12px 0}.preview-block h4{margin:0 0 10px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.photo{border:1px dashed #b8c4d0;border-radius:10px;padding:24px;text-align:center;background:#fafcfe}.photo small{display:block;color:var(--muted);margin:7px}.checklist{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.checkitem{border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff}.checkitem b{display:block;margin-bottom:6px}.empty{padding:45px;text-align:center;color:var(--muted)}
 .toast{position:fixed;right:24px;bottom:24px;background:#12263a;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow);display:none;font-size:12px;z-index:9999}
-@media(max-width:900px){.sidebar{width:72px}.brand div:not(.logo),.nav button span,.nav .section{display:none}.main{margin-left:72px;width:calc(100% - 72px);padding:20px}.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.sidebar{width:72px}.brand div:not(.logo),.nav button span,.nav .section{display:none}.main{margin-left:72px;width:calc(100% - 72px);padding:20px}.grid,.unit-grid,.checklist{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.grid,.unit-grid,.checklist,.two{grid-template-columns:1fr}.top{align-items:flex-start;gap:12px;flex-direction:column}}
+</style>
+
+<style>
+/* V7.1 sidebar scroll */
+.sidebar{
+  height:100vh;
+  max-height:100vh;
+  overflow-y:auto;
+  overflow-x:hidden;
+  position:fixed;
+  top:0;
+  left:0;
+  bottom:0;
+  scrollbar-width:thin;
+  z-index:1000;
+  box-sizing:border-box;
+}
+.sidebar nav, .sidebar .nav, .sidebar .menu{
+  min-height:0;
+}
+@media (max-height:760px){
+  .sidebar{overflow-y:auto}
+}
 </style>
 <style>
-.sidebar{height:100vh;max-height:100vh;overflow-y:auto;overflow-x:hidden;position:fixed;top:0;left:0;bottom:0;scrollbar-width:thin;z-index:1000;box-sizing:border-box}
+/* V7.1 sidebar visibility */
+.sidebar{display:block;overscroll-behavior:contain}
 .sidebar::-webkit-scrollbar{width:8px}
 .sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.28);border-radius:8px}
-</style>
-</head>
+.sidebar::-webkit-scrollbar-track{background:rgba(255,255,255,.05)}
+.main{position:relative;z-index:1}
+</style></head>
 <body>
 <div class="app">
 <aside class="sidebar">
@@ -31,9 +56,19 @@
 <button class="active" data-page="dashboard">⌂ <span>Dashboard</span></button>
 <button data-page="jadual">▦ <span>Master Jadual</span></button>
 <button data-page="lmk">▤ <span>LMK</span></button>
-<button data-page="master">⚙ <span>Master Data (Live)</span></button>
+<button data-page="kehadiran">☑ <span>Kehadiran</span></button>
+<button data-page="analisis-kehadiran">▥ <span>Analisis Kehadiran</span></button>
+<button data-page="lmkeditor">◉ <span>LMK — 12 Perjumpaan</span></button>
+<div class="section">Analitik Raw Data</div>
+<button data-page="lpp">◈ <span>LPP — Penglibatan & Pencapaian</span></button>
+<div class="section">Proses & Output</div>
+<button data-page="pemantauan">✓ <span>Pemantauan</span></button>
+<button data-page="arkib">▣ <span>Pelaporan & Arkib</span></button>
+<div class="section">Admin</div>
+<button data-page="master">⚙ <span>Master Tetapan</span></button>
 <button data-page="agihan">👥 <span>Agihan Tugas Guru</span></button>
 <button data-page="takwim">📅 <span>Master Takwim</span></button>
+<button data-page="oppm">📌 <span>OPPM</span></button>
 </div>
 </aside>
 
@@ -42,49 +77,794 @@
 <div><h1 id="pageTitle">Dashboard LMK</h1><p id="pageDesc">Satu sistem untuk LMK dan LPP — semua unit, semua tahun.</p></div>
 <div class="actions">
   <button class="btn primary" onclick="loadLiveData()">↻ Sync Sheets</button>
-  <select class="year-select"><option>2026</option><option>2027</option></select>
+  <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
+  <button class="btn">Profil</button>
 </div>
 </div>
 
 <section id="dashboard" class="page active">
 <div class="grid">
-<div class="card stat"><div class="label">Status Sistem</div><div class="num" style="font-size:18px;color:var(--green)">🟢 Live API</div><div class="small">Bersambung Sheets</div></div>
+<div class="card stat"><div class="label">Unit / Kelab</div><div class="num">8</div><div class="small">Contoh sesi 2026</div></div>
 <div class="card stat"><div class="label">Perjumpaan</div><div class="num">96</div><div class="small">12 × 8 unit</div></div>
 <div class="card stat"><div class="label">LMK Lengkap</div><div class="num">72</div><div class="small">Termasuk evidens</div></div>
-<div class="card stat"><div class="label">Perlu Tindakan</div><div class="num">24</div><div class="small">Semakan</div></div>
+<div class="card stat"><div class="label">Status Google Sheets</div><div class="num" style="font-size:16px; color:var(--green)">🟢 Bersambung</div><div class="small">Live API</div></div>
 </div>
+<div class="section-title"><h2>Status Dokumentasi</h2><div class="filters"><select><option>Semua Unit</option><option>Catur</option><option>Bola Sepak</option><option>Bola Baling</option></select></div></div>
+<div class="table-wrap"><table><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status</th></tr></thead><tbody>
+<tr><td>1</td><td>21/1/2026</td><td>Kelab Catur</td><td>Ahmad Safwan</td><td><span class="badge green">ADA</span></td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td></tr>
+<tr><td>2</td><td>28/1/2026</td><td>Kelab Catur</td><td>Rachel</td><td><span class="badge green">ADA</span></td><td><span class="badge red">BELUM</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
+<tr><td>3</td><td>28/1/2026</td><td>Bola Sepak</td><td>Muhamad Hisham</td><td><span class="badge red">BELUM</span></td><td><span class="badge green">ADA</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
+</tbody></table></div>
 </section>
 
 <section id="jadual" class="page">
-<div class="card"><div class="section-title"><h2>Master Jadual Perjumpaan</h2></div>
-<p style="color:var(--muted);font-size:13px">Rujukan jadual perjumpaan rasmi kokurikulum sekolah.</p></div>
+  <div class="card">
+    <div class="section-title">
+      <div>
+        <h2>Master Jadual Perjumpaan</h2>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">
+          SSOT jadual perjumpaan • sumber LMK, guru bertugas, Takwim dan Looker Studio.
+        </div>
+      </div>
+      <div class="actions">
+        <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
+        <button class="btn">↻ Susun Ikut Tarikh</button>
+        <button class="btn">+ Tambah / Edit Jadual</button>
+      </div>
+    </div>
+
+    <div class="card" style="background:#f8fafc;margin-bottom:15px">
+      <b>Fungsi utama:</b> satu master menjadi sumber kepada jadual perjumpaan mingguan, agihan guru bertugas,
+      LMK, takwim dan Looker Studio. Guru bertugas boleh diganti di LMK tanpa mengubah jadual asal.
+    </div>
+
+    <div class="section-title">
+      <div>
+        <h2>Jadual Perjumpaan Mingguan Kokum 2026</h2>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">
+          Paparan mengikut slot UBB, UKP dan USP.
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn">📄 Jana PDF Jadual Perjumpaan</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table style="min-width:980px">
+        <thead>
+          <tr>
+            <th>MINGGU</th><th>TARIKH</th><th>HARI</th><th>MASA 1</th><th>UBB</th>
+            <th>MASA 2</th><th>UKP</th><th>MASA 3</th><th>USP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>M2</td><td>21 Jan 2026</td><td>RABU</td><td>11:40AM–12:20PM</td>
+            <td><span class="badge red">PERHIMPUNAN BULANAN KOKURIKULUM / MESYUARAT AGUNG</span></td>
+            <td>12:20PM–1:00PM</td>
+            <td><span class="badge red">PERHIMPUNAN BULANAN KOKURIKULUM / MESYUARAT AGUNG</span></td>
+            <td>1:00PM–1:40PM</td>
+            <td><span class="badge red">PERHIMPUNAN BULANAN KOKURIKULUM / MESYUARAT AGUNG</span></td>
+          </tr>
+          <tr>
+            <td>M3</td><td>28 Jan 2026</td><td>RABU</td><td>11:40AM–12:40PM</td>
+            <td><span class="badge blue">UBB 2</span></td>
+            <td>12:40PM–1:40PM</td>
+            <td><span class="badge purple">UKP 2</span></td>
+            <td>—</td><td>—</td>
+          </tr>
+          <tr>
+            <td>M4</td><td>4 Feb 2026</td><td>RABU</td><td>11:40AM–12:40PM</td>
+            <td><span class="badge blue">UBB 3</span></td>
+            <td>—</td><td>—</td>
+            <td>12:40PM–1:40PM</td>
+            <td><span class="badge green">USP 2</span></td>
+          </tr>
+          <tr>
+            <td>M11</td><td>8 Apr 2026</td><td>RABU</td><td>11:40AM–12:40PM</td>
+            <td><span class="badge blue">UBB 4</span></td>
+            <td>12:40PM–1:40PM</td>
+            <td><span class="badge purple">UKP 3</span></td>
+            <td>—</td><td>—</td>
+          </tr>
+          <tr>
+            <td>M12</td><td>15 Apr 2026</td><td>RABU</td><td>11:40AM–12:40PM</td>
+            <td><span class="badge blue">UBB 5</span></td>
+            <td>—</td><td>—</td>
+            <td>12:40PM–1:40PM</td>
+            <td><span class="badge green">USP 3</span></td>
+          </tr>
+          <tr>
+            <td>M13</td><td>22 Apr 2026</td><td>RABU</td><td>11:40AM–12:40PM</td>
+            <td><span class="badge blue">UBB 6</span></td>
+            <td>12:40PM–1:40PM</td>
+            <td><span class="badge purple">UKP 4</span></td>
+            <td>—</td><td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title" style="margin-top:24px">
+      <div>
+        <h2>Jadual Guru Bertugas 2026</h2>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">
+          Paparan agihan guru mengikut minggu dan unit seperti jadual operasi sekolah.
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn">📄 Jana PDF Jadual Guru Bertugas</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table style="min-width:1200px">
+        <thead>
+          <tr>
+            <th>MINGGU</th><th>TARIKH</th><th>UBB</th><th>PENGAKAP</th><th>TKRS</th>
+            <th>UKP</th><th>PAI</th><th>PBI</th><th>KPA</th>
+            <th>USP</th><th>KC</th><th>KBS</th><th>KBB</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>M2</td><td>Jan 21, 2026</td>
+            <td><span class="badge red">PERHIMPUNAN BULANAN KOKURIKULUM / MESYUARAT AGUNG / UBB 1 / UKP 1 / USP 1</span></td>
+            <td>WAXRY DE VALNO MASHRINU</td><td>MUHAMAD HISHAMUD DIN BIN HAMID</td>
+            <td><span class="badge red">PERHIMPUNAN BULANAN KOKURIKULUM / MESYUARAT AGUNG / UBB 1 / UKP 1 / USP 1</span></td>
+            <td>AHMAD SAFWAN BIN JAMALUDIN</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MOHD AZMIN BIN SUDIRMAN</td>
+            <td><span class="badge red">PERHIMPUNAN BULANAN KOKURIKULUM / MESYUARAT AGUNG / UBB 1 / UKP 1 / USP 1</span></td>
+            <td>FLORYNAH BAKAR</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>RACHEL MANJIL</td>
+          </tr>
+          <tr>
+            <td>M3</td><td>Jan 28, 2026</td>
+            <td><span class="badge blue">UBB 2</span></td>
+            <td>AHMAD SAFWAN BIN JAMALUDIN</td><td>FLORYNAH BAKAR</td>
+            <td><span class="badge purple">UKP 2</span></td>
+            <td>AHMAD SAFWAN BIN JAMALUDIN</td><td>RACHEL MANJIL</td><td>FLORYNAH BAKAR</td>
+            <td>—</td><td>—</td><td>—</td><td>—</td>
+          </tr>
+          <tr>
+            <td>M4</td><td>Feb 4, 2026</td>
+            <td><span class="badge blue">UBB 3</span></td>
+            <td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MOHD AZMIN BIN SUDIRMAN</td>
+            <td>—</td><td>—</td><td>—</td><td>—</td>
+            <td><span class="badge green">USP 2</span></td>
+            <td>MUHAMMAD ADAM CHONG</td><td>AHMAD SAFWAN BIN JAMALUDIN</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td>
+          </tr>
+          <tr>
+            <td>M11</td><td>Apr 8, 2026</td>
+            <td><span class="badge blue">UBB 4</span></td>
+            <td>MUHAMMAD ADAM CHONG</td><td>RACHEL MANJIL</td>
+            <td><span class="badge purple">UKP 3</span></td>
+            <td>MUHAMMAD HISHAMUD DIN BIN HAMID</td><td>MUHAMMAD ADAM CHONG</td><td>WAXRY DE VALNO MASHRINU</td>
+            <td>—</td><td>—</td><td>—</td><td>—</td>
+          </tr>
+          <tr>
+            <td>M12</td><td>Apr 15, 2026</td>
+            <td><span class="badge blue">UBB 5</span></td>
+            <td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MUHAMMAD HISHAMUD DIN BIN HAMID</td>
+            <td>—</td><td>—</td><td>—</td><td>—</td>
+            <td><span class="badge green">USP 3</span></td>
+            <td>MUHAMMAD HISHAMUD DIN BIN HAMID</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>WAXRY DE VALNO MASHRINU</td>
+          </tr>
+          <tr>
+            <td>M13</td><td>Apr 22, 2026</td>
+            <td><span class="badge blue">UBB 6</span></td>
+            <td>WAXRY DE VALNO MASHRINU</td><td>FLORYNAH BAKAR</td>
+            <td><span class="badge purple">UKP 4</span></td>
+            <td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>—</td>
+            <td>—</td><td>—</td><td>—</td><td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:18px;background:#eef5ff;border-color:#d7e6ff">
+      <b>SSOT & Output</b>
+      <div style="font-size:11px;color:#2458c4;margin-top:5px">
+        Data jadual disimpan sebagai raw data. Paparan ini digunakan untuk LMK, guru bertugas, Takwim dan Looker Studio.
+        PDF jadual perjumpaan dan PDF jadual guru bertugas menjadi evidens tahunan.
+      </div>
+    </div>
+  </div>
 </section>
 
 <section id="lmk" class="page">
-<div class="card"><div class="section-title"><h2>Modul LMK</h2></div>
-<p style="color:var(--muted);font-size:13px">Pengisian minit keceriaan aktiviti mingguan.</p></div>
+<div class="card">
+<div class="section-title"><h2>LMK — 12 Perjumpaan</h2><div class="filters"><select><option>Kelab Catur</option><option>Bola Sepak</option><option>Bola Baling</option></select></div></div>
+<div class="card" style="background:#f8fafc;margin-bottom:15px"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><b>Arkib LMK</b><div style="font-size:11px;color:var(--muted);margin-top:4px">12 perjumpaan digabungkan menjadi satu fail PDF bagi kelab dan tahun.</div></div><span class="badge blue">1 KELAB = 1 PDF</span></div></div>
+<div class="grid"><div class="card stat"><div class="label">Lengkap</div><div class="num">9</div></div><div class="card stat"><div class="label">Sebahagian</div><div class="num">2</div></div><div class="card stat"><div class="label">Belum</div><div class="num">1</div></div><div class="card stat"><div class="label">Minimum evidens</div><div class="num">2</div><div class="small">gambar / LMK</div></div></div>
+<div class="section-title"><h2>Senarai LMK</h2></div>
+<div class="table-wrap">
+<div data-v8-lmk-entry class="card" style="background:#f8fafc;margin-bottom:14px">
+  <div class="section-title">
+    <div>
+      <b>Isi LMK Mengikut Perjumpaan</b>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">
+        Pilih perjumpaan untuk membuka borang LMK. Maklumat tarikh, unit dan guru bertugas akan ditarik daripada Master Jadual.
+      </div>
+    </div>
+    <button class="btn primary" onclick="document.querySelector('[data-page=&quot;lmkeditor&quot;]')?.click()">+ Isi LMK</button>
+  </div>
+</div>
+
+<div data-v9-lmk-groups class="card" style="background:#f8fafc;margin-bottom:14px">
+  <div class="section-title">
+    <div>
+      <b>LMK — Tugasan Saya</b>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">
+        Semua unit/kelab yang telah ditetapkan kepada guru dipaparkan terus. Filter hanya pilihan untuk memudahkan carian.
+      </div>
+    </div>
+    <div class="filters">
+      <select id="lmkUnitFilter">
+        <option>Semua Unit</option>
+        <option>UBB</option>
+        <option>UKP</option>
+        <option>USP</option>
+        <option>Pengakap</option>
+        <option>TKRS</option>
+        <option>Catur</option>
+        <option>Bola Sepak</option>
+        <option>Bola Baling</option>
+      </select>
+      <select id="lmkStatusFilter">
+        <option>Semua Status</option>
+        <option>BELUM</option>
+        <option>DRAF</option>
+        <option>LENGKAP</option>
+      </select>
+      <input id="lmkSearch" placeholder="Cari tarikh / guru">
+    </div>
+  </div>
+
+  <div class="lmk-group" data-unit="UBB">
+    <div class="section-title" style="margin-top:8px"><h3>UBB — Pengakap</h3></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bil</th><th>Tarikh</th><th>Guru Bertugas</th><th>Kehadiran</th><th>Status LMK</th><th>Tindakan</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>21/01/2026</td><td>Rachel</td><td><span class="badge green">ADA</span></td><td><span class="badge amber">BELUM</span></td><td><button class="btn primary">Isi LMK</button></td></tr>
+          <tr><td>2</td><td>28/01/2026</td><td>Ahmad Safwan</td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td><td><button class="btn">Semak</button></td></tr>
+          <tr><td>3</td><td>04/02/2026</td><td>Florynah Bakar</td><td><span class="badge green">ADA</span></td><td><span class="badge amber">DRAF</span></td><td><button class="btn primary">Sambung</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="lmk-group" data-unit="UKP">
+    <div class="section-title" style="margin-top:18px"><h3>UKP — Catur</h3></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bil</th><th>Tarikh</th><th>Guru Bertugas</th><th>Kehadiran</th><th>Status LMK</th><th>Tindakan</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>21/01/2026</td><td>Rachel</td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td><td><button class="btn">Semak</button></td></tr>
+          <tr><td>2</td><td>28/01/2026</td><td>Ahmad Safwan</td><td><span class="badge green">ADA</span></td><td><span class="badge amber">BELUM</span></td><td><button class="btn primary">Isi LMK</button></td></tr>
+          <tr><td>3</td><td>04/02/2026</td><td>Florynah Bakar</td><td><span class="badge green">ADA</span></td><td><span class="badge amber">BELUM</span></td><td><button class="btn primary">Isi LMK</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="lmk-group" data-unit="USP">
+    <div class="section-title" style="margin-top:18px"><h3>USP — Bola Sepak</h3></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bil</th><th>Tarikh</th><th>Guru Bertugas</th><th>Kehadiran</th><th>Status LMK</th><th>Tindakan</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>21/01/2026</td><td>Florynah Bakar</td><td><span class="badge green">ADA</span></td><td><span class="badge amber">BELUM</span></td><td><button class="btn primary">Isi LMK</button></td></tr>
+          <tr><td>2</td><td>28/01/2026</td><td>Rachel</td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td><td><button class="btn">Semak</button></td></tr>
+          <tr><td>3</td><td>04/02/2026</td><td>Ahmad Safwan</td><td><span class="badge green">ADA</span></td><td><span class="badge amber">BELUM</span></td><td><button class="btn primary">Isi LMK</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<table><thead><tr><th>Bil</th><th>Tarikh</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status</th><th>Tindakan</th></tr></thead><tbody id="lmkRows"></tbody></table></div>
+</div>
 </section>
 
-<!-- MASTER DATA (DINAMIK & BOLEH TAMBAH) -->
+<section id="kehadiran" class="page">
+<div class="card"><div class="section-title"><h2>Kehadiran Murid</h2><div class="filters"><select><option>Kelab Catur — Bil 2</option><option>Bola Sepak — Bil 2</option></select></div></div>
+<div style="display:flex;gap:10px;align-items:center;margin-bottom:14px"><button class="btn primary" onclick="toggleAll(true)">☑ Tandakan Semua Hadir</button><button class="btn" onclick="toggleAll(false)">Kosongkan</button><span style="font-size:12px;color:var(--muted)">Uncheck hanya murid yang tidak hadir.</span></div>
+<div class="table-wrap"><table><thead><tr><th>Hadir</th><th>Bil</th><th>Nama Murid</th><th>Kelas</th><th>Jawatan</th></tr></thead><tbody id="studentRows"></tbody></table></div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-top:15px;padding-top:15px;border-top:1px solid var(--line)">
+  <div style="font-size:12px;color:var(--muted)">
+    <b style="color:var(--text)">Jumlah ahli: 6</b> &nbsp;•&nbsp; <b style="color:var(--green)">Hadir: <span id="presentCount">6</span></b> &nbsp;•&nbsp; <b style="color:var(--red)">Tidak hadir: <span id="absentCount">0</span></b>
+  </div>
+  <div style="display:flex;gap:9px">
+    <button class="btn" onclick="toast('Demo: perubahan belum disimpan.')">Batal</button>
+    <button class="btn primary" onclick="saveAttendance()">💾 Simpan Kehadiran</button>
+  </div>
+</div>
+<div id="saveResult" style="display:none;margin-top:10px;padding:10px 12px;border-radius:9px;background:var(--greenbg);color:var(--green);font-size:12px;font-weight:650">🟢 Kehadiran berjaya disimpan.</div>
+</div>
+</section>
+
+<section id="analisis-kehadiran" class="page">
+<div class="card">
+  <div class="section-title">
+    <div><h2>Analisis Kehadiran Kokurikulum</h2><div style="font-size:11px;color:var(--muted);margin-top:4px">Ringkasan keseluruhan tiga unit untuk tahun yang dipilih.</div></div>
+    <div class="filters"><select><option>2026</option><option>2025</option></select><select><option>Setakat Perjumpaan Semasa</option><option>Sepanjang Tahun</option></select></div>
+  </div>
+
+  <div class="grid">
+    <div class="card stat"><div class="label">Jumlah Murid</div><div class="num">86</div><div class="small">Keahlian keseluruhan</div></div>
+    <div class="card stat"><div class="label">Jumlah Kehadiran</div><div class="num">1,842</div><div class="small">Rekod hadir</div></div>
+    <div class="card stat"><div class="label">Jumlah Tidak Hadir</div><div class="num">214</div><div class="small">Rekod tidak hadir</div></div>
+    <div class="card stat"><div class="label">% Kehadiran Keseluruhan</div><div class="num">89.6%</div><div class="small">Semua unit</div></div>
+  </div>
+
+  <div class="section-title"><h2>Kehadiran Mengikut Unit</h2></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Unit</th><th>Jumlah Murid</th><th>Jumlah Rekod Kehadiran</th><th>Hadir</th><th>Tidak Hadir</th><th>% Kehadiran</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><b>UBB</b></td><td>86</td><td>672</td><td>612</td><td>60</td><td><b>91.1%</b></td><td><span class="badge green">BAIK</span></td></tr>
+      <tr><td><b>UKP</b></td><td>86</td><td>586</td><td>515</td><td>71</td><td><b>87.9%</b></td><td><span class="badge amber">PERLU PERHATIAN</span></td></tr>
+      <tr><td><b>USP</b></td><td>86</td><td>798</td><td>715</td><td>83</td><td><b>89.6%</b></td><td><span class="badge green">BAIK</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="section-title"><h2>Ringkasan Perjumpaan</h2></div>
+  <div class="two">
+    <div class="card" style="background:#f8fafc">
+      <b>Perjumpaan direkod</b>
+      <div style="font-size:28px;font-weight:800;margin-top:8px">96</div>
+      <div style="font-size:11px;color:var(--muted)">UBB + UKP + USP</div>
+    </div>
+    <div class="card" style="background:#f8fafc">
+      <b>Perjumpaan belum direkod</b>
+      <div style="font-size:28px;font-weight:800;margin-top:8px">8</div>
+      <div style="font-size:11px;color:var(--muted)">Perlu tindakan guru bertugas</div>
+    </div>
+  </div>
+
+  <div class="preview-block" style="margin-top:16px">
+    <h4>Interpretasi Ringkas</h4>
+    <div style="font-size:12px;line-height:1.7;color:var(--muted)">
+      Paparan ini menunjukkan prestasi kehadiran keseluruhan murid bagi UBB, UKP dan USP.
+      Analisis boleh ditapis mengikut tahun dan status tempoh perjumpaan. Data ini berasal daripada rekod kehadiran LMK.
+    </div>
+  </div>
+
+<div class="section-title" style="margin-top:28px">
+  <div>
+    <h2>Analisis Kehadiran Mengikut Murid</h2>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px">Seorang murid satu baris; kehadiran UBB, UKP dan USP dipaparkan bersama.</div>
+  </div>
+  <div class="filters">
+    <select><option>Semua Kelas</option><option>5 Amanah</option><option>6 Amanah</option></select>
+    <input placeholder="Cari nama murid">
+    <select><option>Semua Kehadiran</option><option>&lt; 80%</option><option>80–89%</option><option>≥ 90%</option></select>
+  </div>
+</div>
+
+<div id="statusLegend" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:11px">
+  <span class="badge green">≥ 90% BAIK</span>
+  <span class="badge amber">80–89% PERLU PERHATIAN</span>
+  <span class="badge red">&lt; 80% INTERVENSI</span>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr>
+  <th>Bil</th><th>Nama Murid</th>
+  <th>UBB Hadir</th><th>UBB Tidak Hadir</th>
+  <th>UKP Hadir</th><th>UKP Tidak Hadir</th>
+  <th>USP Hadir</th><th>USP Tidak Hadir</th>
+  <th>Jumlah Hadir</th><th>Jumlah Tidak Hadir</th><th>% Kehadiran</th>
+</tr></thead>
+<tbody>
+  <tr><td>1</td><td><b>Mohamad Aznil</b></td><td>10</td><td>2</td><td>9</td><td>3</td><td>11</td><td>1</td><td>30</td><td>6</td><td><b>83.3%</b></td></tr>
+  <tr><td>2</td><td><b>Anissah Suraya</b></td><td>12</td><td>0</td><td>11</td><td>1</td><td>12</td><td>0</td><td>35</td><td>1</td><td><b>97.2%</b></td></tr>
+  <tr><td>3</td><td><b>Aiman Hakim</b></td><td>8</td><td>4</td><td>10</td><td>2</td><td>9</td><td>3</td><td>27</td><td>9</td><td><span class="badge amber">75.0%</span></td></tr>
+  <tr><td>4</td><td><b>Nur Aisyah</b></td><td>11</td><td>1</td><td>12</td><td>0</td><td>10</td><td>2</td><td>33</td><td>3</td><td><b>91.7%</b></td></tr>
+  <tr><td>5</td><td><b>Rizal Danial</b></td><td>9</td><td>3</td><td>8</td><td>4</td><td>10</td><td>2</td><td>27</td><td>9</td><td><span class="badge amber">75.0%</span></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<section id="lmkeditor" class="page">
+<div class="preview">
+<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap"><div><h2>LMK BIL 2 / 2026</h2><div class="sub">Kelab Catur • Rabu • 28 Januari 2026 • 11:40 pagi – 12:40 tengah hari</div></div><span class="badge amber">DRAF</span></div>
+<div class="preview-block"><h4>Maklumat Perjumpaan</h4><div class="two"><div><b>Unit:</b> Kelab Catur</div><div><b>Guru Bertugas:</b> Rachel</div><div><b>Bilangan:</b> 2 / 12</div><div><b>Kehadiran:</b> 18 / 20 hadir</div></div></div>
+
+<div class="preview-block">
+  
+<h4>Kehadiran Guru</h4>
+<div style="font-size:11px;color:var(--muted);margin-bottom:10px">
+  Guru penasihat ditarik daripada Master Guru. Semua ditanda hadir secara lalai; uncheck hanya guru yang tidak hadir.
+</div>
+
+<div data-v8-lmk-flow class="card" style="background:#f8fafc;margin-bottom:14px">
+  <div style="font-size:12px;font-weight:700">Aliran LMK</div>
+  <div style="font-size:11px;color:var(--muted);margin-top:6px">
+    ① Tarik maklumat perjumpaan → ② Semak/tanda kehadiran → ③ Isi pelaporan → ④ Muat naik sekurang-kurangnya 2 gambar → ⑤ Pratonton → ⑥ Simpan/Jana PDF
+  </div>
+</div>
+<div class="card" style="background:#f8fafc;margin-bottom:10px">
+  <div class="two">
+    <div><b>Guru Bertugas Asal:</b><br>Rachel</div>
+    <div><b>Guru Bertugas Sebenar:</b><br>
+      <select id="actualDutyTeacher"><option>Rachel</option><option>Ahmad Safwan</option><option>Florynah Bakar</option></select>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">Jika pengganti, pilih guru yang menggantikan.</div>
+    </div>
+  </div>
+</div>
+
+  <div style="font-size:11px;color:var(--muted);margin-bottom:10px">
+    Senarai guru ditarik automatik daripada Master Guru / guru penasihat kelab.
+    Semua ditanda hadir secara lalai; uncheck hanya guru yang tidak hadir.
+  </div>
+  <div class="table-wrap">
+    <table style="min-width:600px">
+      <thead>
+        <tr><th>Hadir</th><th>Nama Guru</th><th>Jawatan</th></tr>
+      </thead>
+      <tbody id="teacherRows">
+        <tr><td><input class="teacher-present" type="checkbox" checked></td><td>Rachel</td><td>Ketua Guru Penasihat</td></tr>
+        <tr><td><input class="teacher-present" type="checkbox" checked></td><td>Ahmad Safwan</td><td>Guru Penasihat</td></tr>
+        <tr><td><input class="teacher-present" type="checkbox" checked></td><td>Florynah</td><td>Guru Penasihat</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px">
+    <span style="font-size:12px;color:var(--muted)">
+      Guru: <b id="teacherPresentCount">3</b> hadir / <b id="teacherAbsentCount">0</b> tidak hadir
+    </span>
+    <button class="btn" onclick="saveTeacherAttendance()">💾 Simpan Kehadiran Guru</button>
+  </div>
+  <div id="teacherSaveResult" style="display:none;margin-top:10px;padding:9px 11px;border-radius:9px;background:var(--greenbg);color:var(--green);font-size:11px;font-weight:650">
+    🟢 Kehadiran guru berjaya disimpan bersama LMK.
+  </div>
+</div>
+<div class="preview-block"><h4>Aktiviti</h4><input style="width:100%" value="Latihan asas dan pertandingan dalaman"></div>
+
+<div class="preview-block"><h4>Pelaporan</h4><textarea style="width:100%;min-height:80px" placeholder="Catatan pelaksanaan aktiviti...">Aktiviti dijalankan mengikut jadual.</textarea></div>
+<div class="two">
+  <div class="preview-block"><h4>Kekuatan</h4><textarea style="width:100%;min-height:70px" placeholder="Kekuatan aktiviti..."></textarea></div>
+  <div class="preview-block"><h4>Kelemahan</h4><textarea style="width:100%;min-height:70px" placeholder="Kelemahan / isu..."></textarea></div>
+</div>
+<div class="preview-block"><h4>Penambahbaikan</h4><textarea style="width:100%;min-height:70px" placeholder="Cadangan penambahbaikan..."></textarea></div>
+<div class="preview-block"><h4>Catatan</h4><textarea style="width:100%;min-height:75px">Aktiviti dijalankan mengikut jadual.</textarea></div>
+<div class="preview-block"><h4>📷 Evidens Aktiviti <span class="badge red">MINIMUM 2 • MAKSIMUM 6 GAMBAR</span></h4><div class="two"><div class="photo"><b>Gambar 1</b><small>Wajib</small><button class="btn">+ Muat naik</button></div><div class="photo"><b>Gambar 2</b><small>Wajib</small><button class="btn">+ Muat naik</button></div><div class="photo"><b>Gambar 3</b><small>Pilihan</small><button class="btn">+ Muat naik</button></div><div class="photo"><b>Gambar 4</b><small>Pilihan</small><button class="btn">+ Muat naik</button></div><div class="photo"><b>Gambar 5</b><small>Pilihan</small><button class="btn">+ Muat naik</button></div><div class="photo"><b>Gambar 6</b><small>Pilihan</small><button class="btn">+ Muat naik</button></div></div></div>
+<div class="preview-block"><h4>Status Dokumen</h4><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge green">KEHADIRAN ADA</span><span class="badge amber">LMK DRAF</span><span class="badge red">EVIDENS BELUM LENGKAP</span></div></div>
+<div style="display:flex;justify-content:flex-end;gap:9px;margin-top:18px"><button class="btn" onclick="toast('Kembali ke senarai LMK.')">Kembali</button><button class="btn primary" onclick="requirePhotos()">Simpan / Lengkapkan LMK</button></div>
+</div>
+</section>
+
+<section id="lpp" class="page">
+<div class="card"><div class="section-title"><div><h2>LPP — Penglibatan & Pencapaian</h2><div style="font-size:11px;color:var(--muted);margin-top:4px">Raw data dikekalkan mengikut master sedia ada supaya terus boleh dibaca Looker Studio.</div></div><div class="actions"><button class="btn">Import Pukal</button><button class="btn primary">+ Rekod</button></div></div>
+<div class="filters" style="margin-bottom:14px"><select><option>2026</option><option>2025</option></select><select><option>Semua Unit</option><option>Olahraga</option><option>Catur</option><option>Bola Sepak</option></select><select><option>Semua Pencapaian</option><option>PENYERTAAN</option><option>EMAS</option><option>PERAK</option><option>GANGSA</option></select><input placeholder="Cari nama pelajar / pertandingan"></div>
+<div class="table-wrap"><table><thead><tr><th>BIL</th><th>PERTANDINGAN</th><th>TARIKH</th><th>TAHUN</th><th>PERINGKAT</th><th>ANJURAN</th><th>KATEGORI</th><th>PENCAPAIAN</th><th>OLAHRAGA</th><th>BIDANG</th><th>KAEDAH PELAKSANAAN</th><th>NAMA PELAJAR</th><th>JANTINA</th><th>KELAS</th><th>CATATAN</th><th>SIJIL</th><th>RANK PERINGKAT</th><th>STATUS P&P</th></tr></thead><tbody>
+<tr><td>1</td><td>OLAHRAGA MSS ZON BANGGI 2022</td><td>18-20/7/2022</td><td>2022</td><td>ZON</td><td>PPD</td><td>L12</td><td><span class="badge green">EMAS</span></td><td>80m Berpagar</td><td>OLAHRAGA</td><td>BERSEMUKA</td><td>MOHAMAD FAZLIE BIN MAJID</td><td>L</td><td>5 GEMILANG</td><td></td><td></td><td>1</td><td>TAMBAHAN KELAB BOLA SEPAK</td></tr>
+<tr><td>2</td><td>OLAHRAGA MSS ZON BANGGI 2022</td><td>18-20/7/2022</td><td>2022</td><td>ZON</td><td>PPD</td><td>P12</td><td><span class="badge green">EMAS</span></td><td>80m Berpagar</td><td>OLAHRAGA</td><td>BERSEMUKA</td><td>HASFAWINA BINTI ABDULLAH</td><td>P</td><td>6 TERBILANG</td><td></td><td></td><td>1</td><td>TAMBAHAN KELAB BOLA BALING</td></tr>
+<tr><td>3</td><td>OLAHRAGA MSS ZON BANGGI 2022</td><td>18-20/7/2022</td><td>2022</td><td>ZON</td><td>PPD</td><td>P12</td><td><span class="badge blue">PENYERTAAN</span></td><td>100m</td><td>OLAHRAGA</td><td>BERSEMUKA</td><td>NAJIHA BINTI JAMURAH</td><td>P</td><td>6 TERBILANG</td><td></td><td></td><td></td><td>TAMBAHAN KELAB BOLA BALING</td></tr>
+</tbody></table></div></div>
+</section>
+
+<section id="pemantauan" class="page">
+<div class="card"><div class="section-title"><h2>Laporan Pemantauan Dokumentasi</h2><div class="filters"><select><option>Semua Unit</option><option>Catur</option><option>Bola Sepak</option></select></div></div>
+<div class="table-wrap"><table><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status Dokumentasi</th></tr></thead><tbody>
+<tr><td>1</td><td>21/1/2026</td><td>Catur</td><td><b>Ahmad Safwan</b></td><td><span class="badge green">ADA</span></td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td></tr>
+<tr><td>2</td><td>28/1/2026</td><td>Catur</td><td><b>Rachel</b></td><td><span class="badge green">ADA</span></td><td><span class="badge red">BELUM</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
+<tr><td>3</td><td>4/2/2026</td><td>Bola Sepak</td><td><b>Muhamad Hisham</b></td><td><span class="badge red">BELUM</span></td><td><span class="badge green">ADA</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
+</tbody></table></div></div>
+</section>
+
+<section id="arkib" class="page">
+<div class="card"><div class="section-title"><h2>Pelaporan & Arkib</h2><div class="filters"><select><option>2026</option><option>2025</option></select><select><option>Kelab Catur</option><option>Semua Unit</option></select></div></div>
+<div class="preview">
+<h2>PELAPORAN KELAB CATUR 2026</h2><div class="sub">Satu fail PDF lengkap bagi satu kelab dan satu tahun.</div>
+<div class="checklist">
+<div class="checkitem"><b>01</b><span class="badge green">Lengkap</span><div style="font-size:11px;margin-top:6px">Profil & Ahli</div></div>
+<div class="checkitem"><b>02</b><span class="badge green">12/12</span><div style="font-size:11px;margin-top:6px">LMK</div></div>
+<div class="checkitem"><b>03</b><span class="badge green">Ada</span><div style="font-size:11px;margin-top:6px">Kehadiran</div></div>
+<div class="checkitem"><b>04</b><span class="badge amber">2 Perlu Semak</span><div style="font-size:11px;margin-top:6px">Pemantauan</div></div>
+<div class="checkitem"><b>05</b><span class="badge green">Ada</span><div style="font-size:11px;margin-top:6px">Penglibatan</div></div>
+<div class="checkitem"><b>06</b><span class="badge green">Ada</span><div style="font-size:11px;margin-top:6px">Pencapaian</div></div>
+<div class="checkitem"><b>07</b><span class="badge green">Ada</span><div style="font-size:11px;margin-top:6px">RAT</div></div>
+<div class="checkitem"><b>08</b><span class="badge blue">Auto</span><div style="font-size:11px;margin-top:6px">Laporan Tahunan</div></div>
+</div>
+<div class="preview-block"><h4>Kandungan PDF</h4><div class="two"><div>Profil kelab & guru</div><div>Senarai ahli</div><div>Jadual perjumpaan</div><div>LMK Bil 1–12</div><div>Kehadiran</div><div>Laporan Pemantauan</div><div>LPP</div><div>RAT & Laporan Tahunan</div></div></div>
+<div style="display:flex;justify-content:center;gap:10px;margin-top:20px"><button class="btn" onclick="toast('Pratonton dokumen lengkap.')">👁 Pratonton PDF</button><button class="btn primary" onclick="toast('Demo: satu PDF lengkap akan dijana dan disimpan ke folder Drive.')">📄 Jana PDF Lengkap</button></div>
+</div></div>
+</section>
+
+
+<section id="agihan" class="page">
+<div class="card">
+  <div class="section-title">
+    <div>
+      <h2>Agihan Tugas Guru Unit Kokum</h2>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Rujukan agihan guru bagi UBB, UKP dan USP. Data datang daripada Master Guru.</div>
+    </div>
+    <div class="filters">
+      <select id="agihanYear"><option>2026</option><option>2027</option></select>
+      <select id="agihanUnit"><option>Semua Unit</option><option>UBB</option><option>UKP</option><option>USP</option></select>
+      <input id="agihanSearch" placeholder="Cari nama guru">
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table id="agihanTable">
+      <thead>
+        <tr>
+          <th>Nama Guru</th>
+          <th>UBB</th><th>Jawatan UBB</th>
+          <th>UKP</th><th>Jawatan UKP</th>
+          <th>USP</th><th>Jawatan USP</th>
+          <th>Rumah Sukan</th>
+          <th>Kejurulatihan</th>
+          <th>Penyelaras Program</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><b>Florynah Bakar</b></td><td>Pengakap</td><td>Ketua Guru Penasihat</td><td>Catur</td><td>Guru Penasihat</td><td>Bola Sepak</td><td>Guru Penasihat</td><td>Merah — Ketua</td><td>Olahraga — Jurulatih</td><td>Karnival Kokum</td></tr>
+        <tr><td><b>Ahmad Safwan</b></td><td>TKRS</td><td>Guru Penasihat</td><td>Catur</td><td>Ketua Guru Penasihat</td><td>Bola Baling</td><td>Guru Penasihat</td><td>Hijau — Guru</td><td>Bola Sepak — Jurulatih</td><td>—</td></tr>
+        <tr><td><b>Rachel</b></td><td>Pengakap</td><td>Guru Penasihat</td><td>Catur</td><td>Guru Penasihat</td><td>Bola Sepak</td><td>Guru Penasihat</td><td>Kuning — Guru</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+
+
+<section id="takwim" class="page">
+  <div class="card">
+    <div class="section-title">
+      <div>
+        <h2>Master Takwim Sekolah</h2>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">
+          Takwim digabung daripada Master Jadual Perjumpaan dan program yang dimasukkan oleh admin.
+        </div>
+      </div>
+      <div class="actions">
+        <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
+        <button class="btn">↻ Susun Ikut Tarikh</button>
+        <button class="btn primary">+ Tambah Program</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card stat"><div class="label">JUMLAH AKTIVITI</div><div class="num">42</div><div class="small">Perjumpaan + program</div></div>
+      <div class="card stat"><div class="label">PERJUMPAAN KOKUM</div><div class="num">36</div><div class="small">Ditarik daripada Master Jadual</div></div>
+      <div class="card stat"><div class="label">PROGRAM TAMBAHAN</div><div class="num">6</div><div class="small">Input admin</div></div>
+      <div class="card stat"><div class="label">TAHUN</div><div class="num">2026</div><div class="small">Tahun semasa</div></div>
+    </div>
+
+    <div class="section-title" style="margin-top:20px">
+      <h2>Senarai Takwim</h2>
+      <div class="filters">
+        <select><option>Semua Bulan</option><option>Januari</option><option>Februari</option><option>Mac</option><option>April</option></select>
+        <select><option>Semua Sumber</option><option>Master Jadual</option><option>Program Admin</option></select>
+        <input placeholder="Cari aktiviti">
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Bil</th><th>Tarikh</th><th>Hari</th><th>Aktiviti</th><th>Sumber</th><th>Tindakan</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>21/01/2026</td><td>Rabu</td><td><b>Perjumpaan Kokurikulum</b></td><td><span class="badge blue">MASTER JADUAL</span></td><td><button class="btn">Lihat</button></td></tr>
+          <tr><td>2</td><td>28/01/2026</td><td>Rabu</td><td><b>Perjumpaan Kokurikulum</b></td><td><span class="badge blue">MASTER JADUAL</span></td><td><button class="btn">Lihat</button></td></tr>
+          <tr><td>3</td><td>04/02/2026</td><td>Rabu</td><td><b>Program Pembangunan Bakat</b></td><td><span class="badge amber">PROGRAM ADMIN</span></td><td><button class="btn">Edit</button></td></tr>
+          <tr><td>4</td><td>11/02/2026</td><td>Rabu</td><td><b>Perjumpaan Kokurikulum</b></td><td><span class="badge blue">MASTER JADUAL</span></td><td><button class="btn">Lihat</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title" style="margin-top:20px"><h2>Output Evidens</h2></div>
+    <div class="two">
+      <div class="card" style="background:#f8fafc">
+        <b>📄 Takwim Sekolah 2026</b>
+        <div style="font-size:11px;color:var(--muted);margin:7px 0 12px">Jana PDF lengkap mengikut tarikh dan aktiviti.</div>
+        <button class="btn primary">Jana PDF Takwim</button>
+      </div>
+      <div class="card" style="background:#f8fafc">
+        <b>📊 Sumber Looker Studio</b>
+        <div style="font-size:11px;color:var(--muted);margin:7px 0 12px">Raw data takwim untuk analisis dan paparan dashboard.</div>
+        <span class="badge green">RAW DATA • SSOT</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section id="tetapan" class="page">
+  <div class="card">
+    <div class="section-title">
+      <div>
+        <h2>Master Tetapan Sekolah</h2>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">
+          Maklumat asas sekolah dan sistem yang digunakan oleh semua paparan serta output.
+        </div>
+      </div>
+      <button class="btn primary">💾 Simpan Tetapan</button>
+    </div>
+
+    <div class="section-title" style="margin-top:12px"><h2>Maklumat Sekolah</h2></div>
+    <div class="two">
+      <div class="card">
+        <label>Nama Sekolah</label>
+        <input value="SK Dogoton Banggi">
+      </div>
+      <div class="card">
+        <label>Kod Sekolah</label>
+        <input value="—">
+      </div>
+    </div>
+    <div class="two">
+      <div class="card">
+        <label>Logo Sekolah</label>
+        <div class="photo" style="min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <b>Logo Sekolah</b><small>Digunakan pada PDF LMK, LPP, OPPM, Jadual dan Takwim</small>
+          <button class="btn" style="margin-top:10px">+ Muat naik logo</button>
+        </div>
+      </div>
+      <div class="card">
+        <label>Alamat Sekolah</label>
+        <textarea style="width:100%;min-height:100px" placeholder="Alamat untuk digunakan pada output PDF"></textarea>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:20px"><h2>Tahun Sistem</h2></div>
+    <div class="card" style="background:#f8fafc">
+      <div class="two">
+        <div>
+          <label>Tahun Semasa</label>
+          <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
+          <small>Dalam sistem sebenar, pilihan tahun akan dibaca secara dinamik daripada data Google Sheets.</small><div style="font-size:10px;color:var(--muted);margin-top:6px">Tahun akan datang akan muncul automatik apabila wujud dalam Google Sheets.</div>
+        </div>
+        <div>
+          <label>Pengurusan Tahun</label>
+          <button class="btn">+ Buka Tahun Baharu</button>
+          <small>Tiada tahun akan di-hard-code; tahun baharu boleh diwujudkan tanpa mengubah frontend.</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:20px"><h2>Folder Evidens</h2></div>
+    <div class="card" style="background:#f8fafc">
+      <div class="two">
+        <div>
+          <label>Folder Tahun Semasa</label>
+          <input value="2026">
+        </div>
+        <div>
+          <label>Status Sambungan</label><br>
+          <span class="badge amber">BELUM DISAMBUNG — PROTOTYPE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="oppm" class="page">
+  <div class="card">
+    <div class="section-title">
+      <div>
+        <h2>OPPM</h2>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">
+          One Page Project Manager • paparan gabungan daripada SSOT sedia ada.
+        </div>
+      </div>
+      <div class="actions">
+        <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
+        <button class="btn">📄 Jana PDF OPPM</button>
+      </div>
+    </div>
+
+    <div class="card" style="background:#f8fafc;margin-bottom:16px">
+      <div class="two">
+        <div><b>Program</b><br><span style="font-size:11px;color:var(--muted)">Tarik daripada Master Takwim</span></div>
+        <div><b>Perjumpaan</b><br><span style="font-size:11px;color:var(--muted)">Tarik daripada Master Jadual Perjumpaan</span></div>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--muted)">
+        Dokumentasi ditentukan daripada Laporan Pemantauan. Tiada data program/perjumpaan ditaip semula di OPPM.
+      </div>
+    </div>
+
+    <div class="section-title">
+      <h2>OPPM Tahun 2026</h2>
+      <div class="filters">
+        <select><option>Semua Bulan</option><option>Januari</option><option>Februari</option><option>Mac</option><option>April</option></select>
+        <select><option>Semua Status</option><option>SELESAI</option><option>TIDAK SELESAI</option></select>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Bil</th><th>Aktiviti / Program</th><th>Tarikh</th>
+            <th>Perjumpaan</th><th>Dokumentasi</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td><td><b>Perjumpaan Kokurikulum</b></td><td>21/01/2026</td>
+            <td><span class="badge green">LENGKAP</span></td>
+            <td><span class="badge green">LENGKAP</span></td>
+            <td><select><option>SELESAI</option><option>TIDAK SELESAI</option></select></td>
+          </tr>
+          <tr>
+            <td>2</td><td><b>Program Pembangunan Bakat</b></td><td>04/02/2026</td>
+            <td>—</td>
+            <td><span class="badge green">LENGKAP</span></td>
+            <td><select><option>SELESAI</option><option>TIDAK SELESAI</option></select></td>
+          </tr>
+          <tr>
+            <td>3</td><td><b>Perjumpaan Kokurikulum</b></td><td>11/02/2026</td>
+            <td><span class="badge red">BELUM</span></td>
+            <td><span class="badge amber">SEBAHAGIAN</span></td>
+            <td><select><option>TIDAK SELESAI</option><option>SELESAI</option></select></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid" style="margin-top:16px">
+      <div class="card stat"><div class="label">SELESAI</div><div class="num">2</div><div class="small">Status OPPM</div></div>
+      <div class="card stat"><div class="label">TIDAK SELESAI</div><div class="num">1</div><div class="small">Perlu tindakan</div></div>
+      <div class="card stat"><div class="label">DOKUMENTASI LENGKAP</div><div class="num">2</div><div class="small">Daripada Laporan Pemantauan</div></div>
+      <div class="card stat"><div class="label">SUMBER DATA</div><div class="num">SSOT</div><div class="small">Takwim + Jadual + Pemantauan</div></div>
+    </div>
+
+    <div style="margin-top:14px;font-size:11px;color:var(--muted)">
+      OPPM tidak menyimpan salinan baharu bagi program, perjumpaan atau dokumentasi. Hanya <b>status Selesai / Tidak Selesai</b> menjadi input OPPM.
+    </div>
+  </div>
+</section>
+
 <section id="master" class="page">
   <div class="card">
     <div class="section-title">
       <div>
-        <h2>Master Guru (Google Sheets)</h2>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Data ditarik terus dari tab Master_Guru.</div>
+        <h2>Master Data</h2>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">
+          Pusat SSOT untuk data guru, murid, keahlian, jadual perjumpaan dan takwim.
+        </div>
+      </div>
+      <div class="actions">
+        <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
       </div>
     </div>
+
+    <div class="grid">
+      <div class="card stat"><div class="label">MASTER GURU</div><div class="num">18</div><div class="small">Penempatan & jawatan guru</div></div>
+      <div class="card stat"><div class="label">MASTER MURID</div><div class="num">86</div><div class="small">Data murid tahun semasa</div></div>
+      <div class="card stat"><div class="label">KEAHLIAN</div><div class="num">258</div><div class="small">Unit + jawatan murid</div></div>
+      <div class="card stat"><div class="label">JADUAL</div><div class="num">36</div><div class="small">Perjumpaan tahun semasa</div></div>
+    </div>
+
+    <div class="section-title" style="margin-top:20px"><h2>Master Guru (Google Sheets Live)</h2></div>
     <div class="table-wrap">
       <table id="tableMasterGuru">
-        <thead><tr><th>Nama Guru</th><th>Email</th><th>Peranan</th><th>Status</th><th>UBB</th><th>UKP</th><th>USP</th></tr></thead>
-        <tbody><tr><td colspan="7" style="text-align:center; color:var(--muted);">Memuatkan data...</td></tr></tbody>
+        <thead><tr>
+          <th>Nama Guru</th><th>Email</th><th>Peranan</th><th>Status</th><th>UBB</th><th>Jawatan UBB</th><th>UKP</th><th>Jawatan UKP</th>
+          <th>USP</th><th>Jawatan USP</th><th>Rumah Sukan</th><th>Jawatan Kokum Sekolah</th>
+          <th>Kejurulatihan</th><th>Penyelaras Program</th>
+        </tr></thead>
+        <tbody>
+          <tr><td colspan="14" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
+        </tbody>
       </table>
+    </div>
+    <div class="actions" style="margin-top:12px">
+      <button class="btn">Import Pukal Guru</button><button class="btn primary">+ Tambah Guru</button>
     </div>
 
     <div class="section-title" style="margin-top:28px">
       <div>
-        <h2>Master Murid (Google Sheets)</h2>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">Cikgu boleh terus tambah murid baru tanpa buka Google Sheets.</div>
+        <h2>Master Murid (Google Sheets Live)</h2>
       </div>
       <div class="actions">
         <button class="btn primary" onclick="tambahMuridBaru()">+ Tambah Murid</button>
@@ -92,19 +872,78 @@
     </div>
     <div class="table-wrap">
       <table id="tableMasterMurid">
-        <thead><tr><th>ID Murid</th><th>Nama Murid</th><th>Jantina</th><th>Tahun</th><th>Kelas</th><th>Status</th></tr></thead>
-        <tbody><tr><td colspan="6" style="text-align:center; color:var(--muted);">Memuatkan data...</td></tr></tbody>
+        <thead><tr><th>ID_Murid</th><th>Nama_Murid</th><th>Jantina</th><th>Tahun</th><th>Kelas</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td colspan="6" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
+        </tbody>
       </table>
     </div>
+    <div class="actions" style="margin-top:12px">
+      <button class="btn">Import Pukal Murid</button>
+    </div>
+
+    <div class="section-title" style="margin-top:28px"><h2>Master Keahlian & Jawatan Murid</h2></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Nama Murid</th><th>UBB</th><th>Jawatan UBB</th><th>UKP</th><th>Jawatan UKP</th><th>USP</th><th>Jawatan USP</th><th>Rumah Sukan</th><th>Jawatan Rumah</th></tr></thead>
+        <tbody>
+          <tr><td><b>Mohamad Aznil</b></td><td>Pengakap</td><td>Ahli</td><td>Catur</td><td>Pengerusi</td><td>Bola Sepak</td><td>Ahli</td><td>Merah</td><td>AJK</td></tr>
+          <tr><td><b>Anissah Suraya</b></td><td>TKRS</td><td>Ahli</td><td>Catur</td><td>Setiausaha</td><td>Bola Baling</td><td>Ahli</td><td>Hijau</td><td>AJK</td></tr>
+          <tr><td><b>Aiman Hakim</b></td><td>Pengakap</td><td>AJK</td><td>Catur</td><td>Ahli</td><td>Bola Sepak</td><td>Ahli</td><td>Kuning</td><td>Ahli</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="actions" style="margin-top:12px">
+      <button class="btn">Import Pukal Keahlian</button><button class="btn primary">+ Tetapkan Jawatan</button>
+    </div>
+
+    
+<div class="section-title" style="margin-top:28px">
+  <div>
+    <h2>Master Jadual Perjumpaan</h2>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px">SSOT jadual perjumpaan. Struktur asal dikekalkan untuk jana jadual guru bertugas, LMK dan Takwim.</div>
   </div>
-</section>
-
-<section id="agihan" class="page">
-<div class="card"><div class="section-title"><h2>Agihan Tugas Guru</h2></div></div>
-</section>
-
-<section id="takwim" class="page">
-<div class="card"><div class="section-title"><h2>Master Takwim</h2></div></div>
+  <div class="actions">
+    <button class="btn">📄 Jana PDF Jadual Perjumpaan</button>
+    <button class="btn">📄 Jana PDF Jadual Guru Bertugas</button>
+  </div>
+</div>
+<div class="table-wrap">
+  <table style="min-width:1200px">
+    <thead><tr>
+      <th>MINGGU</th><th>TARIKH</th><th>UBB</th><th>PENGAKAP</th><th>TKRS</th>
+      <th>UKP</th><th>PAI</th><th>PBI</th><th>KPA</th><th>USP</th><th>KC</th><th>KBS</th><th>KBB</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>M2</td><td>Jan 21, 2026</td><td>PERHIMPUNAN / UBB 1</td><td>WAXRY DE VALNO MASHRINU</td><td>MUHAMAD HISHAMUD DIN BIN HAMID</td><td>PERHIMPUNAN / UKP 1</td><td>AHMAD SAFWAN BIN JAMALUDIN</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>PERHIMPUNAN / USP 1</td><td>FLORYNAH BAKAR</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>RACHEL MANJIL</td></tr>
+      <tr><td>M3</td><td>Jan 28, 2026</td><td>UBB 2</td><td>AHMAD SAFWAN BIN JAMALUDIN</td><td>FLORYNAH BAKAR</td><td>UKP 2</td><td>AHMAD SAFWAN BIN JAMALUDIN</td><td>RACHEL MANJIL</td><td>FLORYNAH BAKAR</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+      <tr><td>M4</td><td>Feb 4, 2026</td><td>UBB 3</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>—</td><td>—</td><td>—</td><td>—</td><td>USP 2</td><td>MUHAMMAD ADAM CHONG</td><td>AHMAD SAFWAN BIN JAMALUDIN</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td></tr>
+      <tr><td>M11</td><td>Apr 8, 2026</td><td>UBB 4</td><td>MUHAMMAD ADAM CHONG</td><td>RACHEL MANJIL</td><td>UKP 3</td><td>MUHAMMAD HISHAMUD DIN BIN HAMID</td><td>MUHAMMAD ADAM CHONG</td><td>WAXRY DE VALNO MASHRINU</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+      <tr><td>M12</td><td>Apr 15, 2026</td><td>UBB 5</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MUHAMMAD HISHAMUD DIN BIN HAMID</td><td>—</td><td>—</td><td>—</td><td>—</td><td>USP 3</td><td>MUHAMMAD HISHAMUD DIN BIN HAMID</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>WAXRY DE VALNO MASHRINU</td></tr>
+      <tr><td>M13</td><td>Apr 22, 2026</td><td>UBB 6</td><td>WAXRY DE VALNO MASHRINU</td><td>FLORYNAH BAKAR</td><td>UKP 4</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="actions" style="margin-top:12px">
+  <button class="btn">+ Tambah / Edit Jadual</button>
+  <button class="btn">Import Jadual</button>
+  <button class="btn primary">↻ Susun Ikut Tarikh</button>
+</div>
+<div class="section-title" style="margin-top:28px"><h2>Master Takwim</h2></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tarikh</th><th>Hari</th><th>Aktiviti</th><th>Sumber</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>21/01/2026</td><td>Rabu</td><td>Perjumpaan Kokurikulum</td><td><span class="badge blue">MASTER JADUAL</span></td><td><span class="badge green">AUTO</span></td></tr>
+          <tr><td>28/01/2026</td><td>Rabu</td><td>Perjumpaan Kokurikulum</td><td><span class="badge blue">MASTER JADUAL</span></td><td><span class="badge green">AUTO</span></td></tr>
+          <tr><td>04/02/2026</td><td>Rabu</td><td>Program Pembangunan Bakat</td><td><span class="badge amber">PROGRAM ADMIN</span></td><td><span class="badge blue">MANUAL</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="actions" style="margin-top:12px">
+      <button class="btn">+ Tambah Program</button><button class="btn">↻ Susun Ikut Tarikh</button><button class="btn primary">📄 Jana PDF Takwim</button>
+    </div>
+  </div>
 </section>
 
 </main></div>
@@ -114,7 +953,7 @@
 // Pautan Web App API Google Apps Script Cikgu
 const API_URL = "https://script.google.com/macros/s/AKfycbyqF_ySQJCeBgowxXS7BRod2j0mmTXdrpmcCUb2-XgHzfmN9jE5avw-dzGBRkJ4Oq4/exec";
 
-// Fungsi Tarik Data
+// 1. Fungsi Tarik Data dari Google Sheets
 async function fetchSheetData(sheetName) {
   try {
     const response = await fetch(`${API_URL}?action=getData&sheet=${sheetName}`);
@@ -122,16 +961,16 @@ async function fetchSheetData(sheetName) {
     if (result.status === "success") return result.data;
     return [];
   } catch (err) {
-    console.error(`Gagal tarik data ${sheetName}:`, err);
+    console.error(`Gagal tarik data untuk ${sheetName}:`, err);
     return [];
   }
 }
 
-// Fungsi Muat Data ke Jadual Live
+// 2. Fungsi Paparkan Data Live
 async function loadLiveData() {
-  toast("Menyelaraskan data dengan Google Sheets...");
+  toast("Menarik data langsung dari Google Sheets...");
   
-  // 1. Master Guru
+  // Master Guru
   const guruList = await fetchSheetData("Master_Guru");
   const guruTbody = document.querySelector("#tableMasterGuru tbody");
   if (guruList.length > 0) {
@@ -142,15 +981,22 @@ async function loadLiveData() {
         <td>${g["Peranan"] || ""}</td>
         <td><span class="badge ${g["Status"] === "AKTIF" ? "green" : "red"}">${g["Status"] || "—"}</span></td>
         <td>${g["UBB"] || "—"}</td>
+        <td>${g["Jawatan UBB"] || "—"}</td>
         <td>${g["UKP"] || "—"}</td>
+        <td>${g["Jawatan UKP"] || "—"}</td>
         <td>${g["USP"] || "—"}</td>
+        <td>${g["Jawatan USP"] || "—"}</td>
+        <td>${g["Rumah Sukan"] || "—"}</td>
+        <td>${g["Jawatan Kokum Sekolah"] || "—"}</td>
+        <td>${g["Kejurulatihan"] || "—"}</td>
+        <td>${g["Penyelaras Program"] || "—"}</td>
       </tr>
     `).join("");
   } else {
-    guruTbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--muted);">Tiada rekod guru dalam Google Sheets.</td></tr>`;
+    guruTbody.innerHTML = `<tr><td colspan="14" style="text-align:center; color:var(--muted);">Tiada rekod dijumpai dalam Google Sheets.</td></tr>`;
   }
 
-  // 2. Master Murid
+  // Master Murid
   const muridList = await fetchSheetData("Master_Murid");
   const muridTbody = document.querySelector("#tableMasterMurid tbody");
   if (muridList.length > 0) {
@@ -165,15 +1011,15 @@ async function loadLiveData() {
       </tr>
     `).join("");
   } else {
-    muridTbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--muted);">Tiada rekod murid dalam Google Sheets.</td></tr>`;
+    muridTbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--muted);">Tiada rekod dijumpai dalam Google Sheets.</td></tr>`;
   }
 
-  toast("Penyelarasan selesai!");
+  toast("Penyelarasan Google Sheets selesai!");
 }
 
-// Fungsi Tambah Murid Terus ke Sheets dari Web
+// 3. Fungsi Tambah Murid Terus ke Google Sheets
 async function tambahMuridBaru() {
-  const id = prompt("Masukkan ID Murid (cth: 004):");
+  const id = prompt("Masukkan ID Murid (contoh: 004):");
   if (!id) return;
   const nama = prompt("Masukkan Nama Penuh Murid:");
   if (!nama) return;
@@ -181,7 +1027,7 @@ async function tambahMuridBaru() {
   const tahun = prompt("Masukkan Tahun:", "2026");
   const kelas = prompt("Masukkan Kelas:", "5 Amanah");
 
-  toast("Menghantar data murid baru ke Google Sheets...");
+  toast("Menghantar data murid baharu ke Google Sheets...");
 
   try {
     const response = await fetch(API_URL, {
@@ -195,30 +1041,36 @@ async function tambahMuridBaru() {
     
     const result = await response.json();
     if (result.success) {
-      toast("Murid berjaya direkod! Mengemas kini jadual...");
+      toast("Murid berjaya ditambah! Memuat semula senarai...");
       loadLiveData();
     } else {
-      toast("Gagal simpan: " + result.message);
+      toast("Gagal menyimpan: " + result.message);
     }
   } catch (err) {
     console.error(err);
-    toast("Ralat rangkaian semasa menghantar data.");
+    toast("Ralat sambungan ke Google Sheets.");
   }
 }
 
-// Auto load semasa buka laman
 window.addEventListener("DOMContentLoaded", () => {
   loadLiveData();
 });
 
-// Navigasi Menu Sisi
 const pages = {
-  dashboard: ["Dashboard LMK", "Satu sistem untuk LMK dan LPP."],
-  jadual: ["Master Jadual", "Rujukan jadual perjumpaan rasmi."],
-  lmk: ["Modul LMK", "Pengisian laporan aktiviti."],
-  master: ["Master Data (Live)", "Pusat rujukan data berhubung terus dengan Google Sheets."],
-  agihan: ["Agihan Tugas Guru", "Senarai tugas penasihat."],
-  takwim: ["Master Takwim", "Takwim aktiviti kokurikulum."]
+  dashboard: ["Dashboard LMK", "Satu sistem untuk LMK dan LPP — semua unit, semua tahun."],
+  jadual: ["Master Jadual Perjumpaan", "Jadual ialah enjin yang menggerakkan LMK dan guru bertugas."],
+  lmk: ["LMK — 12 Perjumpaan", "Satu template LMK untuk semua kelab dan tahun."],
+  kehadiran: ["Kehadiran Murid", "Semua murid ditanda hadir; uncheck hanya yang tidak hadir."],
+  "analisis-kehadiran": ["Analisis Kehadiran", "Ringkasan keseluruhan kehadiran UBB, UKP dan USP."],
+  lmkeditor: ["Isi / Edit LMK", "Semak kandungan, kehadiran dan minimum 2 gambar evidens."],
+  lpp: ["LPP — Penglibatan & Pencapaian", "Satu master data yang terus digunakan oleh Looker Studio."],
+  pemantauan: ["Laporan Pemantauan", "Semakan kelengkapan dokumentasi mengikut perjumpaan dan guru bertugas."],
+  arkib: ["Pelaporan & Arkib", "Gabungkan pelaporan lengkap satu kelab + satu tahun menjadi satu PDF."],
+  "agihan": ["Agihan Tugas Guru Unit Kokum", "Rujukan agihan guru UBB, UKP, USP dan tugas sokongan."],
+  takwim: ["Master Takwim Sekolah", "Takwim digabung daripada Master Jadual dan program admin."],
+  tetapan: ["Master Tetapan Sekolah", "Maklumat asas sekolah dan sistem."],
+  master: ["Master Data", "Pusat SSOT untuk data guru, murid, dan pangkalan Google Sheets."],
+  oppm: ["OPPM", "One Page Project Manager."]
 };
 
 document.querySelectorAll(".nav button").forEach(b => b.addEventListener("click", () => {
@@ -231,13 +1083,104 @@ document.querySelectorAll(".nav button").forEach(b => b.addEventListener("click"
   document.getElementById("pageDesc").textContent = pages[id][1];
 }));
 
+const students = ["Mohamad Aznil", "Anissah Suraya", "Aiman Hakim", "Nur Aisyah", "Rizal Danial", "Siti Nurin"];
+document.getElementById("studentRows").innerHTML = students.map((n, i) => `<tr><td><input class="present" type="checkbox" checked></td><td>${i+1}</td><td>${n}</td><td>${i%2?"6 Amanah":"5 Amanah"}</td><td>${i===0?"Pengerusi":"Ahli"}</td></tr>`).join("");
+
+function toggleAll(v) {
+  document.querySelectorAll(".present").forEach(x => x.checked = v);
+  toast(v ? "Semua murid ditanda hadir." : "Semua ditanda tidak hadir.");
+}
+
+const rows = [
+  ["1", "21/1/2026", "Ahmad Safwan", "ADA", "ADA", "LENGKAP", "green"],
+  ["2", "28/1/2026", "Rachel", "ADA", "BELUM", "SEBAHAGIAN", "amber"],
+  ["3", "4/2/2026", "Ahmad Safwan", "ADA", "ADA", "LENGKAP", "green"],
+  ["4", "11/2/2026", "Florynah", "ADA", "DRAF", "SEBAHAGIAN", "amber"],
+  ["5", "18/2/2026", "Rachel", "BELUM", "BELUM", "BELUM", "red"],
+  ["6", "25/2/2026", "Ahmad Safwan", "ADA", "ADA", "LENGKAP", "green"]
+];
+document.getElementById("lmkRows").innerHTML = rows.map(x => `<tr><td>${x[0]}</td><td>${x[1]}</td><td>${x[2]}</td><td><span class="badge ${x[3]=="ADA"?"green":"red"}">${x[3]}</span></td><td><span class="badge ${x[4]=="ADA"?"green":x[4]=="DRAF"?"amber":"red"}">${x[4]}</span></td><td><span class="badge ${x[6]}">${x[5]}</span></td><td><button class="btn" onclick="document.querySelector('[data-page=lmkeditor]').click()">Semak</button></td></tr>`).join("");
+
 function toast(msg) {
   const t = document.getElementById("toast");
   t.textContent = msg;
   t.style.display = "block";
   clearTimeout(window.tt);
-  window.tt = setTimeout(() => t.style.display = "none", 3000);
+  window.tt = setTimeout(() => t.style.display = "none", 2400);
 }
+
+function requirePhotos() {
+  toast("Demo: minimum 2 gambar evidens diperlukan sebelum LMK lengkap.");
+}
+
+function updateTeacherAttendanceCount(){
+  const boxes = [...document.querySelectorAll(".teacher-present")];
+  const present = boxes.filter(x => x.checked).length;
+  const absent = boxes.length - present;
+  const p = document.getElementById("teacherPresentCount");
+  const a = document.getElementById("teacherAbsentCount");
+  if(p) p.textContent = present;
+  if(a) a.textContent = absent;
+}
+
+function saveTeacherAttendance(){
+  updateTeacherAttendanceCount();
+  const r = document.getElementById("teacherSaveResult");
+  if(r) r.style.display = "block";
+  if(typeof toast === "function") toast("Kehadiran guru berjaya disimpan bersama LMK.");
+}
+
+document.addEventListener("change", function(e){
+  if(e.target.classList && e.target.classList.contains("teacher-present")){
+    updateTeacherAttendanceCount();
+  }
+});
+
+function filterAgihan(){
+  const q=(document.getElementById("agihanSearch")?.value||"").toLowerCase();
+  const unit=document.getElementById("agihanUnit")?.value||"Semua Unit";
+  document.querySelectorAll("#agihanTable tbody tr").forEach(r=>{
+    const text=r.textContent.toLowerCase();
+    const okName=!q||text.includes(q);
+    const okUnit=unit==="Semua Unit"||text.includes(unit.toLowerCase());
+    r.style.display=(okName&&okUnit)?"":"none";
+  });
+}
+document.addEventListener("input",e=>{if(e.target.id==="agihanSearch")filterAgihan();});
+document.addEventListener("change",e=>{if(e.target.id==="agihanUnit")filterAgihan();});
+
+function filterTakwim(){
+  const q=(document.querySelector("#takwim input")?.value||"").toLowerCase();
+  const rows=document.querySelectorAll("#takwim tbody tr");
+  rows.forEach(r=>r.style.display=!q||r.textContent.toLowerCase().includes(q)?"":"none");
+}
+document.addEventListener("input",e=>{if(e.target.closest("#takwim"))filterTakwim();});
+
+function filterLMKGroupsV9(){
+  const unit=(document.getElementById("lmkUnitFilter")?.value||"Semua Unit").toLowerCase();
+  const status=(document.getElementById("lmkStatusFilter")?.value||"Semua Status").toLowerCase();
+  const q=(document.getElementById("lmkSearch")?.value||"").toLowerCase();
+  document.querySelectorAll("#lmk [data-v9-lmk-groups] .lmk-group").forEach(g=>{
+    const unitText=(g.dataset.unit||"").toLowerCase();
+    const groupMatch=unit==="semua unit"||unitText===unit||g.textContent.toLowerCase().includes(unit);
+    let visibleRows=0;
+    g.querySelectorAll("tbody tr").forEach(r=>{
+      const txt=r.textContent.toLowerCase();
+      const statusMatch=status==="semua status"||txt.includes(status);
+      const searchMatch=!q||txt.includes(q);
+      const show=groupMatch&&statusMatch&&searchMatch;
+      r.style.display=show?"":"none";
+      if(show) visibleRows++;
+    });
+    g.style.display=visibleRows?"":"none";
+  });
+}
+document.addEventListener("change",e=>{
+  if(["lmkUnitFilter","lmkStatusFilter"].includes(e.target.id)) filterLMKGroupsV9();
+});
+document.addEventListener("input",e=>{
+  if(e.target.id==="lmkSearch") filterLMKGroupsV9();
+});
 </script>
 </body>
 </html>
