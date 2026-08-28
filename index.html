@@ -578,7 +578,7 @@
 
 <section id="pemantauan" class="page">
 <div class="card"><div class="section-title"><h2>Laporan Pemantauan Dokumentasi</h2><div class="filters"><select><option>Semua Unit</option><option>Catur</option><option>Bola Sepak</option></select></div></div>
-<div class="table-wrap"><table><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status Dokumentasi</th></tr></thead><tbody>
+<div class="table-wrap"><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status Dokumentasi</th></tr></thead><tbody>
 <tr><td>1</td><td>21/1/2026</td><td>Catur</td><td><b>Ahmad Safwan</b></td><td><span class="badge green">ADA</span></td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td></tr>
 <tr><td>2</td><td>28/1/2026</td><td>Catur</td><td><b>Rachel</b></td><td><span class="badge green">ADA</span></td><td><span class="badge red">BELUM</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
 <tr><td>3</td><td>4/2/2026</td><td>Bola Sepak</td><td><b>Muhamad Hisham</b></td><td><span class="badge red">BELUM</span></td><td><span class="badge green">ADA</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
@@ -705,102 +705,6 @@
   </div>
 </section>
 
-<section id="tetapan" class="page">
-  <div class="card">
-    <div class="section-title">
-      <div>
-        <h2>Master Tetapan Sekolah</h2>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">
-          Maklumat asas sekolah, konfigurasi sistem dan pendaftaran rasmi unit kokurikulum.
-        </div>
-      </div>
-      <button class="btn primary">💾 Simpan Tetapan</button>
-    </div>
-
-    <div class="section-title" style="margin-top:12px"><h2>Maklumat Sekolah</h2></div>
-    <div class="two">
-      <div class="card">
-        <label>Nama Sekolah</label>
-        <input value="SK Dogoton Banggi">
-      </div>
-      <div class="card">
-        <label>Kod Sekolah</label>
-        <input value="—">
-      </div>
-    </div>
-    <div class="two">
-      <div class="card">
-        <label>Logo Sekolah</label>
-        <div class="photo" style="min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center">
-          <b>Logo Sekolah</b><small>Digunakan pada PDF LMK, LPP, OPPM, Jadual dan Takwim</small>
-          <button class="btn" style="margin-top:10px">+ Muat naik logo</button>
-        </div>
-      </div>
-      <div class="card">
-        <label>Alamat Sekolah</label>
-        <textarea style="width:100%;min-height:100px" placeholder="Alamat untuk digunakan pada output PDF"></textarea>
-      </div>
-    </div>
-
-    <!-- BAHAGIAN BAHARU: PENDAFTARAN KELAB / UNIT (UBB, UKP, USP) -->
-    <div class="section-title" style="margin-top:28px">
-      <div>
-        <h2>Pendaftaran Kelab / Unit Rasmi (UBB, UKP, USP)</h2>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">
-          Daftarkan senarai unit kokurikulum di sini. Senarai ini akan menjadi sumber pilihan dropdown di modul Master Keahlian.
-        </div>
-      </div>
-    </div>
-    <div class="card" style="background:#f8fafc">
-      <div class="two" style="margin-bottom:12px">
-        <div>
-          <label style="display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px">Komponen Kokum</label>
-          <select id="inputKategoriUnit" style="width:100%;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 12px;color:var(--text)">
-            <option value="UBB">UBB — Unit Beruniform</option>
-            <option value="UKP">UKP — Kelab / Persatuan</option>
-            <option value="USP">USP — Sukan / Permainan</option>
-          </select>
-        </div>
-        <div>
-          <label style="display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px">Nama Kelab / Unit Rasmi</label>
-          <input id="inputNamaUnit" placeholder="Contoh: Pengakap / Kelab Catur / Bola Sepak" style="width:100%;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 12px;color:var(--text)">
-        </div>
-      </div>
-      <button class="btn primary" onclick="tambahUnitKelab()">+ Daftar Unit Baharu</button>
-    </div>
-
-    <div class="table-wrap" style="margin-top:15px">
-      <table id="tableSenaraiUnit">
-        <thead>
-          <tr><th>Bil</th><th>Komponen</th><th>Nama Kelab / Unit Rasmi</th><th>Status</th><th>Aksi</th></tr>
-        </thead>
-        <tbody id="tbodySenaraiUnit">
-          <tr><td>1</td><td><span class="badge blue">UBB</span></td><td><b>Pengakap</b></td><td><span class="badge green">AKTIF</span></td><td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)">Padam</button></td></tr>
-          <tr><td>2</td><td><span class="badge blue">UBB</span></td><td><b>TKRS</b></td><td><span class="badge green">AKTIF</span></td><td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)">Padam</button></td></tr>
-          <tr><td>3</td><td><span class="badge purple">UKP</span></td><td><b>Kelab Catur</b></td><td><span class="badge green">AKTIF</span></td><td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)">Padam</button></td></tr>
-          <tr><td>4</td><td><span class="badge green">USP</span></td><td><b>Bola Sepak</b></td><td><span class="badge green">AKTIF</span></td><td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)">Padam</button></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="section-title" style="margin-top:28px"><h2>Tahun Sistem</h2></div>
-    <div class="card" style="background:#f8fafc">
-      <div class="two">
-        <div>
-          <label>Tahun Semasa</label>
-          <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
-          <small>Dalam sistem sebenar, pilihan tahun akan dibaca secara dinamik daripada data Google Sheets.</small><div style="font-size:10px;color:var(--muted);margin-top:6px">Tahun akan datang akan muncul automatik apabila wujud dalam Google Sheets.</div>
-        </div>
-        <div>
-          <label>Pengurusan Tahun</label>
-          <button class="btn">+ Buka Tahun Baharu</button>
-          <small>Tiada tahun akan di-hard-code; tahun baharu boleh diwujudkan tanpa mengubah frontend.</small>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section id="oppm" class="page">
   <div class="card">
     <div class="section-title">
@@ -882,9 +786,9 @@
   <div class="card">
     <div class="section-title">
       <div>
-        <h2>Master Data</h2>
+        <h2>Master Data & Tetapan</h2>
         <div style="font-size:11px;color:var(--muted);margin-top:4px">
-          Pusat SSOT untuk data guru, murid, keahlian, jadual perjumpaan dan takwim.
+          Pusat SSOT untuk data guru, murid, pendaftaran kelab, dan pangkalan Google Sheets.
         </div>
       </div>
       <div class="actions">
@@ -899,7 +803,48 @@
       <div class="card stat"><div class="label">JADUAL</div><div class="num">36</div><div class="small">Perjumpaan tahun semasa</div></div>
     </div>
 
-    <div class="section-title" style="margin-top:20px"><h2>Master Guru</h2></div>
+    <!-- BAHAGIAN PENDAFTARAN KELAB / UNIT RASMI DI MASTER TETAPAN -->
+    <div class="section-title" style="margin-top:28px">
+      <div>
+        <h2>Pendaftaran Kelab / Unit Rasmi (UBB, UKP, USP)</h2>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">
+          Daftarkan senarai unit kokurikulum di sini. Senarai ini akan menjadi sumber pilihan dropdown di modul Master Keahlian.
+        </div>
+      </div>
+    </div>
+    <div class="card" style="background:#f8fafc">
+      <div class="two" style="margin-bottom:12px">
+        <div>
+          <label style="display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px">Komponen Kokum</label>
+          <select id="inputKategoriUnit" style="width:100%;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 12px;color:var(--text)">
+            <option value="UBB">UBB — Unit Beruniform</option>
+            <option value="UKP">UKP — Kelab / Persatuan</option>
+            <option value="USP">USP — Sukan / Permainan</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px">Nama Kelab / Unit Rasmi</label>
+          <input id="inputNamaUnit" placeholder="Contoh: Pengakap / Kelab Catur / Bola Sepak" style="width:100%;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 12px;color:var(--text)">
+        </div>
+      </div>
+      <button class="btn primary" onclick="tambahUnitKelab()">+ Daftar Unit Baharu</button>
+    </div>
+
+    <div class="table-wrap" style="margin-top:15px">
+      <table id="tableSenaraiUnit">
+        <thead>
+          <tr><th>Bil</th><th>Komponen</th><th>Nama Kelab / Unit Rasmi</th><th>Status</th><th>Aksi</th></tr>
+        </thead>
+        <tbody id="tbodySenaraiUnit">
+          <tr><td>1</td><td><span class="badge blue">UBB</span></td><td><b>Pengakap</b></td><td><span class="badge green">AKTIF</span></td><td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)" onclick="this.closest('tr').remove()">Padam</button></td></tr>
+          <tr><td>2</td><td><span class="badge blue">UBB</span></td><td><b>TKRS</b></td><td><span class="badge green">AKTIF</span></td><td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)" onclick="this.closest('tr').remove()">Padam</button></td></tr>
+          <tr><td>3</td><td><span class="badge purple">UKP</span></td><td><b>Kelab Catur</b></td><td><span class="badge green">AKTIF</span></td><td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)" onclick="this.closest('tr').remove()">Padam</button></td></tr>
+          <tr><td>4</td><td><span class="badge green">USP</span></td><td><b>Bola Sepak</b></td><td><span class="badge green">AKTIF</span></td><td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)" onclick="this.closest('tr').remove()">Padam</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title" style="margin-top:28px"><h2>Master Guru</h2></div>
     <div class="table-wrap">
       <table id="tableMasterGuru">
         <thead><tr>
@@ -1097,7 +1042,7 @@ async function loadLiveData() {
   toast("Penyelarasan Google Sheets selesai!");
 }
 
-// Fungsi Tambah Unit Kelab di Master Tetapan (Prototaip Interaktif)
+// Fungsi Tambah Unit Kelab di Master Data / Tetapan
 function tambahUnitKelab() {
   const kategori = document.getElementById("inputKategoriUnit").value;
   const namaUnit = document.getElementById("inputNamaUnit").value.trim();
@@ -1256,7 +1201,7 @@ const pages = {
   "agihan": ["Agihan Tugas Guru Unit Kokum", "Rujukan agihan guru UBB, UKP, USP dan tugas sokongan."],
   takwim: ["Master Takwim Sekolah", "Takwim digabung daripada Master Jadual dan program admin."],
   tetapan: ["Master Tetapan Sekolah", "Maklumat asas sekolah dan konfigurasi sistem."],
-  master: ["Master Data", "Pusat SSOT untuk data guru, murid, dan pangkalan Google Sheets."],
+  master: ["Master Data & Tetapan", "Pusat SSOT untuk data guru, murid, pendaftaran kelab, dan pangkalan Google Sheets."],
   oppm: ["OPPM", "One Page Project Manager."]
 };
 
