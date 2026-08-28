@@ -545,7 +545,7 @@
 
 <section id="pemantauan" class="page">
 <div class="card"><div class="section-title"><h2>Laporan Pemantauan Dokumentasi</h2><div class="filters"><select><option>Semua Unit</option><option>Catur</option><option>Bola Sepak</option></select></div></div>
-<div class="table-wrap"><table><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status Dokumentasi</th></tr></thead><tbody>
+<div class="table-wrap"><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status Dokumentasi</th></tr></thead><tbody>
 <tr><td>1</td><td>21/1/2026</td><td>Catur</td><td><b>Ahmad Safwan</b></td><td><span class="badge green">ADA</span></td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td></tr>
 <tr><td>2</td><td>28/1/2026</td><td>Catur</td><td><b>Rachel</b></td><td><span class="badge green">ADA</span></td><td><span class="badge red">BELUM</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
 <tr><td>3</td><td>4/2/2026</td><td>Bola Sepak</td><td><b>Muhamad Hisham</b></td><td><span class="badge red">BELUM</span></td><td><span class="badge green">ADA</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
@@ -891,7 +891,7 @@
       <button class="btn">Import Pukal Keahlian</button><button class="btn primary">+ Tetapkan Jawatan</button>
     </div>
 
-    
+     
 <div class="section-title" style="margin-top:28px">
   <div>
     <h2>Master Jadual Perjumpaan</h2>
@@ -944,6 +944,24 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// API Endpoint Google Apps Script Cikgu
+const API_URL = "https://script.google.com/macros/s/AKfycbyqF_ySQJCeBgowxXS7BRod2j0mmTXdrpmcCUb2-XgHzfmN9jE5avw-dzGBRkJ4Oq4/exec";
+
+// Fungsi untuk menarik data dari Google Sheets secara dinamik
+async function fetchSheetData(sheetName) {
+  try {
+    const response = await fetch(`${API_URL}?action=getData&sheet=${sheetName}`);
+    const result = await response.json();
+    if (result.status === "success") {
+      return result.data;
+    }
+    return [];
+  } catch (err) {
+    console.error(`Gagal tarik data untuk ${sheetName}:`, err);
+    return [];
+  }
+}
+
 const pages = {
   dashboard: ["Dashboard LMK", "Satu sistem untuk LMK dan LPP — semua unit, semua tahun."],
   jadual: ["Master Jadual Perjumpaan", "Jadual ialah enjin yang menggerakkan LMK dan guru bertugas."],
