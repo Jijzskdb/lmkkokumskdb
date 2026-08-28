@@ -14,6 +14,16 @@
 .page{display:none}.page.active{display:block}.unit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.unit{padding:16px}.unit h3{margin:0 0 4px;font-size:14px}.unit p{margin:0;color:var(--muted);font-size:11px}.unit .row{display:flex;justify-content:space-between;margin-top:15px;font-size:11px}
 .preview{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:30px;max-width:900px;margin:auto}.preview h2{text-align:center;margin:0 0 4px}.preview .sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:25px}.preview-block{border:1px solid var(--line);border-radius:10px;padding:15px;margin:12px 0}.preview-block h4{margin:0 0 10px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.photo{border:1px dashed #b8c4d0;border-radius:10px;padding:24px;text-align:center;background:#fafcfe}.photo small{display:block;color:var(--muted);margin:7px}.checklist{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.checkitem{border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff}.checkitem b{display:block;margin-bottom:6px}.empty{padding:45px;text-align:center;color:var(--muted)}
 .toast{position:fixed;right:24px;bottom:24px;background:#12263a;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow);display:none;font-size:12px;z-index:9999}
+
+/* Styling untuk Modal Borang Tambah Murid */
+.modal-overlay{position:fixed;inset:0;background:rgba(16,42,67,0.6);display:none;justify-content:center;align-items:center;z-index:2000;backdrop-filter:blur(2px)}
+.modal-box{background:var(--card);padding:24px;border-radius:16px;width:100%;max-width:480px;box-shadow:0 12px 32px rgba(0,0,0,0.15)}
+.modal-box h3{margin:0 0 16px;font-size:18px;color:var(--text)}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px}
+.form-group input, .form-group select{width:100%;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 12px;color:var(--text);font:inherit}
+.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:22px}
+
 @media(max-width:900px){.sidebar{width:72px}.brand div:not(.logo),.nav button span,.nav .section{display:none}.main{margin-left:72px;width:calc(100% - 72px);padding:20px}.grid,.unit-grid,.checklist{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.grid,.unit-grid,.checklist,.two{grid-template-columns:1fr}.top{align-items:flex-start;gap:12px;flex-direction:column}}
 </style>
 
@@ -87,7 +97,7 @@
 <div class="card stat"><div class="label">Unit / Kelab</div><div class="num">8</div><div class="small">Contoh sesi 2026</div></div>
 <div class="card stat"><div class="label">Perjumpaan</div><div class="num">96</div><div class="small">12 × 8 unit</div></div>
 <div class="card stat"><div class="label">LMK Lengkap</div><div class="num">72</div><div class="small">Termasuk evidens</div></div>
-<div class="card stat"><div class="label">Status Google Sheets</div><div class="num" style="font-size:16px; color:var(--green)">🟢 Bersambung</div><div class="small">Live API</div></div>
+<div class="card stat"><div class="label">Perlu Tindakan</div><div class="num">24</div><div class="small">Sebahagian / belum</div></div>
 </div>
 <div class="section-title"><h2>Status Dokumentasi</h2><div class="filters"><select><option>Semua Unit</option><option>Catur</option><option>Bola Sepak</option><option>Bola Baling</option></select></div></div>
 <div class="table-wrap"><table><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status</th></tr></thead><tbody>
@@ -96,6 +106,7 @@
 <tr><td>3</td><td>28/1/2026</td><td>Bola Sepak</td><td>Muhamad Hisham</td><td><span class="badge red">BELUM</span></td><td><span class="badge green">ADA</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
 </tbody></table></div>
 </section>
+
 
 <section id="jadual" class="page">
   <div class="card">
@@ -845,16 +856,16 @@
       <div class="card stat"><div class="label">JADUAL</div><div class="num">36</div><div class="small">Perjumpaan tahun semasa</div></div>
     </div>
 
-    <div class="section-title" style="margin-top:20px"><h2>Master Guru (Google Sheets Live)</h2></div>
+    <div class="section-title" style="margin-top:20px"><h2>Master Guru</h2></div>
     <div class="table-wrap">
       <table id="tableMasterGuru">
         <thead><tr>
-          <th>Nama Guru</th><th>Email</th><th>Peranan</th><th>Status</th><th>UBB</th><th>Jawatan UBB</th><th>UKP</th><th>Jawatan UKP</th>
+          <th>Nama Guru</th><th>UBB</th><th>Jawatan UBB</th><th>UKP</th><th>Jawatan UKP</th>
           <th>USP</th><th>Jawatan USP</th><th>Rumah Sukan</th><th>Jawatan Kokum Sekolah</th>
           <th>Kejurulatihan</th><th>Penyelaras Program</th>
         </tr></thead>
         <tbody>
-          <tr><td colspan="14" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
+          <tr><td colspan="11" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
         </tbody>
       </table>
     </div>
@@ -862,24 +873,17 @@
       <button class="btn">Import Pukal Guru</button><button class="btn primary">+ Tambah Guru</button>
     </div>
 
-    <div class="section-title" style="margin-top:28px">
-      <div>
-        <h2>Master Murid (Google Sheets Live)</h2>
-      </div>
-      <div class="actions">
-        <button class="btn primary" onclick="tambahMuridBaru()">+ Tambah Murid</button>
-      </div>
-    </div>
+    <div class="section-title" style="margin-top:28px"><h2>Master Murid</h2></div>
     <div class="table-wrap">
       <table id="tableMasterMurid">
-        <thead><tr><th>ID_Murid</th><th>Nama_Murid</th><th>Jantina</th><th>Tahun</th><th>Kelas</th><th>Status</th></tr></thead>
+        <thead><tr><th>ID</th><th>Nama Murid</th><th>Jantina</th><th>Kelas</th><th>Tahun</th><th>Status</th></tr></thead>
         <tbody>
           <tr><td colspan="6" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
         </tbody>
       </table>
     </div>
     <div class="actions" style="margin-top:12px">
-      <button class="btn">Import Pukal Murid</button>
+      <button class="btn">Import Pukal Murid</button><button class="btn primary" onclick="bukaModalMurid()">+ Tambah Murid</button>
     </div>
 
     <div class="section-title" style="margin-top:28px"><h2>Master Keahlian & Jawatan Murid</h2></div>
@@ -947,13 +951,48 @@
 </section>
 
 </main></div>
+
+<!-- MODAL BORANG TAMBAH MURID -->
+<div class="modal-overlay" id="modalTambahMurid">
+  <div class="modal-box">
+    <h3>Tambah Murid Baharu</h3>
+    <div class="form-group">
+      <label>ID Murid</label>
+      <input id="inputID" placeholder="Contoh: 004">
+    </div>
+    <div class="form-group">
+      <label>Nama Penuh Murid</label>
+      <input id="inputNama" placeholder="Nama penuh seperti dalam dokumen">
+    </div>
+    <div class="form-group">
+      <label>Jantina</label>
+      <select id="inputJantina">
+        <option value="L">L — Lelaki</option>
+        <option value="P">P — Perempuan</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Tahun</label>
+      <input id="inputTahun" value="2026">
+    </div>
+    <div class="form-group">
+      <label>Kelas</label>
+      <input id="inputKelas" placeholder="Contoh: 5 Amanah">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="tutupModalMurid()">Batal</button>
+      <button class="btn primary" onclick="hantarMuridBaru()">Simpan ke Sheets</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 // Pautan Web App API Google Apps Script Cikgu
 const API_URL = "https://script.google.com/macros/s/AKfycbyqF_ySQJCeBgowxXS7BRod2j0mmTXdrpmcCUb2-XgHzfmN9jE5avw-dzGBRkJ4Oq4/exec";
 
-// 1. Fungsi Tarik Data dari Google Sheets
+// 1. Tarik Data Live dari Google Sheets
 async function fetchSheetData(sheetName) {
   try {
     const response = await fetch(`${API_URL}?action=getData&sheet=${sheetName}`);
@@ -966,7 +1005,6 @@ async function fetchSheetData(sheetName) {
   }
 }
 
-// 2. Fungsi Paparkan Data Live
 async function loadLiveData() {
   toast("Menarik data langsung dari Google Sheets...");
   
@@ -977,9 +1015,6 @@ async function loadLiveData() {
     guruTbody.innerHTML = guruList.map(g => `
       <tr>
         <td><b>${g["Nama Guru"] || ""}</b></td>
-        <td>${g["Email"] || ""}</td>
-        <td>${g["Peranan"] || ""}</td>
-        <td><span class="badge ${g["Status"] === "AKTIF" ? "green" : "red"}">${g["Status"] || "—"}</span></td>
         <td>${g["UBB"] || "—"}</td>
         <td>${g["Jawatan UBB"] || "—"}</td>
         <td>${g["UKP"] || "—"}</td>
@@ -993,7 +1028,7 @@ async function loadLiveData() {
       </tr>
     `).join("");
   } else {
-    guruTbody.innerHTML = `<tr><td colspan="14" style="text-align:center; color:var(--muted);">Tiada rekod dijumpai dalam Google Sheets.</td></tr>`;
+    guruTbody.innerHTML = `<tr><td colspan="11" style="text-align:center; color:var(--muted);">Tiada rekod dijumpai dalam Google Sheets.</td></tr>`;
   }
 
   // Master Murid
@@ -1005,8 +1040,8 @@ async function loadLiveData() {
         <td>${m["ID_Murid"] || ""}</td>
         <td><b>${m["Nama_Murid"] || ""}</b></td>
         <td>${m["Jantina"] || ""}</td>
-        <td>${m["Tahun"] || ""}</td>
         <td>${m["Kelas"] || ""}</td>
+        <td>${m["Tahun"] || ""}</td>
         <td><span class="badge green">${m["Status"] || "AKTIF"}</span></td>
       </tr>
     `).join("");
@@ -1017,16 +1052,28 @@ async function loadLiveData() {
   toast("Penyelarasan Google Sheets selesai!");
 }
 
-// 3. Fungsi Tambah Murid Terus ke Google Sheets
-async function tambahMuridBaru() {
-  const id = prompt("Masukkan ID Murid (contoh: 004):");
-  if (!id) return;
-  const nama = prompt("Masukkan Nama Penuh Murid:");
-  if (!nama) return;
-  const jantina = prompt("Masukkan Jantina (L / P):", "L");
-  const tahun = prompt("Masukkan Tahun:", "2026");
-  const kelas = prompt("Masukkan Kelas:", "5 Amanah");
+// 2. Fungsi Kawalan Modal Borang Tambah Murid
+function bukaModalMurid() {
+  document.getElementById("modalTambahMurid").style.display = "flex";
+}
 
+function tutupModalMurid() {
+  document.getElementById("modalTambahMurid").style.display = "none";
+}
+
+async function hantarMuridBaru() {
+  const id = document.getElementById("inputID").value.trim();
+  const nama = document.getElementById("inputNama").value.trim();
+  const jantina = document.getElementById("inputJantina").value;
+  const tahun = document.getElementById("inputTahun").value.trim();
+  const kelas = document.getElementById("inputKelas").value.trim();
+
+  if (!id || !nama || !kelas) {
+    alert("Sila lengkapkan ID, Nama dan Kelas murid.");
+    return;
+  }
+
+  tutupModalMurid();
   toast("Menghantar data murid baharu ke Google Sheets...");
 
   try {
@@ -1042,6 +1089,9 @@ async function tambahMuridBaru() {
     const result = await response.json();
     if (result.success) {
       toast("Murid berjaya ditambah! Memuat semula senarai...");
+      document.getElementById("inputID").value = "";
+      document.getElementById("inputNama").value = "";
+      document.getElementById("inputKelas").value = "";
       loadLiveData();
     } else {
       toast("Gagal menyimpan: " + result.message);
