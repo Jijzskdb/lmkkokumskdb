@@ -17,7 +17,7 @@
 .preview{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:30px;max-width:900px;margin:auto}.preview h2{text-align:center;margin:0 0 4px}.preview .sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:25px}.preview-block{border:1px solid var(--line);border-radius:10px;padding:15px;margin:12px 0}.preview-block h4{margin:0 0 10px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.photo{border:1px dashed #b8c4d0;border-radius:10px;padding:24px;text-align:center;background:#fafcfe}.photo small{display:block;color:var(--muted);margin:7px}.checklist{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.checkitem{border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff}.checkitem b{display:block;margin-bottom:6px}.empty{padding:45px;text-align:center;color:var(--muted)}
 .toast{position:fixed;right:24px;bottom:24px;background:#12263a;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:var(--shadow);display:none;font-size:12px;z-index:9999}
 
-/* Styling untuk Modal Borang Tambah Murid */
+/* Styling untuk Modal Borang */
 .modal-overlay{position:fixed;inset:0;background:rgba(16,42,67,0.6);display:none;justify-content:center;align-items:center;z-index:2000;backdrop-filter:blur(2px)}
 .modal-box{background:var(--card);padding:24px;border-radius:16px;width:100%;max-width:480px;box-shadow:0 12px 32px rgba(0,0,0,0.15)}
 .modal-box h3{margin:0 0 16px;font-size:18px;color:var(--text)}
@@ -788,7 +788,7 @@
       <div>
         <h2>Master Data & Tetapan</h2>
         <div style="font-size:11px;color:var(--muted);margin-top:4px">
-          Pusat SSOT untuk data guru, murid, pendaftaran kelab, dan pangkalan Google Sheets.
+          Pusat SSOT untuk data guru, murid, pendaftaran kelab, keahlian, dan pangkalan Google Sheets.
         </div>
       </div>
       <div class="actions">
@@ -803,7 +803,7 @@
       <div class="card stat"><div class="label">JADUAL</div><div class="num">36</div><div class="small">Perjumpaan tahun semasa</div></div>
     </div>
 
-    <!-- BAHAGIAN PENDAFTARAN KELAB / UNIT RASMI DI MASTER TETAPAN -->
+    <!-- 1. PENDAFTARAN KELAB / UNIT RASMI -->
     <div class="section-title" style="margin-top:28px">
       <div>
         <h2>Pendaftaran Kelab / Unit Rasmi (UBB, UKP, USP)</h2>
@@ -841,6 +841,7 @@
       </table>
     </div>
 
+    <!-- 2. MASTER GURU -->
     <div class="section-title" style="margin-top:28px"><h2>Master Guru</h2></div>
     <div class="table-wrap">
       <table id="tableMasterGuru">
@@ -858,6 +859,7 @@
       <button class="btn">Import Pukal Guru</button><button class="btn primary">+ Tambah Guru</button>
     </div>
 
+    <!-- 3. MASTER MURID -->
     <div class="section-title" style="margin-top:28px"><h2>Master Murid</h2></div>
     <div class="table-wrap">
       <table id="tableMasterMurid">
@@ -873,54 +875,56 @@
       <button class="btn primary" onclick="bukaModalMurid()">+ Tambah Murid</button>
     </div>
 
+    <!-- 4. MASTER KEAHLIAN & JAWATAN MURID -->
     <div class="section-title" style="margin-top:28px"><h2>Master Keahlian & Jawatan Murid</h2></div>
     <div class="table-wrap">
-      <table>
+      <table id="tableMasterKeahlian">
         <thead><tr><th>Nama Murid</th><th>UBB</th><th>Jawatan UBB</th><th>UKP</th><th>Jawatan UKP</th><th>USP</th><th>Jawatan USP</th><th>Rumah Sukan</th><th>Jawatan Rumah</th></tr></thead>
-        <tbody>
-          <tr><td><b>Mohamad Aznil</b></td><td>Pengakap</td><td>Ahli</td><td>Catur</td><td>Pengerusi</td><td>Bola Sepak</td><td>Ahli</td><td>Merah</td><td>AJK</td></tr>
-          <tr><td><b>Anissah Suraya</b></td><td>TKRS</td><td>Ahli</td><td>Catur</td><td>Setiausaha</td><td>Bola Baling</td><td>Ahli</td><td>Hijau</td><td>AJK</td></tr>
-          <tr><td><b>Aiman Hakim</b></td><td>Pengakap</td><td>AJK</td><td>Catur</td><td>Ahli</td><td>Bola Sepak</td><td>Ahli</td><td>Kuning</td><td>Ahli</td></tr>
+        <tbody id="tbodyMasterKeahlian">
+          <tr><td colspan="9" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
         </tbody>
       </table>
     </div>
     <div class="actions" style="margin-top:12px">
-      <button class="btn">Import Pukal Keahlian</button><button class="btn primary">+ Tetapkan Jawatan</button>
+      <button class="btn">Import Pukal Keahlian</button>
+      <button class="btn primary" onclick="bukaModalKeahlian()">+ Tetapkan Jawatan</button>
     </div>
 
-    
-<div class="section-title" style="margin-top:28px">
-  <div>
-    <h2>Master Jadual Perjumpaan</h2>
-    <div style="font-size:11px;color:var(--muted);margin-top:4px">SSOT jadual perjumpaan. Struktur asal dikekalkan untuk jana jadual guru bertugas, LMK dan Takwim.</div>
-  </div>
-  <div class="actions">
-    <button class="btn">📄 Jana PDF Jadual Perjumpaan</button>
-    <button class="btn">📄 Jana PDF Jadual Guru Bertugas</button>
-  </div>
-</div>
-<div class="table-wrap">
-  <table style="min-width:1200px">
-    <thead><tr>
-      <th>MINGGU</th><th>TARIKH</th><th>UBB</th><th>PENGAKAP</th><th>TKRS</th>
-      <th>UKP</th><th>PAI</th><th>PBI</th><th>KPA</th><th>USP</th><th>KC</th><th>KBS</th><th>KBB</th>
-    </tr></thead>
-    <tbody>
-      <tr><td>M2</td><td>Jan 21, 2026</td><td>PERHIMPUNAN / UBB 1</td><td>WAXRY DE VALNO MASHRINU</td><td>MUHAMAD HISHAMUD DIN BIN HAMID</td><td>PERHIMPUNAN / UKP 1</td><td>AHMAD SAFWAN BIN JAMALUDIN</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>PERHIMPUNAN / USP 1</td><td>FLORYNAH BAKAR</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>RACHEL MANJIL</td></tr>
-      <tr><td>M3</td><td>Jan 28, 2026</td><td>UBB 2</td><td>AHMAD SAFWAN BIN JAMALUDIN</td><td>FLORYNAH BAKAR</td><td>UKP 2</td><td>AHMAD SAFWAN BIN JAMALUDIN</td><td>RACHEL MANJIL</td><td>FLORYNAH BAKAR</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>M4</td><td>Feb 4, 2026</td><td>UBB 3</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>—</td><td>—</td><td>—</td><td>—</td><td>USP 2</td><td>MUHAMMAD ADAM CHONG</td><td>AHMAD SAFWAN BIN JAMALUDIN</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td></tr>
-      <tr><td>M11</td><td>Apr 8, 2026</td><td>UBB 4</td><td>MUHAMMAD ADAM CHONG</td><td>RACHEL MANJIL</td><td>UKP 3</td><td>MUHAMMAD HISHAMUD DIN BIN HAMID</td><td>MUHAMMAD ADAM CHONG</td><td>WAXRY DE VALNO MASHRINU</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-      <tr><td>M12</td><td>Apr 15, 2026</td><td>UBB 5</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MUHAMMAD HISHAMUD DIN BIN HAMID</td><td>—</td><td>—</td><td>—</td><td>—</td><td>USP 3</td><td>MUHAMMAD HISHAMUD DIN BIN HAMID</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>WAXRY DE VALNO MASHRINU</td></tr>
-      <tr><td>M13</td><td>Apr 22, 2026</td><td>UBB 6</td><td>WAXRY DE VALNO MASHRINU</td><td>FLORYNAH BAKAR</td><td>UKP 4</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-    </tbody>
-  </table>
-</div>
-<div class="actions" style="margin-top:12px">
-  <button class="btn">+ Tambah / Edit Jadual</button>
-  <button class="btn">Import Jadual</button>
-  <button class="btn primary">↻ Susun Ikut Tarikh</button>
-</div>
-<div class="section-title" style="margin-top:28px"><h2>Master Takwim</h2></div>
+    <!-- 5. MASTER JADUAL -->
+    <div class="section-title" style="margin-top:28px">
+      <div>
+        <h2>Master Jadual Perjumpaan</h2>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">SSOT jadual perjumpaan. Struktur asal dikekalkan untuk jana jadual guru bertugas, LMK dan Takwim.</div>
+      </div>
+      <div class="actions">
+        <button class="btn">📄 Jana PDF Jadual Perjumpaan</button>
+        <button class="btn">📄 Jana PDF Jadual Guru Bertugas</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table style="min-width:1200px">
+        <thead><tr>
+          <th>MINGGU</th><th>TARIKH</th><th>UBB</th><th>PENGAKAP</th><th>TKRS</th>
+          <th>UKP</th><th>PAI</th><th>PBI</th><th>KPA</th><th>USP</th><th>KC</th><th>KBS</th><th>KBB</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>M2</td><td>Jan 21, 2026</td><td>PERHIMPUNAN / UBB 1</td><td>WAXRY DE VALNO MASHRINU</td><td>MUHAMAD HISHAMUD DIN BIN HAMID</td><td>PERHIMPUNAN / UKP 1</td><td>AHMAD SAFWAN BIN JAMALUDIN</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>PERHIMPUNAN / USP 1</td><td>FLORYNAH BAKAR</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>RACHEL MANJIL</td></tr>
+          <tr><td>M3</td><td>Jan 28, 2026</td><td>UBB 2</td><td>AHMAD SAFWAN BIN JAMALUDIN</td><td>FLORYNAH BAKAR</td><td>UKP 2</td><td>AHMAD SAFWAN BIN JAMALUDIN</td><td>RACHEL MANJIL</td><td>FLORYNAH BAKAR</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>M4</td><td>Feb 4, 2026</td><td>UBB 3</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>—</td><td>—</td><td>—</td><td>—</td><td>USP 2</td><td>MUHAMMAD ADAM CHONG</td><td>AHMAD SAFWAN BIN JAMALUDIN</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td></tr>
+          <tr><td>M11</td><td>Apr 8, 2026</td><td>UBB 4</td><td>MUHAMMAD ADAM CHONG</td><td>RACHEL MANJIL</td><td>UKP 3</td><td>MUHAMMAD HISHAMUD DIN BIN HAMID</td><td>MUHAMMAD ADAM CHONG</td><td>WAXRY DE VALNO MASHRINU</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>M12</td><td>Apr 15, 2026</td><td>UBB 5</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MUHAMMAD HISHAMUD DIN BIN HAMID</td><td>—</td><td>—</td><td>—</td><td>—</td><td>USP 3</td><td>MUHAMMAD HISHAMUD DIN BIN HAMID</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>WAXRY DE VALNO MASHRINU</td></tr>
+          <tr><td>M13</td><td>Apr 22, 2026</td><td>UBB 6</td><td>WAXRY DE VALNO MASHRINU</td><td>FLORYNAH BAKAR</td><td>UKP 4</td><td>SHIRAH SYATIKAH BINTI RAMLEE</td><td>MOHD AZMIN BIN SUDIRMAN</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="actions" style="margin-top:12px">
+      <button class="btn">+ Tambah / Edit Jadual</button>
+      <button class="btn">Import Jadual</button>
+      <button class="btn primary">↻ Susun Ikut Tarikh</button>
+    </div>
+
+    <!-- 6. MASTER TAKWIM -->
+    <div class="section-title" style="margin-top:28px"><h2>Master Takwim</h2></div>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Tarikh</th><th>Hari</th><th>Aktiviti</th><th>Sumber</th><th>Status</th></tr></thead>
@@ -973,6 +977,84 @@
   </div>
 </div>
 
+<!-- MODAL BORANG TETAPKAN KEAHLIAN & JAWATAN -->
+<div class="modal-overlay" id="modalKeahlian">
+  <div class="modal-box" style="max-width:540px;">
+    <h3>Tetapkan Keahlian & Jawatan Murid</h3>
+    <div class="form-group">
+      <label>Nama Penuh Murid</label>
+      <input id="kNamaMurid" placeholder="Contoh: Mohamad Aznil">
+    </div>
+    <div class="two">
+      <div class="form-group">
+        <label>UBB (Unit Beruniform)</label>
+        <input id="kUBB" placeholder="Contoh: Pengakap">
+      </div>
+      <div class="form-group">
+        <label>Jawatan UBB</label>
+        <select id="kJawatanUBB">
+          <option value="Ahli">Ahli</option>
+          <option value="Pengerusi">Pengerusi</option>
+          <option value="Setiausaha">Setiausaha</option>
+          <option value="Bendahari">Bendahari</option>
+          <option value="AJK">AJK</option>
+        </select>
+      </div>
+    </div>
+    <div class="two">
+      <div class="form-group">
+        <label>UKP (Kelab / Persatuan)</label>
+        <input id="kUKP" placeholder="Contoh: Kelab Catur">
+      </div>
+      <div class="form-group">
+        <label>Jawatan UKP</label>
+        <select id="kJawatanUKP">
+          <option value="Ahli">Ahli</option>
+          <option value="Pengerusi">Pengerusi</option>
+          <option value="Setiausaha">Setiausaha</option>
+          <option value="Bendahari">Bendahari</option>
+          <option value="AJK">AJK</option>
+        </select>
+      </div>
+    </div>
+    <div class="two">
+      <div class="form-group">
+        <label>USP (Sukan / Permainan)</label>
+        <input id="kUSP" placeholder="Contoh: Bola Sepak">
+      </div>
+      <div class="form-group">
+        <label>Jawatan USP</label>
+        <select id="kJawatanUSP">
+          <option value="Ahli">Ahli</option>
+          <option value="Pengerusi">Pengerusi</option>
+          <option value="Setiausaha">Setiausaha</option>
+          <option value="Bendahari">Bendahari</option>
+          <option value="AJK">AJK</option>
+        </select>
+      </div>
+    </div>
+    <div class="two">
+      <div class="form-group">
+        <label>Rumah Sukan</label>
+        <input id="kRumah" placeholder="Contoh: Merah">
+      </div>
+      <div class="form-group">
+        <label>Jawatan Rumah Sukan</label>
+        <select id="kJawatanRumah">
+          <option value="Ahli">Ahli</option>
+          <option value="Ketua">Ketua</option>
+          <option value="Penolong Ketua">Penolong Ketua</option>
+          <option value="AJK">AJK</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="tutupModalKeahlian()">Batal</button>
+      <button class="btn primary" onclick="simpanKeahlian()">Simpan ke Sheets</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -995,8 +1077,9 @@ async function fetchSheetData(sheetName) {
 async function loadLiveData() {
   toast("Menarik data langsung dari Google Sheets...");
   
-  // Muat senarai kelab rasmi dari Google Sheets
+  // Muat senarai kelab dan keahlian
   loadKelabList();
+  loadKeahlianList();
 
   // Master Guru
   const guruList = await fetchSheetData("Master_Guru");
@@ -1093,9 +1176,87 @@ async function tambahUnitKelab() {
     if (result.success) {
       toast("Unit berjaya disimpan ke Google Sheets!");
       document.getElementById("inputNamaUnit").value = "";
-      loadKelabList(); // Muat semula senarai dari sheet secara live
+      loadKelabList();
     } else {
       toast("Gagal menyimpan: " + (result.message || "Ralat"));
+    }
+  } catch (err) {
+    console.error(err);
+    toast("Ralat sambungan ke Google Sheets.");
+  }
+}
+
+// Fungsi Tarik Master Keahlian dari Google Sheets
+async function loadKeahlianList() {
+  const keahlianList = await fetchSheetData("Master_Keahlian");
+  const tbody = document.getElementById("tbodyMasterKeahlian");
+  if (!tbody) return;
+
+  if (keahlianList && keahlianList.length > 0) {
+    tbody.innerHTML = keahlianList.map(k => `
+      <tr>
+        <td><b>${k["Nama Murid"] || k["Nama_Murid"] || ""}</b></td>
+        <td>${k["UBB"] || "—"}</td>
+        <td>${k["Jawatan UBB"] || "—"}</td>
+        <td>${k["UKP"] || "—"}</td>
+        <td>${k["Jawatan UKP"] || "—"}</td>
+        <td>${k["USP"] || "—"}</td>
+        <td>${k["Jawatan USP"] || "—"}</td>
+        <td>${k["Rumah Sukan"] || "—"}</td>
+        <td>${k["Jawatan Rumah"] || "—"}</td>
+      </tr>
+    `).join("");
+  } else {
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:var(--muted);">Tiada rekod keahlian dalam tab Master_Keahlian. Sila tetapkan jawatan murid.</td></tr>`;
+  }
+}
+
+// Fungsi Kawalan Modal Keahlian
+function bukaModalKeahlian() {
+  document.getElementById("modalKeahlian").style.display = "flex";
+}
+function tutupModalKeahlian() {
+  document.getElementById("modalKeahlian").style.display = "none";
+}
+
+async function simpanKeahlian() {
+  const nama = document.getElementById("kNamaMurid").value.trim();
+  if (!nama) {
+    alert("Sila masukkan nama murid.");
+    return;
+  }
+  const ubb = document.getElementById("kUBB").value.trim();
+  const jUBB = document.getElementById("kJawatanUBB").value;
+  const ukp = document.getElementById("kUKP").value.trim();
+  const jUKP = document.getElementById("kJawatanUKP").value;
+  const usp = document.getElementById("kUSP").value.trim();
+  const jUSP = document.getElementById("kJawatanUSP").value;
+  const rumah = document.getElementById("kRumah").value.trim();
+  const jRumah = document.getElementById("kJawatanRumah").value;
+
+  tutupModalKeahlian();
+  toast("Menyimpan rekod keahlian ke Google Sheets...");
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        sheet: "Master_Keahlian",
+        row: [nama, ubb, jUBB, ukp, jUKP, usp, jUSP, rumah, jRumah]
+      })
+    });
+    const result = await response.json();
+    if (result.success) {
+      toast("Keahlian & jawatan berjaya disimpan!");
+      document.getElementById("kNamaMurid").value = "";
+      document.getElementById("kUBB").value = "";
+      document.getElementById("kUKP").value = "";
+      document.getElementById("kUSP").value = "";
+      document.getElementById("kRumah").value = "";
+      loadKeahlianList();
+    } else {
+      toast("Gagal menyimpan: " + result.message);
     }
   } catch (err) {
     console.error(err);
@@ -1231,7 +1392,7 @@ const pages = {
   "agihan": ["Agihan Tugas Guru Unit Kokum", "Rujukan agihan guru UBB, UKP, USP dan tugas sokongan."],
   takwim: ["Master Takwim Sekolah", "Takwim digabung daripada Master Jadual dan program admin."],
   tetapan: ["Master Tetapan Sekolah", "Maklumat asas sekolah dan konfigurasi sistem."],
-  master: ["Master Data & Tetapan", "Pusat SSOT untuk data guru, murid, pendaftaran kelab, dan pangkalan Google Sheets."],
+  master: ["Master Data & Tetapan", "Pusat SSOT untuk data guru, murid, pendaftaran kelab, keahlian, dan pangkalan Google Sheets."],
   oppm: ["OPPM", "One Page Project Manager."]
 };
 
