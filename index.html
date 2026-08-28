@@ -399,7 +399,7 @@
 <section id="kehadiran" class="page">
 <div class="card"><div class="section-title"><h2>Kehadiran Murid</h2><div class="filters"><select><option>Kelab Catur — Bil 2</option><option>Bola Sepak — Bil 2</option></select></div></div>
 <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px"><button class="btn primary" onclick="toggleAll(true)">☑ Tandakan Semua Hadir</button><button class="btn" onclick="toggleAll(false)">Kosongkan</button><span style="font-size:12px;color:var(--muted)">Uncheck hanya murid yang tidak hadir.</span></div>
-<div class="table-wrap"><table><thead><tr><th>Hadir</th><th>Bil</th><th>Nama Murid</th><th>Kelas</th><th>Jawatan</th></tr></thead><tbody id="studentRows"></tbody></table></div>
+<div class="table-wrap"><thead><tr><th>Hadir</th><th>Bil</th><th>Nama Murid</th><th>Kelas</th><th>Jawatan</th></tr></thead><tbody id="studentRows"></tbody></table></div>
 <div style="display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-top:15px;padding-top:15px;border-top:1px solid var(--line)">
   <div style="font-size:12px;color:var(--muted)">
     <b style="color:var(--text)">Jumlah ahli: 6</b> &nbsp;•&nbsp; <b style="color:var(--green)">Hadir: <span id="presentCount">6</span></b> &nbsp;•&nbsp; <b style="color:var(--red)">Tidak hadir: <span id="absentCount">0</span></b>
@@ -836,10 +836,7 @@
           <tr><th>Bil</th><th>Komponen</th><th>Nama Kelab / Unit Rasmi</th><th>Status</th><th>Aksi</th></tr>
         </thead>
         <tbody id="tbodySenaraiUnit">
-          <tr><td>1</td><td><span class="badge blue">UBB</span></td><td><b>Pengakap</b></td><td><span class="badge green">AKTIF</span></td><td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)" onclick="this.closest('tr').remove()">Padam</button></td></tr>
-          <tr><td>2</td><td><span class="badge blue">UBB</span></td><td><b>TKRS</b></td><td><span class="badge green">AKTIF</span></td><td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)" onclick="this.closest('tr').remove()">Padam</button></td></tr>
-          <tr><td>3</td><td><span class="badge purple">UKP</span></td><td><b>Kelab Catur</b></td><td><span class="badge green">AKTIF</span></td><td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)" onclick="this.closest('tr').remove()">Padam</button></td></tr>
-          <tr><td>4</td><td><span class="badge green">USP</span></td><td><b>Bola Sepak</b></td><td><span class="badge green">AKTIF</span></td><td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)" onclick="this.closest('tr').remove()">Padam</button></td></tr>
+          <tr><td colspan="5" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
         </tbody>
       </table>
     </div>
@@ -998,6 +995,9 @@ async function fetchSheetData(sheetName) {
 async function loadLiveData() {
   toast("Menarik data langsung dari Google Sheets...");
   
+  // Muat senarai kelab rasmi dari Google Sheets
+  loadKelabList();
+
   // Master Guru
   const guruList = await fetchSheetData("Master_Guru");
   const guruTbody = document.querySelector("#tableMasterGuru tbody");
@@ -1042,8 +1042,33 @@ async function loadLiveData() {
   toast("Penyelarasan Google Sheets selesai!");
 }
 
-// Fungsi Tambah Unit Kelab di Master Data / Tetapan
-function tambahUnitKelab() {
+// Fungsi Tarik Senarai Kelab dari Google Sheets
+async function loadKelabList() {
+  const kelabList = await fetchSheetData("Master_Kelab");
+  const tbody = document.getElementById("tbodySenaraiUnit");
+  if (kelabList && kelabList.length > 0) {
+    tbody.innerHTML = kelabList.map((k, index) => {
+      const kat = k["Kategori"] || "UBB";
+      let badgeClass = "blue";
+      if (kat === "UKP") badgeClass = "purple";
+      if (kat === "USP") badgeClass = "green";
+      return `
+        <tr>
+          <td>${index + 1}</td>
+          <td><span class="badge ${badgeClass}">${kat}</span></td>
+          <td><b>${k["Nama_Kelab"] || ""}</b></td>
+          <td><span class="badge green">${k["Status"] || "AKTIF"}</span></td>
+          <td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)" onclick="toast('Gunakan Google Sheets untuk padam baris ini.')">Padam</button></td>
+        </tr>
+      `;
+    }).join("");
+  } else {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--muted);">Tiada rekod unit dalam tab Master_Kelab. Sila daftar unit baru.</td></tr>`;
+  }
+}
+
+// Fungsi Simpan Unit Kelab Baharu ke Google Sheets
+async function tambahUnitKelab() {
   const kategori = document.getElementById("inputKategoriUnit").value;
   const namaUnit = document.getElementById("inputNamaUnit").value.trim();
 
@@ -1052,25 +1077,30 @@ function tambahUnitKelab() {
     return;
   }
 
-  const tbody = document.getElementById("tbodySenaraiUnit");
-  const rowCount = tbody.rows.length + 1;
-  
-  let badgeClass = "blue";
-  if (kategori === "UKP") badgeClass = "purple";
-  if (kategori === "USP") badgeClass = "green";
+  toast("Menyimpan unit baharu ke Google Sheets...");
 
-  const newRow = document.createElement("tr");
-  newRow.innerHTML = `
-    <td>${rowCount}</td>
-    <td><span class="badge ${badgeClass}">${kategori}</span></td>
-    <td><b>${namaUnit}</b></td>
-    <td><span class="badge green">AKTIF</span></td>
-    <td><button class="btn" style="padding:4px 8px;font-size:11px;color:var(--red);border-color:var(--red)" onclick="this.closest('tr').remove()">Padam</button></td>
-  `;
-  tbody.appendChild(newRow);
-  
-  document.getElementById("inputNamaUnit").value = "";
-  toast(`Unit ${namaUnit} berjaya didaftarkan!`);
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        sheet: "Master_Kelab",
+        row: [kategori, namaUnit, "AKTIF"]
+      })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      toast("Unit berjaya disimpan ke Google Sheets!");
+      document.getElementById("inputNamaUnit").value = "";
+      loadKelabList(); // Muat semula senarai dari sheet secara live
+    } else {
+      toast("Gagal menyimpan: " + (result.message || "Ralat"));
+    }
+  } catch (err) {
+    console.error(err);
+    toast("Ralat sambungan ke Google Sheets.");
+  }
 }
 
 // 2. Fungsi Kawalan Modal Borang Tambah Murid
