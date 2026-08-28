@@ -4,6 +4,8 @@
 <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width,initial-scale=1'>
 <title>SPKOKUM LMK — Prototype V7.1</title>
+<!-- Pustaka SheetJS untuk membaca fail Excel (.xlsx) secara terus -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 :root{--nav:#102a43;--nav2:#173f60;--blue:#2563eb;--bg:#f4f7fb;--card:#fff;--text:#172b4d;--muted:#6b7c93;--line:#e5eaf0;--green:#16855b;--greenbg:#e8f7f0;--amber:#b7791f;--amberbg:#fff7df;--red:#c53030;--redbg:#fff0f0;--shadow:0 8px 24px rgba(16,42,67,.07)}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--text)}button,select,input,textarea{font:inherit}button{cursor:pointer}
@@ -106,7 +108,6 @@
 <tr><td>3</td><td>28/1/2026</td><td>Bola Sepak</td><td>Muhamad Hisham</td><td><span class="badge red">BELUM</span></td><td><span class="badge green">ADA</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
 </tbody></table></div>
 </section>
-
 
 <section id="jadual" class="page">
   <div class="card">
@@ -882,8 +883,11 @@
         </tbody>
       </table>
     </div>
+    <!-- BUTANG IMPORT PUKAL EXCEL DIMUATKAN DI SINI -->
     <div class="actions" style="margin-top:12px">
-      <button class="btn">Import Pukal Murid</button><button class="btn primary" onclick="bukaModalMurid()">+ Tambah Murid</button>
+      <input type="file" id="importExcelInput" accept=".xlsx, .xls" style="display:none" onchange="handleExcelUpload(event)">
+      <button class="btn" onclick="document.getElementById('importExcelInput').click()">Import Pukal Excel</button>
+      <button class="btn primary" onclick="bukaModalMurid()">+ Tambah Murid</button>
     </div>
 
     <div class="section-title" style="margin-top:28px"><h2>Master Keahlian & Jawatan Murid</h2></div>
@@ -1100,6 +1104,67 @@ async function hantarMuridBaru() {
     console.error(err);
     toast("Ralat sambungan ke Google Sheets.");
   }
+}
+
+// 3. FUNGSI IMPORT PUKAL FAIL EXCEL (.xlsx / .xls)
+async function handleExcelUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const firstSheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheetName];
+      const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+      
+      if (rows.length <= 1) {
+        alert("Fail Excel kosong atau tiada data sah.");
+        return;
+      }
+
+      toast(`Sedang memproses ${rows.length - 1} rekod dari fail Excel...`);
+      let successCount = 0;
+
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (row && row.length >= 5) {
+          const id = row[0] ? String(row[0]).trim() : "";
+          const nama = row[1] ? String(row[1]).trim() : "";
+          const jantina = row[2] ? String(row[2]).trim() : "L";
+          const tahun = row[3] ? String(row[3]).trim() : "2026";
+          const kelas = row[4] ? String(row[4]).trim() : "";
+
+          if (id && nama) {
+            try {
+              const response = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({
+                  sheet: "Master_Murid",
+                  row: [id, nama, jantina, tahun, kelas, "AKTIF"]
+                })
+              });
+              const result = await response.json();
+              if (result.success) successCount++;
+            } catch (err) {
+              console.error("Ralat pada baris Excel:", i, err);
+            }
+          }
+        }
+      }
+
+      toast(`Import Pukal Excel Selesai! Berjaya masukkan ${successCount} murid.`);
+      loadLiveData();
+      event.target.value = "";
+    } catch (err) {
+      console.error(err);
+      toast("Ralat membaca fail Excel.");
+    }
+  };
+  reader.readAsArrayBuffer(file);
 }
 
 window.addEventListener("DOMContentLoaded", () => {
