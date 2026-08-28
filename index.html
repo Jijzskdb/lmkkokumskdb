@@ -75,7 +75,11 @@
 <main class="main">
 <div class="top">
 <div><h1 id="pageTitle">Dashboard LMK</h1><p id="pageDesc">Satu sistem untuk LMK dan LPP — semua unit, semua tahun.</p></div>
-<div class="actions"><select class="year-select" data-source="years"><option>2026</option><option>2027</option></select><button class="btn">Profil</button></div>
+<div class="actions">
+  <button class="btn primary" onclick="loadLiveData()">↻ Sync Sheets</button>
+  <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
+  <button class="btn">Profil</button>
+</div>
 </div>
 
 <section id="dashboard" class="page active">
@@ -83,7 +87,7 @@
 <div class="card stat"><div class="label">Unit / Kelab</div><div class="num">8</div><div class="small">Contoh sesi 2026</div></div>
 <div class="card stat"><div class="label">Perjumpaan</div><div class="num">96</div><div class="small">12 × 8 unit</div></div>
 <div class="card stat"><div class="label">LMK Lengkap</div><div class="num">72</div><div class="small">Termasuk evidens</div></div>
-<div class="card stat"><div class="label">Perlu Tindakan</div><div class="num">24</div><div class="small">Sebahagian / belum</div></div>
+<div class="card stat"><div class="label">Status API</div><div class="num" style="font-size:16px;color:var(--green)">🟢 Live</div><div class="small">Google Sheets</div></div>
 </div>
 <div class="section-title"><h2>Status Dokumentasi</h2><div class="filters"><select><option>Semua Unit</option><option>Catur</option><option>Bola Sepak</option><option>Bola Baling</option></select></div></div>
 <div class="table-wrap"><table><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status</th></tr></thead><tbody>
@@ -545,7 +549,7 @@
 
 <section id="pemantauan" class="page">
 <div class="card"><div class="section-title"><h2>Laporan Pemantauan Dokumentasi</h2><div class="filters"><select><option>Semua Unit</option><option>Catur</option><option>Bola Sepak</option></select></div></div>
-<div class="table-wrap"><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status Dokumentasi</th></tr></thead><tbody>
+<div class="table-wrap"><table><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status Dokumentasi</th></tr></thead><tbody>
 <tr><td>1</td><td>21/1/2026</td><td>Catur</td><td><b>Ahmad Safwan</b></td><td><span class="badge green">ADA</span></td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td></tr>
 <tr><td>2</td><td>28/1/2026</td><td>Catur</td><td><b>Rachel</b></td><td><span class="badge green">ADA</span></td><td><span class="badge red">BELUM</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
 <tr><td>3</td><td>4/2/2026</td><td>Bola Sepak</td><td><b>Muhamad Hisham</b></td><td><span class="badge red">BELUM</span></td><td><span class="badge green">ADA</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
@@ -842,18 +846,16 @@
       <div class="card stat"><div class="label">JADUAL</div><div class="num">36</div><div class="small">Perjumpaan tahun semasa</div></div>
     </div>
 
-    <div class="section-title" style="margin-top:20px"><h2>Master Guru</h2></div>
+    <div class="section-title" style="margin-top:20px"><h2>Master Guru (Google Sheets Live)</h2></div>
     <div class="table-wrap">
-      <table>
+      <table id="tableMasterGuru">
         <thead><tr>
-          <th>Nama Guru</th><th>UBB</th><th>Jawatan UBB</th><th>UKP</th><th>Jawatan UKP</th>
+          <th>Nama Guru</th><th>Email</th><th>Peranan</th><th>Status</th><th>UBB</th><th>Jawatan UBB</th><th>UKP</th><th>Jawatan UKP</th>
           <th>USP</th><th>Jawatan USP</th><th>Rumah Sukan</th><th>Jawatan Kokum Sekolah</th>
           <th>Kejurulatihan</th><th>Penyelaras Program</th>
         </tr></thead>
         <tbody>
-          <tr><td><b>Florynah Bakar</b></td><td>Pengakap</td><td>Ketua Guru Penasihat</td><td>Catur</td><td>Guru Penasihat</td><td>Bola Sepak</td><td>Guru Penasihat</td><td>Merah</td><td>—</td><td>Olahraga</td><td>Karnival Kokum</td></tr>
-          <tr><td><b>Ahmad Safwan</b></td><td>TKRS</td><td>Guru Penasihat</td><td>Catur</td><td>Ketua Guru Penasihat</td><td>Bola Baling</td><td>Guru Penasihat</td><td>Hijau</td><td>SU Kokum</td><td>Bola Sepak</td><td>—</td></tr>
-          <tr><td><b>Rachel</b></td><td>Pengakap</td><td>Guru Penasihat</td><td>Catur</td><td>Guru Penasihat</td><td>Bola Sepak</td><td>Guru Penasihat</td><td>Kuning</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td colspan="14" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
         </tbody>
       </table>
     </div>
@@ -861,14 +863,12 @@
       <button class="btn">Import Pukal Guru</button><button class="btn primary">+ Tambah Guru</button>
     </div>
 
-    <div class="section-title" style="margin-top:28px"><h2>Master Murid</h2></div>
+    <div class="section-title" style="margin-top:28px"><h2>Master Murid (Google Sheets Live)</h2></div>
     <div class="table-wrap">
-      <table>
-        <thead><tr><th>ID</th><th>Nama Murid</th><th>Jantina</th><th>Kelas</th><th>Tahun</th><th>Status</th></tr></thead>
+      <table id="tableMasterMurid">
+        <thead><tr><th>ID_Murid</th><th>Nama_Murid</th><th>Jantina</th><th>Tahun</th><th>Kelas</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td>001</td><td><b>Mohamad Aznil</b></td><td>L</td><td>5 Amanah</td><td>2026</td><td><span class="badge green">AKTIF</span></td></tr>
-          <tr><td>002</td><td><b>Anissah Suraya</b></td><td>P</td><td>6 Amanah</td><td>2026</td><td><span class="badge green">AKTIF</span></td></tr>
-          <tr><td>003</td><td><b>Aiman Hakim</b></td><td>L</td><td>6 Amanah</td><td>2026</td><td><span class="badge green">AKTIF</span></td></tr>
+          <tr><td colspan="6" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
         </tbody>
       </table>
     </div>
@@ -891,7 +891,7 @@
       <button class="btn">Import Pukal Keahlian</button><button class="btn primary">+ Tetapkan Jawatan</button>
     </div>
 
-     
+    
 <div class="section-title" style="margin-top:28px">
   <div>
     <h2>Master Jadual Perjumpaan</h2>
@@ -947,20 +947,72 @@
 // API Endpoint Google Apps Script Cikgu
 const API_URL = "https://script.google.com/macros/s/AKfycbyqF_ySQJCeBgowxXS7BRod2j0mmTXdrpmcCUb2-XgHzfmN9jE5avw-dzGBRkJ4Oq4/exec";
 
-// Fungsi untuk menarik data dari Google Sheets secara dinamik
+// Fungsi Tarik Data Live dari Google Sheets
 async function fetchSheetData(sheetName) {
   try {
     const response = await fetch(`${API_URL}?action=getData&sheet=${sheetName}`);
     const result = await response.json();
-    if (result.status === "success") {
-      return result.data;
-    }
+    if (result.status === "success") return result.data;
     return [];
   } catch (err) {
     console.error(`Gagal tarik data untuk ${sheetName}:`, err);
     return [];
   }
 }
+
+async function loadLiveData() {
+  toast("Menarik data langsung dari Google Sheets...");
+  
+  // 1. Muat Master Guru
+  const guruList = await fetchSheetData("Master_Guru");
+  const guruTbody = document.querySelector("#tableMasterGuru tbody");
+  if (guruList.length > 0) {
+    guruTbody.innerHTML = guruList.map(g => `
+      <tr>
+        <td><b>${g["Nama Guru"] || ""}</b></td>
+        <td>${g["Email"] || ""}</td>
+        <td>${g["Peranan"] || ""}</td>
+        <td><span class="badge ${g["Status"] === "AKTIF" ? "green" : "red"}">${g["Status"] || "—"}</span></td>
+        <td>${g["UBB"] || "—"}</td>
+        <td>${g["Jawatan UBB"] || "—"}</td>
+        <td>${g["UKP"] || "—"}</td>
+        <td>${g["Jawatan UKP"] || "—"}</td>
+        <td>${g["USP"] || "—"}</td>
+        <td>${g["Jawatan USP"] || "—"}</td>
+        <td>${g["Rumah Sukan"] || "—"}</td>
+        <td>${g["Jawatan Kokum Sekolah"] || "—"}</td>
+        <td>${g["Kejurulatihan"] || "—"}</td>
+        <td>${g["Penyelaras Program"] || "—"}</td>
+      </tr>
+    `).join("");
+  } else {
+    guruTbody.innerHTML = `<tr><td colspan="14" style="text-align:center; color:var(--muted);">Tiada rekod dijumpai dalam Google Sheets.</td></tr>`;
+  }
+
+  // 2. Muat Master Murid
+  const muridList = await fetchSheetData("Master_Murid");
+  const muridTbody = document.querySelector("#tableMasterMurid tbody");
+  if (muridList.length > 0) {
+    muridTbody.innerHTML = muridList.map(m => `
+      <tr>
+        <td>${m["ID_Murid"] || ""}</td>
+        <td><b>${m["Nama_Murid"] || ""}</b></td>
+        <td>${m["Jantina"] || ""}</td>
+        <td>${m["Tahun"] || ""}</td>
+        <td>${m["Kelas"] || ""}</td>
+        <td><span class="badge green">${m["Status"] || "AKTIF"}</span></td>
+      </tr>
+    `).join("");
+  } else {
+    muridTbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--muted);">Tiada rekod dijumpai dalam Google Sheets.</td></tr>`;
+  }
+
+  toast("Data berjaya diselaraskan dengan Google Sheets!");
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  loadLiveData();
+});
 
 const pages = {
   dashboard: ["Dashboard LMK", "Satu sistem untuk LMK dan LPP — semua unit, semua tahun."],
