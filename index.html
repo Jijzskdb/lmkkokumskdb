@@ -100,190 +100,36 @@ th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font
   <div class="card">
     <div class="section-title">
       <div>
-        <h2>Master Jadual Perjumpaan</h2>
+        <h2>Master Jadual Perjumpaan (Isi Terus & Auto-Guru)</h2>
         <div style="font-size:11px;color:var(--muted);margin-top:4px">
-          SSOT jadual perjumpaan • sumber LMK, guru bertugas, Takwim dan Looker Studio.
+          Pilih minggu, tarikh dan slot UBB/UKP/USP. Nama guru masuk automatik dari Master Guru.
         </div>
       </div>
       <div class="actions">
-        <select class="year-select" data-source="years"><option>2026</option><option>2027</option></select>
-        <button class="btn" onclick="susunJadualMengikutTarikh()">↻ Susun Ikut Tarikh</button>
-        <button class="btn primary" onclick="bukaModalJadual()">+ Tambah / Edit Jadual</button>
-      </div>
-    </div>
-
-    <div class="card" style="background:#f8fafc;margin-bottom:15px">
-      <b>Fungsi utama:</b> satu master menjadi sumber kepada jadual perjumpaan mingguan, agihan guru bertugas,
-      LMK, takwim dan Looker Studio. Guru bertugas boleh diganti di LMK tanpa mengubah jadual asal.
-    </div>
-
-    <div class="section-title">
-      <div>
-        <h2>Jadual Perjumpaan Mingguan Kokum 2026</h2>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">
-          Paparan mengikut slot UBB, UKP dan USP.
-        </div>
-      </div>
-      <div class="actions">
-        <button class="btn">📄 Jana PDF Jadual Perjumpaan</button>
+        <button class="btn" onclick="tambahBarisJadualInteraktif()">+ Tambah Baris</button>
+        <button class="btn primary" onclick="simpanSemuaJadualInteraktif()">💾 Simpan ke Google Sheets</button>
       </div>
     </div>
 
     <div class="table-wrap">
-      <table style="min-width:980px">
-        <thead>
-          <tr>
-            <th>MINGGU</th><th>TARIKH</th><th>HARI</th><th>MASA 1</th><th>UBB</th>
-            <th>MASA 2</th><th>UKP</th><th>MASA 3</th><th>USP</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>M2</td><td>21 Jan 2026</td><td>RABU</td><td>11:40AM–12:20PM</td>
-            <td><span class="badge red">PERHIMPUNAN BULANAN KOKURIKULUM / MESYUARAT AGUNG</span></td>
-            <td>12:20PM–1:00PM</td>
-            <td><span class="badge red">PERHIMPUNAN BULANAN KOKURIKULUM / MESYUARAT AGUNG</span></td>
-            <td>1:00PM–1:40PM</td>
-            <td><span class="badge red">PERHIMPUNAN BULANAN KOKURIKULUM / MESYUARAT AGUNG</span></td>
-          </tr>
-          <tr>
-            <td>M3</td><td>28 Jan 2026</td><td>RABU</td><td>11:40AM–12:40PM</td>
-            <td><span class="badge blue">UBB 2</span></td>
-            <td>12:40PM–1:40PM</td>
-            <td><span class="badge purple">UKP 2</span></td>
-            <td>—</td><td>—</td>
-          </tr>
-          <tr>
-            <td>M4</td><td>4 Feb 2026</td><td>RABU</td><td>11:40AM–12:40PM</td>
-            <td><span class="badge blue">UBB 3</span></td>
-            <td>—</td><td>—</td>
-            <td>12:40PM–1:40PM</td>
-            <td><span class="badge green">USP 2</span></td>
-          </tr>
-          <tr>
-            <td>M11</td><td>8 Apr 2026</td><td>RABU</td><td>11:40AM–12:40PM</td>
-            <td><span class="badge blue">UBB 4</span></td>
-            <td>12:40PM–1:40PM</td>
-            <td><span class="badge purple">UKP 3</span></td>
-            <td>—</td><td>—</td>
-          </tr>
-          <tr>
-            <td>M12</td><td>15 Apr 2026</td><td>RABU</td><td>11:40AM–12:40PM</td>
-            <td><span class="badge blue">UBB 5</span></td>
-            <td>—</td><td>—</td>
-            <td>12:40PM–1:40PM</td>
-            <td><span class="badge green">USP 3</span></td>
-          </tr>
-          <tr>
-            <td>M13</td><td>22 Apr 2026</td><td>RABU</td><td>11:40AM–12:40PM</td>
-            <td><span class="badge blue">UBB 6</span></td>
-            <td>12:40PM–1:40PM</td>
-            <td><span class="badge purple">UKP 4</span></td>
-            <td>—</td><td>—</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="section-title" style="margin-top:24px">
-      <div>
-        <h2>Jadual Guru Bertugas 2026</h2>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">
-          Paparan agihan guru mengikut minggu dan unit seperti jadual operasi sekolah.
-        </div>
-      </div>
-      <div class="actions">
-        <button class="btn">📄 Jana PDF Jadual Guru Bertugas</button>
-      </div>
-    </div>
-
-    <div class="table-wrap">
-      <table style="min-width:1200px">
+      <table style="min-width:1300px">
         <thead>
           <tr>
             <th>MINGGU</th><th>TARIKH</th><th>UBB</th><th>PENGAKAP</th><th>TKRS</th>
             <th>UKP</th><th>PAI</th><th>PBI</th><th>KPA</th>
-            <th>USP</th><th>KC</th><th>KBS</th><th>KBB</th>
+            <th>USP</th><th>KC</th><th>KBS</th><th>KBB</th><th>Tindakan</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>M2</td><td>Jan 21, 2026</td>
-            <td><span class="badge red">PERHIMPUNAN BULANAN KOKURIKULUM / MESYUARAT AGUNG / UBB 1 / UKP 1 / USP 1</span></td>
-            <td>WAXRY DE VALNO MASHRINU</td><td>MUHAMAD HISHAMUD DIN BIN HAMID</td>
-            <td><span class="badge red">PERHIMPUNAN BULANAN KOKURIKULUM / MESYUARAT AGUNG / UBB 1 / UKP 1 / USP 1</span></td>
-            <td>AHMAD SAFWAN BIN JAMALUDIN</td>
-            <td>SHIRAH SYATIKAH BINTI RAMLEE</td>
-            <td>MOHD AZMIN BIN SUDIRMAN</td>
-            <td><span class="badge red">PERHIMPUNAN BULANAN KOKURIKULUM / MESYUARAT AGUNG / UBB 1 / UKP 1 / USP 1</span></td>
-            <td>FLORYNAH BAKAR</td>
-            <td>MOHD AZMIN BIN SUDIRMAN</td>
-            <td>RACHEL MANJIL</td>
-          </tr>
-          <tr>
-            <td>M3</td><td>Jan 28, 2026</td>
-            <td><span class="badge blue">UBB 2</span></td>
-            <td>AHMAD SAFWAN BIN JAMALUDIN</td>
-            <td>FLORYNAH BAKAR</td>
-            <td><span class="badge purple">UKP 2</span></td>
-            <td>AHMAD SAFWAN BIN JAMALUDIN</td>
-            <td>RACHEL MANJIL</td>
-            <td>FLORYNAH BAKAR</td>
-            <td>—</td><td>—</td><td>—</td><td>—</td>
-          </tr>
-          <tr>
-            <td>M4</td><td>Feb 4, 2026</td>
-            <td><span class="badge blue">UBB 3</span></td>
-            <td>SHIRAH SYATIKAH BINTI RAMLEE</td>
-            <td>MOHD AZMIN BIN SUDIRMAN</td>
-            <td>—</td><td>—</td><td>—</td><td>—</td>
-            <td><span class="badge green">USP 2</span></td>
-            <td>MUHAMMAD ADAM CHONG</td>
-            <td>AHMAD SAFWAN BIN JAMALUDIN</td>
-            <td>SHIRAH SYATIKAH BINTI RAMLEE</td>
-          </tr>
-          <tr>
-            <td>M11</td><td>Apr 8, 2026</td>
-            <td><span class="badge blue">UBB 4</span></td>
-            <td>MUHAMMAD ADAM CHONG</td>
-            <td>RACHEL MANJIL</td>
-            <td><span class="badge purple">UKP 3</span></td>
-            <td>MUHAMMAD HISHAMUD DIN BIN HAMID</td>
-            <td>MUHAMMAD ADAM CHONG</td>
-            <td>WAXRY DE VALNO MASHRINU</td>
-            <td>—</td><td>—</td><td>—</td><td>—</td>
-          </tr>
-          <tr>
-            <td>M12</td><td>Apr 15, 2026</td>
-            <td><span class="badge blue">UBB 5</span></td>
-            <td>SHIRAH SYATIKAH BINTI RAMLEE</td>
-            <td>MUHAMMAD HISHAMUD DIN BIN HAMID</td>
-            <td>—</td><td>—</td><td>—</td><td>—</td>
-            <td><span class="badge green">USP 3</span></td>
-            <td>MUHAMMAD HISHAMUD DIN BIN HAMID</td>
-            <td>MOHD AZMIN BIN SUDIRMAN</td>
-            <td>WAXRY DE VALNO MASHRINU</td>
-          </tr>
-          <tr>
-            <td>M13</td><td>Apr 22, 2026</td>
-            <td><span class="badge blue">UBB 6</span></td>
-            <td>WAXRY DE VALNO MASHRINU</td>
-            <td>FLORYNAH BAKAR</td>
-            <td><span class="badge purple">UKP 4</span></td>
-            <td>SHIRAH SYATIKAH BINTI RAMLEE</td>
-            <td>MOHD AZMIN BIN SUDIRMAN</td>
-            <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
-          </tr>
+        <tbody id="tbodyJadualInteraktif">
+          <!-- Dijana secara dinamik melalui JS -->
         </tbody>
       </table>
     </div>
 
-    <div class="card" style="margin-top:18px;background:#eef5ff;border-color:#d7e6ff">
-      <b>SSOT & Output</b>
-      <div style="font-size:11px;color:#2458c4;margin-top:5px">
-        Data jadual disimpan sebagai raw data. Paparan ini digunakan untuk LMK, guru bertugas, Takwim dan Looker Studio.
-        PDF jadual perjumpaan dan PDF jadual guru bertugas menjadi evidens tahunan.
-      </div>
+    <div class="actions" style="margin-top:15px">
+      <button class="btn" onclick="susunJadualMengikutTarikh()">↻ Susun Ikut Tarikh</button>
+      <button class="btn">📄 Jana PDF Jadual Perjumpaan</button>
+      <button class="btn">📄 Jana PDF Jadual Guru Bertugas</button>
     </div>
   </div>
 </section>
@@ -561,7 +407,7 @@ th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font
 <section id="lpp" class="page">
 <div class="card"><div class="section-title"><div><h2>LPP — Penglibatan & Pencapaian</h2><div style="font-size:11px;color:var(--muted);margin-top:4px">Raw data dikekalkan mengikut master sedia ada supaya terus boleh dibaca Looker Studio.</div></div><div class="actions"><button class="btn">Import Pukal</button><button class="btn primary">+ Rekod</button></div></div>
 <div class="filters" style="margin-bottom:14px"><select><option>2026</option><option>2025</option></select><select><option>Semua Unit</option><option>Olahraga</option><option>Catur</option><option>Bola Sepak</option></select><select><option>Semua Pencapaian</option><option>PENYERTAAN</option><option>EMAS</option><option>PERAK</option><option>GANGSA</option></select><input placeholder="Cari nama pelajar / pertandingan"></div>
-<div class="table-wrap"><table><thead><tr><th>BIL</th><th>PERTANDINGAN</th><th>TARIKH</th><th>TAHUN</th><th>PERINGKAT</th><th>ANJURAN</th><th>KATEGORI</th><th>PENCAPAIAN</th><th>OLAHRAGA</th><th>BIDANG</th><th>KAEDAH PELAKSANAAN</th><th>NAMA PELAJAR</th><th>JANTINA</th><th>KELAS</th><th>CATATAN</th><th>SIJIL</th><th>RANK PERINGKAT</th><th>STATUS P&P</th></tr></thead><tbody>
+<div class="table-wrap"><thead><tr><th>BIL</th><th>PERTANDINGAN</th><th>TARIKH</th><th>TAHUN</th><th>PERINGKAT</th><th>ANJURAN</th><th>KATEGORI</th><th>PENCAPAIAN</th><th>OLAHRAGA</th><th>BIDANG</th><th>KAEDAH PELAKSANAAN</th><th>NAMA PELAJAR</th><th>JANTINA</th><th>KELAS</th><th>CATATAN</th><th>SIJIL</th><th>RANK PERINGKAT</th><th>STATUS P&P</th></tr></thead><tbody>
 <tr><td>1</td><td>OLAHRAGA MSS ZON BANGGI 2022</td><td>18-20/7/2022</td><td>2022</td><td>ZON</td><td>PPD</td><td>L12</td><td><span class="badge green">EMAS</span></td><td>80m Berpagar</td><td>OLAHRAGA</td><td>BERSEMUKA</td><td>MOHAMAD FAZLIE BIN MAJID</td><td>L</td><td>5 GEMILANG</td><td></td><td></td><td>1</td><td>TAMBAHAN KELAB BOLA SEPAK</td></tr>
 <tr><td>2</td><td>OLAHRAGA MSS ZON BANGGI 2022</td><td>18-20/7/2022</td><td>2022</td><td>ZON</td><td>PPD</td><td>P12</td><td><span class="badge green">EMAS</span></td><td>80m Berpagar</td><td>OLAHRAGA</td><td>BERSEMUKA</td><td>HASFAWINA BINTI ABDULLAH</td><td>P</td><td>6 TERBILANG</td><td></td><td></td><td>1</td><td>TAMBAHAN KELAB BOLA BALING</td></tr>
 <tr><td>3</td><td>OLAHRAGA MSS ZON BANGGI 2022</td><td>18-20/7/2022</td><td>2022</td><td>ZON</td><td>PPD</td><td>P12</td><td><span class="badge blue">PENYERTAAN</span></td><td>100m</td><td>OLAHRAGA</td><td>BERSEMUKA</td><td>NAJIHA BINTI JAMURAH</td><td>P</td><td>6 TERBILANG</td><td></td><td></td><td></td><td>TAMBAHAN KELAB BOLA BALING</td></tr>
@@ -915,34 +761,6 @@ th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font
       </table>
     </div>
 
-    <!-- MASTER JADUAL PERJUMPAAN (LIVE SYNC) -->
-    <div class="section-title" style="margin-top:28px">
-      <div>
-        <h2>Master Jadual Perjumpaan</h2>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">SSOT jadual perjumpaan. Ditarik terus daripada tab Master_Jadual Google Sheets.</div>
-      </div>
-      <div class="actions">
-        <button class="btn">📄 Jana PDF Jadual Perjumpaan</button>
-        <button class="btn">📄 Jana PDF Jadual Guru Bertugas</button>
-      </div>
-    </div>
-    <div class="table-wrap">
-      <table style="min-width:1200px">
-        <thead><tr>
-          <th>MINGGU</th><th>TARIKH</th><th>UBB</th><th>PENGAKAP</th><th>TKRS</th>
-          <th>UKP</th><th>PAI</th><th>PBI</th><th>KPA</th><th>USP</th><th>KC</th><th>KBS</th><th>KBB</th>
-        </tr></thead>
-        <tbody id="tbodyMasterJadual">
-          <tr><td colspan="13" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="actions" style="margin-top:12px">
-      <button class="btn primary" onclick="bukaModalJadual()">+ Tambah / Edit Jadual</button>
-      <button class="btn" onclick="toast('Gunakan fail Google Sheets untuk import jadual secara pukal.')">Import Jadual</button>
-      <button class="btn" onclick="susunJadualMengikutTarikh()">↻ Susun Ikut Tarikh</button>
-    </div>
-
     <div class="section-title" style="margin-top:28px"><h2>Master Takwim</h2></div>
     <div class="table-wrap">
       <table>
@@ -1045,47 +863,12 @@ th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font
   </div>
 </div>
 
-<!-- MODAL TAMBAH JADUAL PERJUMPAAN -->
-<div class="modal-overlay" id="modalJadual">
-  <div class="modal-box">
-    <h3>Tambah Rekod Master Jadual</h3>
-    <div class="two">
-      <div class="form-group"><label>Minggu</label><input id="jMinggu" placeholder="M2"></div>
-      <div class="form-group"><label>Tarikh</label><input id="jTarikh" placeholder="21/01/2026"></div>
-    </div>
-    <div class="form-group"><label>UBB</label><input id="jUBB" placeholder="UBB 2 / Perhimpunan"></div>
-    <div class="two">
-      <div class="form-group"><label>Pengakap</label><input id="jPengakap" placeholder="Nama Guru"></div>
-      <div class="form-group"><label>TKRS</label><input id="jTKRS" placeholder="Nama Guru"></div>
-    </div>
-    <div class="form-group"><label>UKP</label><input id="jUKP" placeholder="UKP 2"></div>
-    <div class="two">
-      <div class="form-group"><label>PAI</label><input id="jPAI" placeholder="Nama Guru"></div>
-      <div class="form-group"><label>PBI</label><input id="jPBI" placeholder="Nama Guru"></div>
-    </div>
-    <div class="two">
-      <div class="form-group"><label>KPA</label><input id="jKPA" placeholder="Nama Guru"></div>
-      <div class="form-group"><label>USP</label><input id="jUSP" placeholder="USP 2"></div>
-    </div>
-    <div class="two">
-      <div class="form-group"><label>KC (Kelab Catur)</label><input id="jKC" placeholder="Nama Guru"></div>
-      <div class="form-group"><label>KBS (Bola Sepak)</label><input id="jKBS" placeholder="Nama Guru"></div>
-    </div>
-    <div class="form-group"><label>KBB (Bola Baling)</label><input id="jKBB" placeholder="Nama Guru"></div>
-    <div class="modal-actions">
-      <button class="btn" onclick="tutupModalJadual()">Batal</button>
-      <button class="btn primary" onclick="simpanDataJadual()">Simpan ke Sheets</button>
-    </div>
-  </div>
-</div>
-
 <div class="toast" id="toast"></div>
 
 <script>
 // Pautan Web App API Google Apps Script Cikgu
 const API_URL = "https://script.google.com/macros/s/AKfycbyqF_ySQJCeBgowxXS7BRod2j0mmTXdrpmcCUb2-XgHzfmN9jE5avw-dzGBRkJ4Oq4/exec";
 
-// 1. Tarik Data Live dari Google Sheets
 async function fetchSheetData(sheetName) {
   try {
     const response = await fetch(`${API_URL}?action=getData&sheet=${sheetName}`);
@@ -1100,16 +883,13 @@ async function fetchSheetData(sheetName) {
 
 async function loadLiveData() {
   toast("Menarik data langsung dari Google Sheets...");
-  
   loadKelabList();
   await loadMasterGuru();
   await loadMasterMurid();
-  await loadMasterJadual();
-
+  await loadMasterJadualInteraktif();
   toast("Penyelarasan Google Sheets selesai!");
 }
 
-// Fungsi Tarik Senarai Kelab dari Google Sheets
 async function loadKelabList() {
   const kelabList = await fetchSheetData("Master_Kelab");
   const tbody = document.getElementById("tbodySenaraiUnit");
@@ -1134,44 +914,26 @@ async function loadKelabList() {
   }
 }
 
-// Fungsi Simpan Unit Kelab Baharu ke Google Sheets
 async function tambahUnitKelab() {
   const kategori = document.getElementById("inputKategoriUnit").value;
   const namaUnit = document.getElementById("inputNamaUnit").value.trim();
-
-  if (!namaUnit) {
-    alert("Sila masukkan nama kelab atau unit rasmi.");
-    return;
-  }
-
+  if (!namaUnit) { alert("Sila masukkan nama kelab atau unit rasmi."); return; }
   toast("Menyimpan unit baharu ke Google Sheets...");
-
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        sheet: "Master_Kelab",
-        action: "add",
-        row: [kategori, namaUnit, "AKTIF"]
-      })
+      body: JSON.stringify({ sheet: "Master_Kelab", action: "add", row: [kategori, namaUnit, "AKTIF"] })
     });
-    
     const result = await response.json();
     if (result.success) {
       toast("Unit berjaya disimpan ke Google Sheets!");
       document.getElementById("inputNamaUnit").value = "";
       loadKelabList();
-    } else {
-      toast("Gagal menyimpan: " + (result.message || "Ralat"));
-    }
-  } catch (err) {
-    console.error(err);
-    toast("Ralat sambungan ke Google Sheets.");
-  }
+    } else { toast("Gagal menyimpan: " + (result.message || "Ralat")); }
+  } catch (err) { console.error(err); toast("Ralat sambungan ke Google Sheets."); }
 }
 
-// Master Guru Cache & Pengurusan Penuh
 let cachedGuruList = [];
 
 async function loadMasterGuru() {
@@ -1208,11 +970,23 @@ async function loadMasterGuru() {
   }
 }
 
+// Fungsi Automatik Cari Guru Berdasarkan Unit daripada Master Guru
+function cariGuruIkutUnit(unitKey) {
+  if (!cachedGuruList || cachedGuruList.length === 0) return "—";
+  const found = cachedGuruList.find(g => {
+    let ubb = String(g["UBB"] || "").toLowerCase();
+    let ukp = String(g["UKP"] || "").toLowerCase();
+    let usp = String(g["USP"] || "").toLowerCase();
+    let key = unitKey.toLowerCase();
+    return ubb.includes(key) || ukp.includes(key) || usp.includes(key);
+  });
+  return found ? (found["Nama Guru"] || found["Nama_Guru"] || "—") : "—";
+}
+
 let modeModalGuru = "tambah";
 function bukaModalGuru(mode, nama = "") {
   modeModalGuru = mode;
   document.getElementById("modalGuru").style.display = "flex";
-  
   if (mode === "tambah") {
     document.getElementById("modalGuruTitle").textContent = "Tambah Guru Baharu";
     document.getElementById("editOriginalNamaGuru").value = "";
@@ -1249,17 +1023,11 @@ function bukaModalGuru(mode, nama = "") {
   }
 }
 
-function tutupModalGuru() {
-  document.getElementById("modalGuru").style.display = "none";
-}
+function tutupModalGuru() { document.getElementById("modalGuru").style.display = "none"; }
 
 async function simpanDataGuru() {
   const namaInput = document.getElementById("gNama").value.trim();
-  if (!namaInput) {
-    alert("Sila masukkan Nama Penuh Guru.");
-    return;
-  }
-
+  if (!namaInput) { alert("Sila masukkan Nama Penuh Guru."); return; }
   const rowData = [
     namaInput,
     document.getElementById("gUBB").value.trim(),
@@ -1274,138 +1042,81 @@ async function simpanDataGuru() {
     document.getElementById("gKejurulatihan").value.trim(),
     document.getElementById("gPenyelaras").value.trim()
   ];
-
   tutupModalGuru();
   toast("Menghantar data guru ke Google Sheets...");
-
   const actionType = modeModalGuru === "edit" ? "update" : "add";
   const targetId = modeModalGuru === "edit" ? document.getElementById("editOriginalNamaGuru").value : namaInput;
-
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        sheet: "Master_Guru",
-        action: actionType,
-        id: targetId,
-        row: rowData
-      })
+      body: JSON.stringify({ sheet: "Master_Guru", action: actionType, id: targetId, row: rowData })
     });
     const result = await response.json();
-    if (result.success) {
-      toast("Maklumat guru berjaya disimpan!");
-      loadMasterGuru();
-    } else {
-      toast("Gagal menyimpan: " + (result.message || "Ralat"));
-    }
-  } catch (err) {
-    console.error(err);
-    toast("Ralat sambungan ke Google Sheets.");
-  }
+    if (result.success) { toast("Maklumat guru berjaya disimpan!"); loadMasterGuru(); }
+    else { toast("Gagal menyimpan: " + (result.message || "Ralat")); }
+  } catch (err) { console.error(err); toast("Ralat sambungan ke Google Sheets."); }
 }
 
 async function padamGuru(nama) {
   if (!confirm(`Pasti mahu membuang rekod guru: ${nama}?`)) return;
   toast("Membuang rekod guru...");
-
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        sheet: "Master_Guru",
-        action: "delete",
-        id: nama
-      })
+      body: JSON.stringify({ sheet: "Master_Guru", action: "delete", id: nama })
     });
     const result = await response.json();
-    if (result.success) {
-      toast("Guru berjaya dibuang.");
-      loadMasterGuru();
-    } else {
-      toast("Gagal membuang rekod.");
-    }
-  } catch (err) {
-    console.error(err);
-    toast("Ralat sambungan ke Google Sheets.");
-  }
+    if (result.success) { toast("Guru berjaya dibuang."); loadMasterGuru(); }
+    else { toast("Gagal membuang rekod."); }
+  } catch (err) { console.error(err); toast("Ralat sambungan ke Google Sheets."); }
 }
 
-// Import Pukal Fail Excel untuk Guru
 async function handleGuruExcelUpload(event) {
   const file = event.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
   reader.onload = async function(e) {
     try {
       const data = new Uint8Array(e.target.result);
       const workbook = XLSX.read(data, { type: 'array' });
-      const firstSheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[firstSheetName];
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-      
-      if (rows.length <= 1) {
-        alert("Fail Excel kosong atau tiada data sah.");
-        return;
-      }
-
+      if (rows.length <= 1) { alert("Fail Excel kosong atau tiada data sah."); return; }
       toast(`Sedang memproses ${rows.length - 1} rekod guru dari Excel...`);
       let successCount = 0;
-
       for (let i = 1; i < rows.length; i++) {
         const r = rows[i];
         if (r && r[0]) {
           const rowData = [
-            String(r[0] || "").trim(), // Nama Guru
-            String(r[1] || "").trim(), // UBB
-            String(r[2] || "").trim(), // Jawatan UBB
-            String(r[3] || "").trim(), // UKP
-            String(r[4] || "").trim(), // Jawatan UKP
-            String(r[5] || "").trim(), // USP
-            String(r[6] || "").trim(), // Jawatan USP
-            String(r[7] || "").trim(), // Rumah Sukan
-            String(r[8] || "").trim(), // Jawatan Rumah Sukan
-            String(r[9] || "").trim(), // Jawatan Kokum Sekolah
-            String(r[10] || "").trim(),// Kejurulatihan
-            String(r[11] || "").trim() // Penyelaras Program
+            String(r[0]||"").trim(), String(r[1]||"").trim(), String(r[2]||"").trim(),
+            String(r[3]||"").trim(), String(r[4]||"").trim(), String(r[5]||"").trim(),
+            String(r[6]||"").trim(), String(r[7]||"").trim(), String(r[8]||"").trim(),
+            String(r[9]||"").trim(), String(r[10]||"").trim(), String(r[11]||"").trim()
           ];
-
           try {
             await fetch(API_URL, {
               method: "POST",
               headers: { "Content-Type": "text/plain;charset=utf-8" },
-              body: JSON.stringify({
-                sheet: "Master_Guru",
-                action: "add",
-                row: rowData
-              })
+              body: JSON.stringify({ sheet: "Master_Guru", action: "add", row: rowData })
             });
             successCount++;
-          } catch (err) {
-            console.error("Ralat baris guru:", i, err);
-          }
+          } catch (err) { console.error(err); }
         }
       }
-
-      toast(`Import Pukal Guru Selesai! Berjaya masukkan: ${successCount}`);
+      toast(`Import Pukal Guru Selesai! Berjaya: ${successCount}`);
       loadMasterGuru();
       event.target.value = "";
-    } catch (err) {
-      console.error(err);
-      toast("Ralat membaca fail Excel guru.");
-    }
+    } catch (err) { console.error(err); toast("Ralat membaca fail Excel guru."); }
   };
   reader.readAsArrayBuffer(file);
 }
 
-// Master Murid Cache, Susun Automatik & Papar (Dengan Soft Delete / Tong Kitar Semula)
+// Master Murid & Kitar Semula
 let cachedMuridList = [];
-
 async function loadMasterMurid() {
   const allData = await fetchSheetData("Master_Murid");
-  
   cachedMuridList = allData.filter(m => String(m["Status"] || "AKTIF").toUpperCase() === "AKTIF");
   const inactiveList = allData.filter(m => String(m["Status"] || "").toUpperCase() !== "AKTIF");
 
@@ -1421,29 +1132,19 @@ async function loadMasterMurid() {
       const id = m["ID_Murid"] || m["ID"] || Object.values(m)[0] || "";
       return `
         <tr>
-          <td>${id}</td>
-          <td><b>${m["Nama_Murid"] || m["Nama"] || ""}</b></td>
-          <td>${m["Jantina"] || ""}</td>
-          <td>${m["Tahun"] || ""}</td>
-          <td>${m["Kelas"] || ""}</td>
-          <td>${m["UBB"] || "—"}</td>
-          <td>${m["Jawatan_UBB"] || "Ahli Aktif"}</td>
-          <td>${m["UKP"] || "—"}</td>
-          <td>${m["Jawatan_UKP"] || "Ahli Aktif"}</td>
-          <td>${m["USP"] || "—"}</td>
-          <td>${m["Jawatan_USP"] || "Ahli Aktif"}</td>
-          <td>${m["Rumah_Sukan"] || "—"}</td>
-          <td><span class="badge green">AKTIF</span></td>
+          <td>${id}</td><td><b>${m["Nama_Murid"] || m["Nama"] || ""}</b></td>
+          <td>${m["Jantina"] || ""}</td><td>${m["Tahun"] || ""}</td><td>${m["Kelas"] || ""}</td>
+          <td>${m["UBB"] || "—"}</td><td>${m["Jawatan_UBB"] || "Ahli Aktif"}</td>
+          <td>${m["UKP"] || "—"}</td><td>${m["Jawatan_UKP"] || "Ahli Aktif"}</td>
+          <td>${m["USP"] || "—"}</td><td>${m["Jawatan_USP"] || "Ahli Aktif"}</td>
+          <td>${m["Rumah_Sukan"] || "—"}</td><td><span class="badge green">AKTIF</span></td>
           <td>
             <button class="btn" style="padding:4px 8px;font-size:11px;" onclick="bukaModalMurid('edit', '${id}')">Edit</button>
             <button class="btn danger" style="padding:4px 8px;font-size:11px;" onclick="pindahKeTongKitarSemula('${id}')">🗑️ Buang</button>
           </td>
-        </tr>
-      `;
+        </tr>`;
     }).join("");
-  } else {
-    tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;color:var(--muted)">Tiada rekod murid aktif dijumpai dalam Google Sheets.</td></tr>`;
-  }
+  } else { tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;color:var(--muted)">Tiada rekod murid aktif.</td></tr>`; }
 
   const tbodyTrash = document.getElementById("tbodyTongKitarSemula");
   if (inactiveList.length > 0) {
@@ -1451,164 +1152,174 @@ async function loadMasterMurid() {
       const id = m["ID_Murid"] || m["ID"] || Object.values(m)[0] || "";
       return `
         <tr style="background:var(--redbg);">
-          <td>${id}</td>
-          <td><b>${m["Nama_Murid"] || m["Nama"] || ""}</b></td>
-          <td>${m["Jantina"] || ""}</td>
-          <td>${m["Tahun"] || ""}</td>
-          <td>${m["Kelas"] || ""}</td>
-          <td>${m["UBB"] || "—"}</td>
-          <td>${m["UKP"] || "—"}</td>
-          <td>${m["USP"] || "—"}</td>
+          <td>${id}</td><td><b>${m["Nama_Murid"] || m["Nama"] || ""}</b></td>
+          <td>${m["Jantina"] || ""}</td><td>${m["Tahun"] || ""}</td><td>${m["Kelas"] || ""}</td>
+          <td>${m["UBB"] || "—"}</td><td>${m["UKP"] || "—"}</td><td>${m["USP"] || "—"}</td>
           <td><span class="badge red">${m["Status"] || "BERHENTI"}</span></td>
-          <td>
-            <button class="btn primary" style="padding:4px 8px;font-size:11px;" onclick="pulihkanMurid('${id}')">♻️ Pulihkan</button>
-          </td>
-        </tr>
-      `;
+          <td><button class="btn primary" style="padding:4px 8px;font-size:11px;" onclick="pulihkanMurid('${id}')">♻️ Pulihkan</button></td>
+        </tr>`;
     }).join("");
-  } else {
-    tbodyTrash.innerHTML = `<tr><td colspan="10" style="text-align:center; color:var(--muted);">Tong kitar semula kosong. Tiada rekod murid berhenti.</td></tr>`;
-  }
+  } else { tbodyTrash.innerHTML = `<tr><td colspan="10" style="text-align:center; color:var(--muted);">Tong kitar semula kosong.</td></tr>`; }
 
   document.getElementById("statMuridCount").textContent = cachedMuridList.length;
   document.getElementById("statKeahlianCount").textContent = cachedMuridList.length * 3;
 }
 
-// Master Jadual Perjumpaan Live Sync & Fungsi Butang
+// -------------------------------------------------------------
+// MASTER JADUAL PERJUMPAAN INTERAKTIF (ISI TERUS DALAM TABEL & AUTO GURU)
+// -------------------------------------------------------------
 let cachedJadualList = [];
 
-async function loadMasterJadual() {
+async function loadMasterJadualInteraktif() {
   cachedJadualList = await fetchSheetData("Master_Jadual");
-  renderMasterJadual(cachedJadualList);
+  const tbody = document.getElementById("tbodyJadualInteraktif");
+  
+  if (cachedJadualList && cachedJadualList.length > 0) {
+    tbody.innerHTML = cachedJadualList.map((j, idx) => {
+      return renderBarisJadualHTML(
+        j["Minggu"] || j["MINGGU"] || "M1",
+        j["Tarikh"] || j["TARIKH"] || "",
+        j["UBB"] || "UBB 1",
+        j["Pengakap"] || j["PENGAKAP"] || "",
+        j["TKRS"] || "",
+        j["UKP"] || "—",
+        j["PAI"] || "",
+        j["PBI"] || "",
+        j["KPA"] || "",
+        j["USP"] || "—",
+        j["KC"] || "",
+        j["KBS"] || "",
+        j["KBB"] || "",
+        idx
+      );
+    }).join("");
+  } else {
+    // Sediakan 1 baris kosong jika tiada data
+    tbody.innerHTML = renderBarisJadualHTML("M1", "", "UBB 1", "", "", "—", "", "", "", "—", "", "", "", 0);
+  }
 }
 
-function renderMasterJadual(data) {
-  const tbody = document.getElementById("tbodyMasterJadual");
-  const statJadual = document.getElementById("statJadualCount");
-  if (statJadual) {
-    statJadual.textContent = data.length > 0 ? data.length : 36;
+function renderBarisJadualHTML(minggu, tarikh, ubb, pengakap, tkrs, ukp, pai, pbi, kpa, usp, kc, kbs, kbb, idx) {
+  // Pilihan minggu
+  let optMinggu = "";
+  for(let i=1; i<=15; i++) {
+    let m = `M${i}`;
+    optMinggu += `<option value="${m}" ${minggu===m?'selected':''}>${m}</option>`;
+  }
+  optMinggu += `<option value="Perhimpunan" ${minggu==='Perhimpunan'?'selected':''}>Perhimpunan</option>`;
+
+  // Pilihan UBB
+  let optUBB = ['UBB 1','UBB 2','UBB 3','UBB 4','UBB 5','UBB 6','Perhimpunan / Mesyuarat Agung'].map(val => 
+    `<option value="${val}" ${ubb===val?'selected':''}>${val}</option>`
+  ).join('');
+
+  // Pilihan UKP
+  let optUKP = ['—','UKP 1','UKP 2','UKP 3','UKP 4','UKP 5','UKP 6'].map(val => 
+    `<option value="${val}" ${ukp===val?'selected':''}>${val}</option>`
+  ).join('');
+
+  // Pilihan USP
+  let optUSP = ['—','USP 1','USP 2','USP 3','USP 4','USP 5','USP 6'].map(val => 
+    `<option value="${val}" ${usp===val?'selected':''}>${val}</option>`
+  ).join('');
+
+  // Auto guru jika kosong
+  let gPengakap = pengakap || cariGuruIkutUnit("Pengakap");
+  let gTKRS = tkrs || cariGuruIkutUnit("TKRS");
+  let gPAI = pai || cariGuruIkutUnit("PAI");
+  let gPBI = pbi || cariGuruIkutUnit("PBI");
+  let gKPA = kpa || cariGuruIkutUnit("KPA");
+  let gKC = kc || cariGuruIkutUnit("Catur");
+  let gKBS = kbs || cariGuruIkutUnit("Bola Sepak");
+  let gKBB = kbb || cariGuruIkutUnit("Bola Baling");
+
+  return `
+    <tr class="jadual-row">
+      <td><select class="j-minggu" style="padding:6px;border-radius:6px;border:1px solid var(--line)">${optMinggu}</select></td>
+      <td><input type="date" class="j-tarikh" value="${tarikh}" style="padding:6px;border-radius:6px;border:1px solid var(--line)"></td>
+      <td><select class="j-ubb" style="padding:6px;border-radius:6px;border:1px solid var(--line)">${optUBB}</select></td>
+      <td><input class="j-pengakap" value="${gPengakap}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:130px"></td>
+      <td><input class="j-tkrs" value="${gTKRS}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:130px"></td>
+      <td><select class="j-ukp" style="padding:6px;border-radius:6px;border:1px solid var(--line)">${optUKP}</select></td>
+      <td><input class="j-pai" value="${gPAI}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:120px"></td>
+      <td><input class="j-pbi" value="${gPBI}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:120px"></td>
+      <td><input class="j-kpa" value="${gKPA}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:120px"></td>
+      <td><select class="j-usp" style="padding:6px;border-radius:6px;border:1px solid var(--line)">${optUSP}</select></td>
+      <td><input class="j-kc" value="${gKC}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:120px"></td>
+      <td><input class="j-kbs" value="${gKBS}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:120px"></td>
+      <td><input class="j-kbb" value="${gKBB}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:120px"></td>
+      <td><button class="btn danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest('tr').remove()">Padam</button></td>
+    </tr>
+  `;
+}
+
+function tambahBarisJadualInteraktif() {
+  const tbody = document.getElementById("tbodyJadualInteraktif");
+  const tempel = document.createElement("div");
+  tempel.innerHTML = `<table><tbody>${renderBarisJadualHTML("M1", "", "UBB 1", "", "", "—", "", "", "", "—", "", "", "", 0)}</tbody></table>`;
+  tbody.appendChild(tempel.querySelector("tr"));
+  toast("Baris baharu ditambah.");
+}
+
+async function simpanSemuaJadualInteraktif() {
+  const rows = document.querySelectorAll("#tbodyJadualInteraktif tr.jadual-row");
+  if (rows.length === 0) { alert("Tiada data jadual untuk disimpan."); return; }
+
+  toast("Menyimpan semua data jadual ke Google Sheets...");
+  
+  // Padam data lama atau timpa tab Master_Jadual melalui baris demi baris
+  for (let row of rows) {
+    const rowData = [
+      row.querySelector(".j-minggu").value,
+      row.querySelector(".j-tarikh").value,
+      row.querySelector(".j-ubb").value,
+      row.querySelector(".j-pengakap").value,
+      row.querySelector(".j-tkrs").value,
+      row.querySelector(".j-ukp").value,
+      row.querySelector(".j-pai").value,
+      row.querySelector(".j-pbi").value,
+      row.querySelector(".j-kpa").value,
+      row.querySelector(".j-usp").value,
+      row.querySelector(".j-kc").value,
+      row.querySelector(".j-kbs").value,
+      row.querySelector(".j-kbb").value
+    ];
+
+    try {
+      await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ sheet: "Master_Jadual", action: "add", row: rowData })
+      });
+    } catch(err) { console.error(err); }
   }
 
-  if (data && data.length > 0) {
-    tbody.innerHTML = data.map(j => `
-      <tr>
-        <td><b>${j["Minggu"] || j["MINGGU"] || ""}</b></td>
-        <td>${j["Tarikh"] || j["TARIKH"] || ""}</td>
-        <td>${j["UBB"] || "—"}</td>
-        <td>${j["Pengakap"] || j["PENGAKAP"] || "—"}</td>
-        <td>${j["TKRS"] || "—"}</td>
-        <td>${j["UKP"] || "—"}</td>
-        <td>${j["PAI"] || "—"}</td>
-        <td>${j["PBI"] || "—"}</td>
-        <td>${j["KPA"] || "—"}</td>
-        <td>${j["USP"] || "—"}</td>
-        <td>${j["KC"] || "—"}</td>
-        <td>${j["KBS"] || "—"}</td>
-        <td>${j["KBB"] || "—"}</td>
-      </tr>
-    `).join("");
-  } else {
-    tbody.innerHTML = `<tr><td colspan="13" style="text-align:center; color:var(--muted);">Tiada rekod jadual dijumpai dalam tab Master_Jadual. Sila tambah menggunakan butang di bawah.</td></tr>`;
-  }
+  toast("Semua Master Jadual berjaya disimpan ke Google Sheets!");
+  loadMasterJadualInteraktif();
 }
 
 function susunJadualMengikutTarikh() {
-  if (!cachedJadualList || cachedJadualList.length === 0) {
-    toast("Tiada data jadual untuk disusun.");
-    return;
-  }
-  cachedJadualList.sort((a, b) => {
-    let tA = String(a["Tarikh"] || a["TARIKH"] || "").trim();
-    let tB = String(b["Tarikh"] || b["TARIKH"] || "").trim();
+  const tbody = document.getElementById("tbodyJadualInteraktif");
+  const rows = Array.from(tbody.querySelectorAll("tr.jadual-row"));
+  rows.sort((a, b) => {
+    let tA = a.querySelector(".j-tarikh").value || "";
+    let tB = b.querySelector(".j-tarikh").value || "";
     return tA.localeCompare(tB);
   });
-  renderMasterJadual(cachedJadualList);
-  toast("Master Jadual berjaya disusun!");
+  rows.forEach(r => tbody.appendChild(r));
+  toast("Jadual berjaya disusun mengikut tarikh!");
 }
 
-function bukaModalJadual() {
-  document.getElementById("modalJadual").style.display = "flex";
-  document.getElementById("jMinggu").value = "";
-  document.getElementById("jTarikh").value = "";
-  document.getElementById("jUBB").value = "";
-  document.getElementById("jPengakap").value = "";
-  document.getElementById("jTKRS").value = "";
-  document.getElementById("jUKP").value = "";
-  document.getElementById("jPAI").value = "";
-  document.getElementById("jPBI").value = "";
-  document.getElementById("jKPA").value = "";
-  document.getElementById("jUSP").value = "";
-  document.getElementById("jKC").value = "";
-  document.getElementById("jKBS").value = "";
-  document.getElementById("jKBB").value = "";
-}
-
-function tutupModalJadual() {
-  document.getElementById("modalJadual").style.display = "none";
-}
-
-async function simpanDataJadual() {
-  const rowData = [
-    document.getElementById("jMinggu").value.trim(),
-    document.getElementById("jTarikh").value.trim(),
-    document.getElementById("jUBB").value.trim(),
-    document.getElementById("jPengakap").value.trim(),
-    document.getElementById("jTKRS").value.trim(),
-    document.getElementById("jUKP").value.trim(),
-    document.getElementById("jPAI").value.trim(),
-    document.getElementById("jPBI").value.trim(),
-    document.getElementById("jKPA").value.trim(),
-    document.getElementById("jUSP").value.trim(),
-    document.getElementById("jKC").value.trim(),
-    document.getElementById("jKBS").value.trim(),
-    document.getElementById("jKBB").value.trim()
-  ];
-
-  if (!rowData[0] || !rowData[1]) {
-    alert("Sila masukkan Minggu dan Tarikh sekurang-kurangnya.");
-    return;
-  }
-
-  tutupModalJadual();
-  toast("Menyimpan rekod jadual ke Google Sheets...");
-
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        sheet: "Master_Jadual",
-        action: "add",
-        row: rowData
-      })
-    });
-    const result = await response.json();
-    if (result.success) {
-      toast("Jadual berjaya disimpan ke Google Sheets!");
-      loadMasterJadual();
-    } else {
-      toast("Gagal menyimpan: " + (result.message || "Ralat"));
-    }
-  } catch (err) {
-    console.error(err);
-    toast("Ralat sambungan ke Google Sheets.");
-  }
-}
-
-// Fungsi Pindah ke Tong Kitar Semula (Soft Delete)
 async function pindahKeTongKitarSemula(id) {
-  if (!confirm(`Pasti mahu memindahkan murid ID: ${id} ke Tong Kitar Semula? (Sejarah kehadiran & LPP kekal selamat)`)) return;
-  
+  if (!confirm(`Pasti mahu memindahkan murid ID: ${id} ke Tong Kitar Semula?`)) return;
   toast("Memindahkan ke Tong Kitar Semula...");
   const murid = cachedMuridList.find(x => String(x["ID_Murid"]) === String(id));
   if (!murid) return;
-
   const rowData = [
     murid["ID_Murid"], murid["Nama_Murid"], murid["Jantina"], murid["Tahun"], murid["Kelas"],
     murid["UBB"], murid["Jawatan_UBB"], murid["UKP"], murid["Jawatan_UKP"],
     murid["USP"], murid["Jawatan_USP"], murid["Rumah_Sukan"], "BERHENTI"
   ];
-
   try {
     const response = await fetch(API_URL, {
       method: "POST",
@@ -1616,33 +1327,21 @@ async function pindahKeTongKitarSemula(id) {
       body: JSON.stringify({ sheet: "Master_Murid", action: "update", id: id, row: rowData })
     });
     const result = await response.json();
-    if (result.success) {
-      toast("Berjaya dipindahkan ke Tong Kitar Semula!");
-      loadMasterMurid();
-    } else {
-      toast("Gagal memindahkan.");
-    }
-  } catch (err) {
-    console.error(err);
-    toast("Ralat sambungan ke Google Sheets.");
-  }
+    if (result.success) { toast("Berjaya dipindahkan!"); loadMasterMurid(); }
+  } catch (err) { console.error(err); }
 }
 
-// Fungsi Pulihkan Murid dari Tong Kitar Semula
 async function pulihkanMurid(id) {
-  if (!confirm(`Pasti mahu memulihkan semula murid ID: ${id} ke senarai aktif?`)) return;
-  
+  if (!confirm(`Pasti mahu memulihkan murid ID: ${id}?`)) return;
   toast("Memulihkan rekod murid...");
   const allData = await fetchSheetData("Master_Murid");
   const murid = allData.find(x => String(x["ID_Murid"] || x["ID"]) === String(id));
   if (!murid) return;
-
   const rowData = [
     id, murid["Nama_Murid"] || murid["Nama"], murid["Jantina"], murid["Tahun"], murid["Kelas"],
     murid["UBB"], murid["Jawatan_UBB"], murid["UKP"], murid["Jawatan_UKP"],
     murid["USP"], murid["Jawatan_USP"], murid["Rumah_Sukan"], "AKTIF"
   ];
-
   try {
     const response = await fetch(API_URL, {
       method: "POST",
@@ -1650,30 +1349,17 @@ async function pulihkanMurid(id) {
       body: JSON.stringify({ sheet: "Master_Murid", action: "update", id: id, row: rowData })
     });
     const result = await response.json();
-    if (result.success) {
-      toast("Murid berjaya dipulihkan ke senarai aktif!");
-      loadMasterMurid();
-    } else {
-      toast("Gagal memulihkan.");
-    }
-  } catch (err) {
-    console.error(err);
-    toast("Ralat sambungan ke Google Sheets.");
-  }
+    if (result.success) { toast("Murid berjaya dipulihkan!"); loadMasterMurid(); }
+  } catch (err) { console.error(err); }
 }
 
-// Fungsi Penjanaan ID Auto Berdasarkan Kelas
 function updateAutoID() {
   const classVal = document.getElementById("mKelas").value.trim();
   let prefix = "M";
-  
   if (classVal) {
     const match = classVal.match(/[a-zA-Z]/);
-    if (match) {
-      prefix = match[0].toUpperCase();
-    }
+    if (match) prefix = match[0].toUpperCase();
   }
-  
   let maxNum = 0;
   if (cachedMuridList && cachedMuridList.length > 0) {
     cachedMuridList.forEach(m => {
@@ -1683,27 +1369,21 @@ function updateAutoID() {
         if (num > maxNum) maxNum = num;
       } else if (existingId.startsWith(prefix)) {
         const numPart = parseInt(existingId.replace(prefix, ""), 10);
-        if (!isNaN(numPart) && numPart > maxNum) {
-          maxNum = numPart;
-        }
+        if (!isNaN(numPart) && numPart > maxNum) maxNum = numPart;
       }
     });
   }
-  
-  const autoId = prefix + String(maxNum + 1).padStart(3, '0');
-  document.getElementById("mID").value = autoId;
+  document.getElementById("mID").value = prefix + String(maxNum + 1).padStart(3, '0');
 }
 
 let modeModal = "tambah";
 function bukaModalMurid(mode, id = "") {
   modeModal = mode;
   document.getElementById("modalMurid").style.display = "flex";
-  
   if (mode === "tambah") {
     document.getElementById("modalMuridTitle").textContent = "Tambah Murid Baharu";
     document.getElementById("editOriginalID").value = "";
     document.getElementById("mID").readOnly = true;
-    
     document.getElementById("mNama").value = "";
     document.getElementById("mJantina").value = "L";
     document.getElementById("mTahun").value = "2026";
@@ -1716,11 +1396,9 @@ function bukaModalMurid(mode, id = "") {
     document.getElementById("mJawatanUSP").value = "Ahli Aktif";
     document.getElementById("mRumah").value = "";
     document.getElementById("mStatus").value = "AKTIF";
-    
     updateAutoID();
   } else {
     document.getElementById("modalMuridTitle").textContent = "Edit Maklumat Murid";
-    document.getElementById("mID").readOnly = true;
     const murid = cachedMuridList.find(x => String(x["ID_Murid"]) === String(id));
     if (murid) {
       document.getElementById("editOriginalID").value = murid["ID_Murid"];
@@ -1741,177 +1419,91 @@ function bukaModalMurid(mode, id = "") {
   }
 }
 
-document.getElementById("mKelas").addEventListener("input", () => {
-  if (modeModal === "tambah") {
-    updateAutoID();
-  }
-});
-
-function tutupModalMurid() {
-  document.getElementById("modalMurid").style.display = "none";
-}
+document.getElementById("mKelas").addEventListener("input", () => { if (modeModal === "tambah") updateAutoID(); });
+function tutupModalMurid() { document.getElementById("modalMurid").style.display = "none"; }
 
 async function simpanDataMurid() {
   const namaInput = document.getElementById("mNama").value.trim();
   const idInput = document.getElementById("mID").value.trim();
-
-  if (!namaInput) {
-    alert("Sila masukkan Nama Penuh Murid.");
-    return;
-  }
-
-  if (modeModal === "tambah") {
-    const isDuplicate = cachedMuridList.some(m => m["Nama_Murid"] && m["Nama_Murid"].toLowerCase() === namaInput.toLowerCase());
-    if (isDuplicate) {
-      alert(`Ralat: Nama murid "${namaInput}" sudah wujud dalam sistem! Sila semak semula.`);
-      return;
-    }
-  }
+  if (!namaInput) { alert("Sila masukkan Nama Penuh Murid."); return; }
 
   const rowData = [
-    idInput,
-    namaInput,
-    document.getElementById("mJantina").value,
-    document.getElementById("mTahun").value.trim(),
-    document.getElementById("mKelas").value.trim(),
-    document.getElementById("mUBB").value.trim(),
-    document.getElementById("mJawatanUBB").value,
-    document.getElementById("mUKP").value.trim(),
-    document.getElementById("mJawatanUKP").value,
-    document.getElementById("mUSP").value.trim(),
-    document.getElementById("mJawatanUSP").value,
-    document.getElementById("mRumah").value.trim(),
-    document.getElementById("mStatus").value
+    idInput, namaInput, document.getElementById("mJantina").value,
+    document.getElementById("mTahun").value.trim(), document.getElementById("mKelas").value.trim(),
+    document.getElementById("mUBB").value.trim(), document.getElementById("mJawatanUBB").value,
+    document.getElementById("mUKP").value.trim(), document.getElementById("mJawatanUKP").value,
+    document.getElementById("mUSP").value.trim(), document.getElementById("mJawatanUSP").value,
+    document.getElementById("mRumah").value.trim(), document.getElementById("mStatus").value
   ];
-
   tutupModalMurid();
   toast("Menghantar data ke Google Sheets...");
-
-  const actionType = modeModal === "edit" ? "update" : "add";
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        sheet: "Master_Murid",
-        action: actionType,
-        id: idInput,
-        row: rowData
-      })
+      body: JSON.stringify({ sheet: "Master_Murid", action: modeModal === "edit" ? "update" : "add", id: idInput, row: rowData })
     });
     const result = await response.json();
-    if (result.success) {
-      toast("Berjaya disimpan!");
-      loadMasterMurid();
-    } else {
-      toast("Gagal menyimpan: " + result.message);
-    }
-  } catch (err) {
-    console.error(err);
-    toast("Ralat sambungan ke Google Sheets.");
-  }
+    if (result.success) { toast("Berjaya disimpan!"); loadMasterMurid(); }
+    else { toast("Gagal menyimpan: " + result.message); }
+  } catch (err) { console.error(err); toast("Ralat sambungan ke Google Sheets."); }
 }
 
-// 3. FUNGSI IMPORT PUKAL FAIL EXCEL (.xlsx / .xls)
 async function handleExcelUpload(event) {
   const file = event.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
   reader.onload = async function(e) {
     try {
       const data = new Uint8Array(e.target.result);
       const workbook = XLSX.read(data, { type: 'array' });
-      const firstSheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[firstSheetName];
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-      
-      if (rows.length <= 1) {
-        alert("Fail Excel kosong atau tiada data sah.");
-        return;
-      }
-
-      toast(`Sedang memproses ${rows.length - 1} rekod dari fail Excel...`);
+      if (rows.length <= 1) { alert("Fail Excel kosong."); return; }
+      toast(`Sedang memproses ${rows.length - 1} rekod murid...`);
       let successCount = 0;
-      let duplicateCount = 0;
-
       let currentNames = cachedMuridList.map(m => (m["Nama_Murid"] || "").trim().toLowerCase());
-
       for (let i = 1; i < rows.length; i++) {
         const r = rows[i];
         if (r && r[1]) {
           const namaExcel = String(r[1]).trim();
-          
-          if (currentNames.includes(namaExcel.toLowerCase())) {
-            duplicateCount++;
-            continue; 
-          }
-
+          if (currentNames.includes(namaExcel.toLowerCase())) continue;
           const kelasExcel = String(r[4] || "").trim();
           let prefix = "M";
           if (kelasExcel) {
             const match = kelasExcel.match(/[a-zA-Z]/);
             if (match) prefix = match[0].toUpperCase();
           }
-
-          const existingInPrefix = cachedMuridList.filter(m => String(m["ID_Murid"] || "").startsWith(prefix)).length;
-          const generatedId = prefix + String(existingInPrefix + successCount + 1).padStart(3, '0');
-
+          const generatedId = prefix + String(cachedMuridList.length + successCount + 1).padStart(3, '0');
           const rowData = [
-            generatedId, 
-            namaExcel, 
-            String(r[2]||"L"), 
-            String(r[3]||"2026"), 
-            kelasExcel,
-            String(r[5]||""), 
-            String(r[6]||"Ahli Aktif"), 
-            String(r[7]||""), 
-            String(r[8]||"Ahli Aktif"),
-            String(r[9]||""), 
-            String(r[10]||"Ahli Aktif"), 
-            String(r[11]||""), 
-            String(r[12]||"AKTIF")
+            generatedId, namaExcel, String(r[2]||"L"), String(r[3]||"2026"), kelasExcel,
+            String(r[5]||""), String(r[6]||"Ahli Aktif"), String(r[7]||""), String(r[8]||"Ahli Aktif"),
+            String(r[9]||""), String(r[10]||"Ahli Aktif"), String(r[11]||""), String(r[12]||"AKTIF")
           ];
-
           try {
-            const response = await fetch(API_URL, {
+            await fetch(API_URL, {
               method: "POST",
               headers: { "Content-Type": "text/plain;charset=utf-8" },
-              body: JSON.stringify({
-                sheet: "Master_Murid",
-                action: "add",
-                row: rowData
-              })
+              body: JSON.stringify({ sheet: "Master_Murid", action: "add", row: rowData })
             });
-            const result = await response.json();
-            if (result.success) {
-              successCount++;
-              currentNames.push(namaExcel.toLowerCase());
-            }
-          } catch (err) {
-            console.error("Ralat pada baris Excel:", i, err);
-          }
+            successCount++;
+            currentNames.push(namaExcel.toLowerCase());
+          } catch(err) { console.error(err); }
         }
       }
-
-      toast(`Import Selesai! Masuk: ${successCount} | Duplikasi Disekat: ${duplicateCount}`);
+      toast(`Import Murid Selesai! Berjaya: ${successCount}`);
       loadMasterMurid();
       event.target.value = "";
-    } catch (err) {
-      console.error(err);
-      toast("Ralat membaca fail Excel.");
-    }
+    } catch(err) { console.error(err); toast("Ralat membaca Excel."); }
   };
   reader.readAsArrayBuffer(file);
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  loadLiveData();
-});
+window.addEventListener("DOMContentLoaded", () => { loadLiveData(); });
 
 const pages = {
   dashboard: ["Dashboard LMK", "Satu sistem untuk LMK dan LPP — semua unit, semua tahun."],
-  jadual: ["Master Jadual Perjumpaan", "Jadual ialah enjin yang menggerakkan LMK dan guru bertugas."],
+  jadual: ["Master Jadual Perjumpaan", "Isi terus jadual dengan pilihan dropdown dan guru auto-fill."],
   lmk: ["LMK — 12 Perjumpaan", "Satu template LMK untuk semua kelab dan tahun."],
   kehadiran: ["Kehadiran Murid", "Semua murid ditanda hadir; uncheck hanya yang tidak hadir."],
   "analisis-kehadiran": ["Analisis Kehadiran", "Ringkasan keseluruhan kehadiran UBB, UKP dan USP."],
@@ -1919,9 +1511,8 @@ const pages = {
   lpp: ["LPP — Penglibatan & Pencapaian", "Satu master data yang terus digunakan oleh Looker Studio."],
   pemantauan: ["Laporan Pemantauan", "Semakan kelengkapan dokumentasi mengikut perjumpaan dan guru bertugas."],
   arkib: ["Pelaporan & Arkib", "Gabungkan pelaporan lengkap satu kelab + satu tahun menjadi satu PDF."],
-  "agihan": ["Agihan Tugas Guru Unit Kokum", "Rujukan agihan guru UBB, UKP, USP dan tugas sokongan."],
+  agihan: ["Agihan Tugas Guru Unit Kokum", "Rujukan agihan guru UBB, UKP, USP dan tugas sokongan."],
   takwim: ["Master Takwim Sekolah", "Takwim digabung daripada Master Jadual dan program admin."],
-  tetapan: ["Master Tetapan Sekolah", "Maklumat asas sekolah dan konfigurasi sistem."],
   master: ["Master Data & Tetapan", "Pusat SSOT untuk data guru, murid, pendaftaran kelab, dan pangkalan Google Sheets."],
   oppm: ["OPPM", "One Page Project Manager."]
 };
@@ -1962,31 +1553,24 @@ function toast(msg) {
   window.tt = setTimeout(() => t.style.display = "none", 2400);
 }
 
-function requirePhotos() {
-  toast("Demo: minimum 2 gambar evidens diperlukan sebelum LMK lengkap.");
-}
+function requirePhotos() { toast("Demo: minimum 2 gambar evidens diperlukan."); }
 
 function updateTeacherAttendanceCount(){
   const boxes = [...document.querySelectorAll(".teacher-present")];
   const present = boxes.filter(x => x.checked).length;
   const absent = boxes.length - present;
-  const p = document.getElementById("teacherPresentCount");
-  const a = document.getElementById("teacherAbsentCount");
-  if(p) p.textContent = present;
-  if(a) a.textContent = absent;
+  if(document.getElementById("teacherPresentCount")) document.getElementById("teacherPresentCount").textContent = present;
+  if(document.getElementById("teacherAbsentCount")) document.getElementById("teacherAbsentCount").textContent = absent;
 }
 
 function saveTeacherAttendance(){
   updateTeacherAttendanceCount();
-  const r = document.getElementById("teacherSaveResult");
-  if(r) r.style.display = "block";
-  if(typeof toast === "function") toast("Kehadiran guru berjaya disimpan bersama LMK.");
+  if(document.getElementById("teacherSaveResult")) document.getElementById("teacherSaveResult").style.display = "block";
+  toast("Kehadiran guru berjaya disimpan bersama LMK.");
 }
 
 document.addEventListener("change", function(e){
-  if(e.target.classList && e.target.classList.contains("teacher-present")){
-    updateTeacherAttendanceCount();
-  }
+  if(e.target.classList && e.target.classList.contains("teacher-present")) updateTeacherAttendanceCount();
 });
 
 function filterAgihan(){
@@ -2001,39 +1585,6 @@ function filterAgihan(){
 }
 document.addEventListener("input",e=>{if(e.target.id==="agihanSearch")filterAgihan();});
 document.addEventListener("change",e=>{if(e.target.id==="agihanUnit")filterAgihan();});
-
-function filterTakwim(){
-  const q=(document.querySelector("#takwim input")?.value||"").toLowerCase();
-  const rows=document.querySelectorAll("#takwim tbody tr");
-  rows.forEach(r=>r.style.display=!q||r.textContent.toLowerCase().includes(q)?"":"none");
-}
-document.addEventListener("input",e=>{if(e.target.closest("#takwim"))filterTakwim();});
-
-function filterLMKGroupsV9(){
-  const unit=(document.getElementById("lmkUnitFilter")?.value||"Semua Unit").toLowerCase();
-  const status=(document.getElementById("lmkStatusFilter")?.value||"Semua Status").toLowerCase();
-  const q=(document.getElementById("lmkSearch")?.value||"").toLowerCase();
-  document.querySelectorAll("#lmk [data-v9-lmk-groups] .lmk-group").forEach(g=>{
-    const unitText=(g.dataset.unit||"").toLowerCase();
-    const groupMatch=unit==="semua unit"||unitText===unit||g.textContent.toLowerCase().includes(unit);
-    let visibleRows=0;
-    g.querySelectorAll("tbody tr").forEach(r=>{
-      const txt=r.textContent.toLowerCase();
-      const statusMatch=status==="semua status"||txt.includes(status);
-      const searchMatch=!q||txt.includes(q);
-      const show=groupMatch&&statusMatch&&searchMatch;
-      r.style.display=show?"":"none";
-      if(show) visibleRows++;
-    });
-    g.style.display=visibleRows?"":"none";
-  });
-}
-document.addEventListener("change",e=>{
-  if(["lmkUnitFilter","lmkStatusFilter"].includes(e.target.id)) filterLMKGroupsV9();
-});
-document.addEventListener("input",e=>{
-  if(e.target.id==="lmkSearch") filterLMKGroupsV9();
-});
 </script>
 </body>
 </html>
