@@ -88,7 +88,7 @@ th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font
 <div class="card stat"><div class="label">Perlu Tindakan</div><div class="num">24</div><div class="small">Sebahagian / belum</div></div>
 </div>
 <div class="section-title"><h2>Status Dokumentasi</h2><div class="filters"><select><option>Semua Unit</option><option>Catur</option><option>Bola Sepak</option><option>Bola Baling</option></select></div></div>
-<div class="table-wrap"><table><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status</th></tr></thead><tbody>
+<div class="table-wrap"><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status</th></tr></thead><tbody>
 <tr><td>1</td><td>21/1/2026</td><td>Kelab Catur</td><td>Ahmad Safwan</td><td><span class="badge green">ADA</span></td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td></tr>
 <tr><td>2</td><td>28/1/2026</td><td>Kelab Catur</td><td>Rachel</td><td><span class="badge green">ADA</span></td><td><span class="badge red">BELUM</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
 <tr><td>3</td><td>28/1/2026</td><td>Bola Sepak</td><td>Muhamad Hisham</td><td><span class="badge red">BELUM</span></td><td><span class="badge green">ADA</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
@@ -793,10 +793,10 @@ th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font
     </div>
 
     <div class="grid">
-      <div class="card stat"><div class="label">MASTER GURU</div><div class="num">18</div><div class="small">Penempatan & jawatan guru</div></div>
-      <div class="card stat"><div class="label">MASTER MURID</div><div class="num">86</div><div class="small">Data murid tahun semasa</div></div>
-      <div class="card stat"><div class="label">KEAHLIAN</div><div class="num">258</div><div class="small">Unit + jawatan murid</div></div>
-      <div class="card stat"><div class="label">JADUAL</div><div class="num">36</div><div class="small">Perjumpaan tahun semasa</div></div>
+      <div class="card stat"><div class="label">MASTER GURU</div><div class="num" id="statGuruCount">0</div><div class="small">Penempatan & jawatan guru</div></div>
+      <div class="card stat"><div class="label">MASTER MURID</div><div class="num" id="statMuridCount">0</div><div class="small">Data murid tahun semasa</div></div>
+      <div class="card stat"><div class="label">KEAHLIAN</div><div class="num" id="statKeahlianCount">0</div><div class="small">Unit + jawatan murid</div></div>
+      <div class="card stat"><div class="label">JADUAL</div><div class="num" id="statJadualCount">36</div><div class="small">Perjumpaan tahun semasa</div></div>
     </div>
 
     <!-- Pendaftaran Kelab / Unit Rasmi -->
@@ -1012,6 +1012,10 @@ async function loadLiveData() {
   // Master Guru
   const guruList = await fetchSheetData("Master_Guru");
   const guruTbody = document.querySelector("#tableMasterGuru tbody");
+  
+  // Kemas kini jumlah guru pada kad skor
+  document.getElementById("statGuruCount").textContent = guruList.length;
+
   if (guruList.length > 0) {
     guruTbody.innerHTML = guruList.map(g => `
       <tr>
@@ -1033,7 +1037,11 @@ async function loadLiveData() {
   }
 
   // Master Murid Terpusat
-  loadMasterMurid();
+  await loadMasterMurid();
+
+  // Kemas kini jumlah murid dan keahlian pada kad skor
+  document.getElementById("statMuridCount").textContent = cachedMuridList.length;
+  document.getElementById("statKeahlianCount").textContent = cachedMuridList.length * 3;
 
   toast("Penyelarasan Google Sheets selesai!");
 }
