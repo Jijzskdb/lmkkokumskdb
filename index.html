@@ -571,7 +571,7 @@ th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font
 <!-- 8. PEMANTAUAN -->
 <section id="pemantauan" class="page">
 <div class="card"><div class="section-title"><h2>Laporan Pemantauan Dokumentasi</h2><div class="filters"><select><option>Semua Unit</option><option>Catur</option><option>Bola Sepak</option></select></div></div>
-<div class="table-wrap"><table><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status Dokumentasi</th></tr></thead><tbody>
+<div class="table-wrap"><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status Dokumentasi</th></tr></thead><tbody>
 <tr><td>1</td><td>21/1/2026</td><td>Catur</td><td><b>Ahmad Safwan</b></td><td><span class="badge green">ADA</span></td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td></tr>
 <tr><td>2</td><td>28/1/2026</td><td>Catur</td><td><b>Rachel</b></td><td><span class="badge green">ADA</span></td><td><span class="badge red">BELUM</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
 <tr><td>3</td><td>4/2/2026</td><td>Bola Sepak</td><td><b>Muhamad Hisham</b></td><td><span class="badge red">BELUM</span></td><td><span class="badge green">ADA</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
@@ -885,6 +885,29 @@ th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font
       </table>
     </div>
 
+    <!-- TONGI KITAR SEMULA / ARKIB MURID BERHENTI -->
+    <div class="section-title" style="margin-top:35px; border-top:2px dashed var(--line); padding-top:20px;">
+      <div>
+        <h2 style="color:var(--red);">🗑️ Tong Kitar Semula (Murid Berhenti / Tidak Aktif)</h2>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Murid yang berhenti sekolah dikumpul di sini supaya sejarah kehadiran & LPP tidak hilang. Boleh dipulihkan bila-bila masa.</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table style="min-width:1300px">
+        <thead>
+          <tr style="background:var(--redbg);">
+            <th>ID</th><th>Nama Murid</th><th>Jantina</th><th>Tahun</th><th>Kelas Asal</th>
+            <th>UBB</th><th>UKP</th><th>USP</th><th>Status Asal</th>
+            <th>Tindakan Pemulihan</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyTongKitarSemula">
+          <tr><td colspan="10" style="text-align:center; color:var(--muted);">Tiada rekod dalam tong kitar semula.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <div class="section-title" style="margin-top:28px">
       <div>
         <h2>Master Jadual Perjumpaan</h2>
@@ -1039,10 +1062,6 @@ async function loadLiveData() {
   // Master Murid Terpusat
   await loadMasterMurid();
 
-  // Kemas kini jumlah murid dan keahlian pada kad skor
-  document.getElementById("statMuridCount").textContent = cachedMuridList.length;
-  document.getElementById("statKeahlianCount").textContent = cachedMuridList.length * 3;
-
   toast("Penyelarasan Google Sheets selesai!");
 }
 
@@ -1108,13 +1127,17 @@ async function tambahUnitKelab() {
   }
 }
 
-// Master Murid Cache, Susun Automatik & Papar
+// Master Murid Cache, Susun Automatik & Papar (Dengan Soft Delete / Tong Kitar Semula)
 let cachedMuridList = [];
 
 async function loadMasterMurid() {
-  cachedMuridList = await fetchSheetData("Master_Murid");
+  const allData = await fetchSheetData("Master_Murid");
   
-  // Susun semula senarai secara automatik mengikut ID_Murid secara numerik/alfabetik
+  // Asingkan mengikut status (AKTIF vs BERHENTI / TIDAK AKTIF)
+  cachedMuridList = allData.filter(m => String(m["Status"] || "AKTIF").toUpperCase() === "AKTIF");
+  const inactiveList = allData.filter(m => String(m["Status"] || "").toUpperCase() !== "AKTIF");
+
+  // Susun semula senarai aktif secara automatik mengikut ID_Murid secara numerik/alfabetik
   cachedMuridList.sort((a, b) => {
     let idA = String(a["ID_Murid"] || a["ID"] || Object.values(a)[0] || "").trim();
     let idB = String(b["ID_Murid"] || b["ID"] || Object.values(b)[0] || "").trim();
@@ -1139,16 +1162,113 @@ async function loadMasterMurid() {
           <td>${m["USP"] || "—"}</td>
           <td>${m["Jawatan_USP"] || "Ahli Aktif"}</td>
           <td>${m["Rumah_Sukan"] || "—"}</td>
-          <td><span class="badge green">${m["Status"] || "AKTIF"}</span></td>
+          <td><span class="badge green">AKTIF</span></td>
           <td>
             <button class="btn" style="padding:4px 8px;font-size:11px;" onclick="bukaModalMurid('edit', '${id}')">Edit</button>
-            <button class="btn danger" style="padding:4px 8px;font-size:11px;" onclick="padamMurid('${id}')">Padam</button>
+            <button class="btn danger" style="padding:4px 8px;font-size:11px;" onclick="pindahKeTongKitarSemula('${id}')">🗑️ Buang</button>
           </td>
         </tr>
       `;
     }).join("");
   } else {
-    tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;color:var(--muted)">Tiada rekod murid dijumpai dalam Google Sheets.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;color:var(--muted)">Tiada rekod murid aktif dijumpai dalam Google Sheets.</td></tr>`;
+  }
+
+  // Papar Jadual Tong Kitar Semula
+  const tbodyTrash = document.getElementById("tbodyTongKitarSemula");
+  if (inactiveList.length > 0) {
+    tbodyTrash.innerHTML = inactiveList.map(m => {
+      const id = m["ID_Murid"] || m["ID"] || Object.values(m)[0] || "";
+      return `
+        <tr style="background:var(--redbg);">
+          <td>${id}</td>
+          <td><b>${m["Nama_Murid"] || m["Nama"] || ""}</b></td>
+          <td>${m["Jantina"] || ""}</td>
+          <td>${m["Tahun"] || ""}</td>
+          <td>${m["Kelas"] || ""}</td>
+          <td>${m["UBB"] || "—"}</td>
+          <td>${m["UKP"] || "—"}</td>
+          <td>${m["USP"] || "—"}</td>
+          <td><span class="badge red">${m["Status"] || "BERHENTI"}</span></td>
+          <td>
+            <button class="btn primary" style="padding:4px 8px;font-size:11px;" onclick="pulihkanMurid('${id}')">♻️ Pulihkan</button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  } else {
+    tbodyTrash.innerHTML = `<tr><td colspan="10" style="text-align:center; color:var(--muted);">Tong kitar semula kosong. Tiada rekod murid berhenti.</td></tr>`;
+  }
+
+  // Kemas kini jumlah murid dan keahlian pada kad skor secara dinamik
+  document.getElementById("statMuridCount").textContent = cachedMuridList.length;
+  document.getElementById("statKeahlianCount").textContent = cachedMuridList.length * 3;
+}
+
+// Fungsi Pindah ke Tong Kitar Semula (Soft Delete)
+async function pindahKeTongKitarSemula(id) {
+  if (!confirm(`Pasti mahu memindahkan murid ID: ${id} ke Tong Kitar Semula? (Sejarah kehadiran & LPP kekal selamat)`)) return;
+  
+  toast("Memindahkan ke Tong Kitar Semula...");
+  const murid = cachedMuridList.find(x => String(x["ID_Murid"]) === String(id));
+  if (!murid) return;
+
+  const rowData = [
+    murid["ID_Murid"], murid["Nama_Murid"], murid["Jantina"], murid["Tahun"], murid["Kelas"],
+    murid["UBB"], murid["Jawatan_UBB"], murid["UKP"], murid["Jawatan_UKP"],
+    murid["USP"], murid["Jawatan_USP"], murid["Rumah_Sukan"], "BERHENTI"
+  ];
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ sheet: "Master_Murid", action: "update", id: id, row: rowData })
+    });
+    const result = await response.json();
+    if (result.success) {
+      toast("Berjaya dipindahkan ke Tong Kitar Semula!");
+      loadMasterMurid();
+    } else {
+      toast("Gagal memindahkan.");
+    }
+  } catch (err) {
+    console.error(err);
+    toast("Ralat sambungan ke Google Sheets.");
+  }
+}
+
+// Fungsi Pulihkan Murid dari Tong Kitar Semula
+async function pulihkanMurid(id) {
+  if (!confirm(`Pasti mahu memulihkan semula murid ID: ${id} ke senarai aktif?`)) return;
+  
+  toast("Memulihkan rekod murid...");
+  const allData = await fetchSheetData("Master_Murid");
+  const murid = allData.find(x => String(x["ID_Murid"] || x["ID"]) === String(id));
+  if (!murid) return;
+
+  const rowData = [
+    id, murid["Nama_Murid"] || murid["Nama"], murid["Jantina"], murid["Tahun"], murid["Kelas"],
+    murid["UBB"], murid["Jawatan_UBB"], murid["UKP"], murid["Jawatan_UKP"],
+    murid["USP"], murid["Jawatan_USP"], murid["Rumah_Sukan"], "AKTIF"
+  ];
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ sheet: "Master_Murid", action: "update", id: id, row: rowData })
+    });
+    const result = await response.json();
+    if (result.success) {
+      toast("Murid berjaya dipulihkan ke senarai aktif!");
+      loadMasterMurid();
+    } else {
+      toast("Gagal memulihkan.");
+    }
+  } catch (err) {
+    console.error(err);
+    toast("Ralat sambungan ke Google Sheets.");
   }
 }
 
@@ -1297,32 +1417,6 @@ async function simpanDataMurid() {
       loadMasterMurid();
     } else {
       toast("Gagal menyimpan: " + result.message);
-    }
-  } catch (err) {
-    console.error(err);
-    toast("Ralat sambungan ke Google Sheets.");
-  }
-}
-
-async function padamMurid(id) {
-  if (!confirm(`Adakah anda pasti mahu memadam murid dengan ID: ${id}?`)) return;
-  toast("Memadam rekod...");
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        sheet: "Master_Murid",
-        action: "delete",
-        id: id
-      })
-    });
-    const result = await response.json();
-    if (result.success) {
-      toast("Rekod berjaya dipadam!");
-      loadMasterMurid();
-    } else {
-      toast("Gagal memadam.");
     }
   } catch (err) {
     console.error(err);
