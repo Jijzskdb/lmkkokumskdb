@@ -95,14 +95,14 @@ th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font
 </tbody></table></div>
 </section>
 
-<!-- 2. JADUAL -->
+<!-- 2. MASTER JADUAL (DINAMIK MENGIKUT PENDAFTARAN KELAB & DROPDOWN GURU) -->
 <section id="jadual" class="page">
   <div class="card">
     <div class="section-title">
       <div>
-        <h2>Master Jadual Perjumpaan (Isi Terus & Auto-Guru)</h2>
+        <h2>Master Jadual Perjumpaan (Mengikut Senarai Pendaftaran Kelab)</h2>
         <div style="font-size:11px;color:var(--muted);margin-top:4px">
-          Pilih minggu, tarikh dan slot UBB/UKP/USP. Nama guru masuk automatik dari Master Guru.
+          Nama kelab ditarik terus dari Master Tetapan. Slot UBB/UKP/USP bernombor 1–12, dan nama guru menggunakan dropdown.
         </div>
       </div>
       <div class="actions">
@@ -113,15 +113,11 @@ th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font
 
     <div class="table-wrap">
       <table style="min-width:1300px">
-        <thead>
-          <tr>
-            <th>MINGGU</th><th>TARIKH</th><th>UBB</th><th>PENGAKAP</th><th>TKRS</th>
-            <th>UKP</th><th>PAI</th><th>PBI</th><th>KPA</th>
-            <th>USP</th><th>KC</th><th>KBS</th><th>KBB</th><th>Tindakan</th>
-          </tr>
+        <thead id="theadJadualInteraktif">
+          <!-- Dijana secara dinamik mengikut kelab berdaftar -->
         </thead>
         <tbody id="tbodyJadualInteraktif">
-          <!-- Dijana secara dinamik melalui JS -->
+          <tr><td colspan="10" style="text-align:center; color:var(--muted);">Sedang memuatkan data jadual...</td></tr>
         </tbody>
       </table>
     </div>
@@ -883,18 +879,19 @@ async function fetchSheetData(sheetName) {
 
 async function loadLiveData() {
   toast("Menarik data langsung dari Google Sheets...");
-  loadKelabList();
-  await loadMasterGuru();
+  await loadKelabList();
+  await loadMasterGuru(); 
   await loadMasterMurid();
   await loadMasterJadualInteraktif();
   toast("Penyelarasan Google Sheets selesai!");
 }
 
+let cachedKelabList = [];
 async function loadKelabList() {
-  const kelabList = await fetchSheetData("Master_Kelab");
+  cachedKelabList = await fetchSheetData("Master_Kelab");
   const tbody = document.getElementById("tbodySenaraiUnit");
-  if (kelabList && kelabList.length > 0) {
-    tbody.innerHTML = kelabList.map((k, index) => {
+  if (cachedKelabList && cachedKelabList.length > 0) {
+    tbody.innerHTML = cachedKelabList.map((k, index) => {
       const kat = k["Kategori"] || "UBB";
       let badgeClass = "blue";
       if (kat === "UKP") badgeClass = "purple";
@@ -935,7 +932,6 @@ async function tambahUnitKelab() {
 }
 
 let cachedGuruList = [];
-
 async function loadMasterGuru() {
   cachedGuruList = await fetchSheetData("Master_Guru");
   const guruTbody = document.querySelector("#tableMasterGuru tbody");
@@ -970,17 +966,16 @@ async function loadMasterGuru() {
   }
 }
 
-// Fungsi Automatik Cari Guru Berdasarkan Unit daripada Master Guru
-function cariGuruIkutUnit(unitKey) {
-  if (!cachedGuruList || cachedGuruList.length === 0) return "—";
+function cariGuruIkutUnit(unitName) {
+  if (!cachedGuruList || cachedGuruList.length === 0) return "";
   const found = cachedGuruList.find(g => {
     let ubb = String(g["UBB"] || "").toLowerCase();
     let ukp = String(g["UKP"] || "").toLowerCase();
     let usp = String(g["USP"] || "").toLowerCase();
-    let key = unitKey.toLowerCase();
-    return ubb.includes(key) || ukp.includes(key) || usp.includes(key);
+    let name = unitName.toLowerCase();
+    return ubb.includes(name) || ukp.includes(name) || usp.includes(name);
   });
-  return found ? (found["Nama Guru"] || found["Nama_Guru"] || "—") : "—";
+  return found ? (found["Nama Guru"] || found["Nama_Guru"] || "") : "";
 }
 
 let modeModalGuru = "tambah";
@@ -1166,98 +1161,126 @@ async function loadMasterMurid() {
 }
 
 // -------------------------------------------------------------
-// MASTER JADUAL PERJUMPAAN INTERAKTIF (ISI TERUS DALAM TABEL & AUTO GURU)
+// MASTER JADUAL PERJUMPAAN DINAMIK IKUT PENDAFTARAN KELAB
 // -------------------------------------------------------------
 let cachedJadualList = [];
 
 async function loadMasterJadualInteraktif() {
   cachedJadualList = await fetchSheetData("Master_Jadual");
-  const tbody = document.getElementById("tbodyJadualInteraktif");
   
+  // Ambil senarai kelab berdaftar dari Master_Kelab
+  // Jika Master_Kelab kosong, guna senarai lalai
+  const ubbClubs = cachedKelabList.filter(k => (k["Kategori"] || "").toUpperCase() === "UBB").map(k => k["Nama_Kelab"]);
+  const ukpClubs = cachedKelabList.filter(k => (k["Kategori"] || "").toUpperCase() === "UKP").map(k => k["Nama_Kelab"]);
+  const uspClubs = cachedKelabList.filter(k => (k["Kategori"] || "").toUpperCase() === "USP").map(k => k["Nama_Kelab"]);
+
+  const finalUBB = ubbClubs.length > 0 ? ubbClubs : ["Pengakap", "TKRS"];
+  const finalUKP = ukpClubs.length > 0 ? ukpClubs : ["Kelab Catur", "Persatuan Agama Islam", "Persatuan Bahasa Inggeris", "KPA"];
+  const finalUSP = uspClubs.length > 0 ? uspClubs : ["Bola Sepak", "Bola Baling"];
+
+  // Render Header Jadual Dinamik
+  const thead = document.getElementById("theadJadualInteraktif");
+  let headerHTML = `<tr><th>MINGGU</th><th>TARIKH</th><th>UBB</th>`;
+  finalUBB.forEach(c => headerHTML += `<th>${c.toUpperCase()}</th>`);
+  headerHTML += `<th>UKP</th>`;
+  finalUKP.forEach(c => headerHTML += `<th>${c.toUpperCase()}</th>`);
+  headerHTML += `<th>USP</th>`;
+  finalUSP.forEach(c => headerHTML += `<th>${c.toUpperCase()}</th>`);
+  headerHTML += `<th>Tindakan</th></tr>`;
+  thead.innerHTML = headerHTML;
+
+  // Render Body Jadual
+  const tbody = document.getElementById("tbodyJadualInteraktif");
   if (cachedJadualList && cachedJadualList.length > 0) {
-    tbody.innerHTML = cachedJadualList.map((j, idx) => {
-      return renderBarisJadualHTML(
-        j["Minggu"] || j["MINGGU"] || "M1",
-        j["Tarikh"] || j["TARIKH"] || "",
-        j["UBB"] || "UBB 1",
-        j["Pengakap"] || j["PENGAKAP"] || "",
-        j["TKRS"] || "",
-        j["UKP"] || "—",
-        j["PAI"] || "",
-        j["PBI"] || "",
-        j["KPA"] || "",
-        j["USP"] || "—",
-        j["KC"] || "",
-        j["KBS"] || "",
-        j["KBB"] || "",
-        idx
-      );
+    tbody.innerHTML = cachedJadualList.map((j) => {
+      return renderBarisJadualDinamik(j, finalUBB, finalUKP, finalUSP);
     }).join("");
   } else {
-    // Sediakan 1 baris kosong jika tiada data
-    tbody.innerHTML = renderBarisJadualHTML("M1", "", "UBB 1", "", "", "—", "", "", "", "—", "", "", "", 0);
+    tbody.innerHTML = renderBarisJadualDinamik({}, finalUBB, finalUKP, finalUSP);
   }
 }
 
-function renderBarisJadualHTML(minggu, tarikh, ubb, pengakap, tkrs, ukp, pai, pbi, kpa, usp, kc, kbs, kbb, idx) {
-  // Pilihan minggu
+function generateTeacherDropdown(selectedVal, clubName) {
+  let defaultVal = selectedVal || cariGuruIkutUnit(clubName);
+  let options = `<option value="">— Pilih Guru —</option>`;
+  cachedGuruList.forEach(g => {
+    let name = g["Nama Guru"] || g["Nama_Guru"] || "";
+    let isSelected = (defaultVal.trim().toLowerCase() === name.trim().toLowerCase()) ? "selected" : "";
+    options += `<option value="${name}" ${isSelected}>${name}</option>`;
+  });
+  return `<select class="j-guru" data-club="${clubName}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:130px">${options}</select>`;
+}
+
+function renderBarisJadualDinamik(jData, ubbList, ukpList, uspList) {
+  let minggu = jData["Minggu"] || jData["MINGGU"] || "M1";
+  let tarikh = jData["Tarikh"] || jData["TARIKH"] || "";
+  let ubbSlot = jData["UBB"] || "UBB 1";
+  let ukpSlot = jData["UKP"] || "—";
+  let uspSlot = jData["USP"] || "—";
+
+  // Dropdown Minggu M1 - M15
   let optMinggu = "";
   for(let i=1; i<=15; i++) {
     let m = `M${i}`;
     optMinggu += `<option value="${m}" ${minggu===m?'selected':''}>${m}</option>`;
   }
-  optMinggu += `<option value="Perhimpunan" ${minggu==='Perhimpunan'?'selected':''}>Perhimpunan</option>`;
 
-  // Pilihan UBB
-  let optUBB = ['UBB 1','UBB 2','UBB 3','UBB 4','UBB 5','UBB 6','Perhimpunan / Mesyuarat Agung'].map(val => 
-    `<option value="${val}" ${ubb===val?'selected':''}>${val}</option>`
-  ).join('');
+  // Dropdown Slot UBB (1-12)
+  let optUBB = `<option value="—">—</option>`;
+  for(let i=1; i<=12; i++) {
+    let val = `UBB ${i}`;
+    optUBB += `<option value="${val}" ${ubbSlot===val?'selected':''}>${val}</option>`;
+  }
 
-  // Pilihan UKP
-  let optUKP = ['—','UKP 1','UKP 2','UKP 3','UKP 4','UKP 5','UKP 6'].map(val => 
-    `<option value="${val}" ${ukp===val?'selected':''}>${val}</option>`
-  ).join('');
+  // Dropdown Slot UKP (1-12)
+  let optUKP = `<option value="—">—</option>`;
+  for(let i=1; i<=12; i++) {
+    let val = `UKP ${i}`;
+    optUKP += `<option value="${val}" ${ukpSlot===val?'selected':''}>${val}</option>`;
+  }
 
-  // Pilihan USP
-  let optUSP = ['—','USP 1','USP 2','USP 3','USP 4','USP 5','USP 6'].map(val => 
-    `<option value="${val}" ${usp===val?'selected':''}>${val}</option>`
-  ).join('');
+  // Dropdown Slot USP (1-12)
+  let optUSP = `<option value="—">—</option>`;
+  for(let i=1; i<=12; i++) {
+    let val = `USP ${i}`;
+    optUSP += `<option value="${val}" ${uspSlot===val?'selected':''}>${val}</option>`;
+  }
 
-  // Auto guru jika kosong
-  let gPengakap = pengakap || cariGuruIkutUnit("Pengakap");
-  let gTKRS = tkrs || cariGuruIkutUnit("TKRS");
-  let gPAI = pai || cariGuruIkutUnit("PAI");
-  let gPBI = pbi || cariGuruIkutUnit("PBI");
-  let gKPA = kpa || cariGuruIkutUnit("KPA");
-  let gKC = kc || cariGuruIkutUnit("Catur");
-  let gKBS = kbs || cariGuruIkutUnit("Bola Sepak");
-  let gKBB = kbb || cariGuruIkutUnit("Bola Baling");
-
-  return `
+  let html = `
     <tr class="jadual-row">
       <td><select class="j-minggu" style="padding:6px;border-radius:6px;border:1px solid var(--line)">${optMinggu}</select></td>
       <td><input type="date" class="j-tarikh" value="${tarikh}" style="padding:6px;border-radius:6px;border:1px solid var(--line)"></td>
-      <td><select class="j-ubb" style="padding:6px;border-radius:6px;border:1px solid var(--line)">${optUBB}</select></td>
-      <td><input class="j-pengakap" value="${gPengakap}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:130px"></td>
-      <td><input class="j-tkrs" value="${gTKRS}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:130px"></td>
-      <td><select class="j-ukp" style="padding:6px;border-radius:6px;border:1px solid var(--line)">${optUKP}</select></td>
-      <td><input class="j-pai" value="${gPAI}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:120px"></td>
-      <td><input class="j-pbi" value="${gPBI}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:120px"></td>
-      <td><input class="j-kpa" value="${gKPA}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:120px"></td>
-      <td><select class="j-usp" style="padding:6px;border-radius:6px;border:1px solid var(--line)">${optUSP}</select></td>
-      <td><input class="j-kc" value="${gKC}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:120px"></td>
-      <td><input class="j-kbs" value="${gKBS}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:120px"></td>
-      <td><input class="j-kbb" value="${gKBB}" style="padding:6px;border-radius:6px;border:1px solid var(--line);width:120px"></td>
-      <td><button class="btn danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest('tr').remove()">Padam</button></td>
-    </tr>
+      <td><select class="j-ubb-slot" style="padding:6px;border-radius:6px;border:1px solid var(--line)">${optUBB}</select></td>
   `;
+
+  // Kolum Guru UBB
+  ubbList.forEach(club => {
+    let savedTeacher = jData[club] || jData[club.toUpperCase()] || "";
+    html += `<td>${generateTeacherDropdown(savedTeacher, club)}</td>`;
+  });
+
+  html += `<td><select class="j-ukp-slot" style="padding:6px;border-radius:6px;border:1px solid var(--line)">${optUKP}</select></td>`;
+
+  // Kolum Guru UKP
+  ukpList.forEach(club => {
+    let savedTeacher = jData[club] || jData[club.toUpperCase()] || "";
+    html += `<td>${generateTeacherDropdown(savedTeacher, club)}</td>`;
+  });
+
+  html += `<td><select class="j-usp-slot" style="padding:6px;border-radius:6px;border:1px solid var(--line)">${optUSP}</select></td>`;
+
+  // Kolum Guru USP
+  uspList.forEach(club => {
+    let savedTeacher = jData[club] || jData[club.toUpperCase()] || "";
+    html += `<td>${generateTeacherDropdown(savedTeacher, club)}</td>`;
+  });
+
+  html += `<td><button class="btn danger" style="padding:4px 8px;font-size:11px;" onclick="this.closest('tr').remove()">Padam</button></td></tr>`;
+  return html;
 }
 
 function tambahBarisJadualInteraktif() {
-  const tbody = document.getElementById("tbodyJadualInteraktif");
-  const tempel = document.createElement("div");
-  tempel.innerHTML = `<table><tbody>${renderBarisJadualHTML("M1", "", "UBB 1", "", "", "—", "", "", "", "—", "", "", "", 0)}</tbody></table>`;
-  tbody.appendChild(tempel.querySelector("tr"));
+  loadMasterJadualInteraktif(); // Muat semula untuk kekal selari dengan struktur kelab terkini
   toast("Baris baharu ditambah.");
 }
 
@@ -1267,23 +1290,16 @@ async function simpanSemuaJadualInteraktif() {
 
   toast("Menyimpan semua data jadual ke Google Sheets...");
   
-  // Padam data lama atau timpa tab Master_Jadual melalui baris demi baris
   for (let row of rows) {
-    const rowData = [
+    let rowData = [
       row.querySelector(".j-minggu").value,
       row.querySelector(".j-tarikh").value,
-      row.querySelector(".j-ubb").value,
-      row.querySelector(".j-pengakap").value,
-      row.querySelector(".j-tkrs").value,
-      row.querySelector(".j-ukp").value,
-      row.querySelector(".j-pai").value,
-      row.querySelector(".j-pbi").value,
-      row.querySelector(".j-kpa").value,
-      row.querySelector(".j-usp").value,
-      row.querySelector(".j-kc").value,
-      row.querySelector(".j-kbs").value,
-      row.querySelector(".j-kbb").value
+      row.querySelector(".j-ubb-slot").value
     ];
+
+    row.querySelectorAll(".j-guru").forEach(gSelect => {
+      rowData.push(gSelect.value);
+    });
 
     try {
       await fetch(API_URL, {
@@ -1294,8 +1310,7 @@ async function simpanSemuaJadualInteraktif() {
     } catch(err) { console.error(err); }
   }
 
-  toast("Semua Master Jadual berjaya disimpan ke Google Sheets!");
-  loadMasterJadualInteraktif();
+  toast("Master Jadual berjaya disimpan ke Google Sheets!");
 }
 
 function susunJadualMengikutTarikh() {
@@ -1503,7 +1518,7 @@ window.addEventListener("DOMContentLoaded", () => { loadLiveData(); });
 
 const pages = {
   dashboard: ["Dashboard LMK", "Satu sistem untuk LMK dan LPP — semua unit, semua tahun."],
-  jadual: ["Master Jadual Perjumpaan", "Isi terus jadual dengan pilihan dropdown dan guru auto-fill."],
+  jadual: ["Master Jadual Perjumpaan", "Jadual dinamik mengikut pendaftaran kelab dan dropdown guru."],
   lmk: ["LMK — 12 Perjumpaan", "Satu template LMK untuk semua kelab dan tahun."],
   kehadiran: ["Kehadiran Murid", "Semua murid ditanda hadir; uncheck hanya yang tidak hadir."],
   "analisis-kehadiran": ["Analisis Kehadiran", "Ringkasan keseluruhan kehadiran UBB, UKP dan USP."],
