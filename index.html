@@ -88,7 +88,7 @@ th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font
 <div class="card stat"><div class="label">Perlu Tindakan</div><div class="num">24</div><div class="small">Sebahagian / belum</div></div>
 </div>
 <div class="section-title"><h2>Status Dokumentasi</h2><div class="filters"><select><option>Semua Unit</option><option>Catur</option><option>Bola Sepak</option><option>Bola Baling</option></select></div></div>
-<div class="table-wrap"><table><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status</th></tr></thead><tbody>
+<div class="table-wrap"><thead><tr><th>Bil</th><th>Tarikh</th><th>Unit</th><th>Guru Bertugas</th><th>Kehadiran</th><th>LMK</th><th>Status</th></tr></thead><tbody>
 <tr><td>1</td><td>21/1/2026</td><td>Kelab Catur</td><td>Ahmad Safwan</td><td><span class="badge green">ADA</span></td><td><span class="badge green">ADA</span></td><td><span class="badge green">LENGKAP</span></td></tr>
 <tr><td>2</td><td>28/1/2026</td><td>Kelab Catur</td><td>Rachel</td><td><span class="badge green">ADA</span></td><td><span class="badge red">BELUM</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
 <tr><td>3</td><td>28/1/2026</td><td>Bola Sepak</td><td>Muhamad Hisham</td><td><span class="badge red">BELUM</span></td><td><span class="badge green">ADA</span></td><td><span class="badge amber">SEBAHAGIAN</span></td></tr>
@@ -842,11 +842,11 @@ th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font
       <table id="tableMasterGuru">
         <thead><tr>
           <th>Nama Guru</th><th>UBB</th><th>Jawatan UBB</th><th>UKP</th><th>Jawatan UKP</th>
-          <th>USP</th><th>Jawatan USP</th><th>Rumah Sukan</th><th>Jawatan Kokum Sekolah</th>
+          <th>USP</th><th>Jawatan USP</th><th>Rumah Sukan</th><th>Jawatan Rumah Sukan</th><th>Jawatan Kokum Sekolah</th>
           <th>Kejurulatihan</th><th>Penyelaras Program</th>
         </tr></thead>
         <tbody>
-          <tr><td colspan="11" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
+          <tr><td colspan="12" style="text-align:center; color:var(--muted);">Sedang memuatkan data dari Google Sheets...</td></tr>
         </tbody>
       </table>
     </div>
@@ -1078,13 +1078,14 @@ async function loadLiveData() {
         <td>${g["USP"] || "—"}</td>
         <td>${g["Jawatan USP"] || "—"}</td>
         <td>${g["Rumah Sukan"] || "—"}</td>
+        <td>${g["Jawatan Rumah Sukan"] || "—"}</td>
         <td>${g["Jawatan Kokum Sekolah"] || "—"}</td>
         <td>${g["Kejurulatihan"] || "—"}</td>
         <td>${g["Penyelaras Program"] || "—"}</td>
       </tr>
     `).join("");
   } else {
-    guruTbody.innerHTML = `<tr><td colspan="11" style="text-align:center; color:var(--muted);">Tiada rekod dijumpai dalam Google Sheets.</td></tr>`;
+    guruTbody.innerHTML = `<tr><td colspan="12" style="text-align:center; color:var(--muted);">Tiada rekod dijumpai dalam Google Sheets.</td></tr>`;
   }
 
   // Master Murid Terpusat & Tong Kitar Semula
