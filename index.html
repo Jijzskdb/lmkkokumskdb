@@ -942,14 +942,14 @@ th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:left;font
     <h3 id="modalMuridTitle">Tambah Murid Baharu</h3>
     <input type="hidden" id="editOriginalID">
     <div class="two">
-      <div class="form-group"><label>ID Murid</label><input id="mID" placeholder="001"></div>
+      <div class="form-group"><label>ID Murid (Auto)</label><input id="mID" readonly placeholder="Auto ID"></div>
       <div class="form-group"><label>Nama Penuh</label><input id="mNama" placeholder="Nama murid"></div>
     </div>
     <div class="two">
       <div class="form-group"><label>Jantina</label><select id="mJantina"><option value="L">L</option><option value="P">P</option></select></div>
       <div class="form-group"><label>Tahun</label><input id="mTahun" value="2026"></div>
     </div>
-    <div class="form-group"><label>Kelas</label><input id="mKelas" placeholder="5 Amanah"></div>
+    <div class="form-group"><label>Kelas</label><input id="mKelas" placeholder="5 Amanah / 6 Terbilang"></div>
     <div class="two">
       <div class="form-group"><label>UBB</label><input id="mUBB" placeholder="Pengakap"></div>
       <div class="form-group"><label>Jawatan UBB</label>
@@ -1136,14 +1136,33 @@ async function loadMasterMurid() {
   }
 }
 
+// Fungsi Penjanaan ID Auto Berdasarkan Kelas
+function updateAutoID() {
+  const classVal = document.getElementById("mKelas").value.trim();
+  let prefix = "M";
+  
+  if (classVal) {
+    const match = classVal.match(/[a-zA-Z]/);
+    if (match) {
+      prefix = match[0].toUpperCase();
+    }
+  }
+  
+  const samePrefixCount = cachedMuridList.filter(m => String(m["ID_Murid"] || "").startsWith(prefix)).length + 1;
+  const autoId = prefix + String(samePrefixCount).padStart(3, '0');
+  document.getElementById("mID").value = autoId;
+}
+
 let modeModal = "tambah";
 function bukaModalMurid(mode, id = "") {
   modeModal = mode;
   document.getElementById("modalMurid").style.display = "flex";
+  
   if (mode === "tambah") {
     document.getElementById("modalMuridTitle").textContent = "Tambah Murid Baharu";
     document.getElementById("editOriginalID").value = "";
-    document.getElementById("mID").value = "";
+    document.getElementById("mID").readOnly = true;
+    
     document.getElementById("mNama").value = "";
     document.getElementById("mJantina").value = "L";
     document.getElementById("mTahun").value = "2026";
@@ -1156,8 +1175,11 @@ function bukaModalMurid(mode, id = "") {
     document.getElementById("mJawatanUSP").value = "Ahli Aktif";
     document.getElementById("mRumah").value = "";
     document.getElementById("mStatus").value = "AKTIF";
+    
+    updateAutoID();
   } else {
     document.getElementById("modalMuridTitle").textContent = "Edit Maklumat Murid";
+    document.getElementById("mID").readOnly = true;
     const murid = cachedMuridList.find(x => String(x["ID_Murid"]) === String(id));
     if (murid) {
       document.getElementById("editOriginalID").value = murid["ID_Murid"];
@@ -1178,14 +1200,38 @@ function bukaModalMurid(mode, id = "") {
   }
 }
 
+// Pantau input kelas secara langsung untuk kemas kini ID auto
+document.getElementById("mKelas").addEventListener("input", () => {
+  if (modeModal === "tambah") {
+    updateAutoID();
+  }
+});
+
 function tutupModalMurid() {
   document.getElementById("modalMurid").style.display = "none";
 }
 
 async function simpanDataMurid() {
+  const namaInput = document.getElementById("mNama").value.trim();
+  const idInput = document.getElementById("mID").value.trim();
+
+  if (!namaInput) {
+    alert("Sila masukkan Nama Penuh Murid.");
+    return;
+  }
+
+  // Semak Duplikasi Nama
+  if (modeModal === "tambah") {
+    const isDuplicate = cachedMuridList.some(m => m["Nama_Murid"] && m["Nama_Murid"].toLowerCase() === namaInput.toLowerCase());
+    if (isDuplicate) {
+      alert(`Ralat: Nama murid "${namaInput}" sudah wujud dalam sistem! Sila semak semula.`);
+      return;
+    }
+  }
+
   const rowData = [
-    document.getElementById("mID").value.trim(),
-    document.getElementById("mNama").value.trim(),
+    idInput,
+    namaInput,
     document.getElementById("mJantina").value,
     document.getElementById("mTahun").value.trim(),
     document.getElementById("mKelas").value.trim(),
@@ -1199,11 +1245,6 @@ async function simpanDataMurid() {
     document.getElementById("mStatus").value
   ];
 
-  if (!rowData[0] || !rowData[1]) {
-    alert("Sila masukkan ID dan Nama Murid.");
-    return;
-  }
-
   tutupModalMurid();
   toast("Menghantar data ke Google Sheets...");
 
@@ -1215,7 +1256,7 @@ async function simpanDataMurid() {
       body: JSON.stringify({
         sheet: "Master_Murid",
         action: actionType,
-        id: rowData[0],
+        id: idInput,
         row: rowData
       })
     });
@@ -1258,7 +1299,7 @@ async function padamMurid(id) {
   }
 }
 
-// 3. FUNGSI IMPORT PUKAL FAIL EXCEL (.xlsx / .xls)
+// 3. FUNGSI IMPORT PUKAL FAIL EXCEL (.xlsx / .xls) DENGAN AUTO-ID & DUPLICATE CHECK
 async function handleExcelUpload(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -1279,15 +1320,46 @@ async function handleExcelUpload(event) {
 
       toast(`Sedang memproses ${rows.length - 1} rekod dari fail Excel...`);
       let successCount = 0;
+      let duplicateCount = 0;
+
+      let currentNames = cachedMuridList.map(m => (m["Nama_Murid"] || "").trim().toLowerCase());
 
       for (let i = 1; i < rows.length; i++) {
         const r = rows[i];
-        if (r && r[0] && r[1]) {
+        if (r && r[1]) {
+          const namaExcel = String(r[1]).trim();
+          
+          if (currentNames.includes(namaExcel.toLowerCase())) {
+            duplicateCount++;
+            continue; 
+          }
+
+          const kelasExcel = String(r[4] || "").trim();
+          let prefix = "M";
+          if (kelasExcel) {
+            const match = kelasExcel.match(/[a-zA-Z]/);
+            if (match) prefix = match[0].toUpperCase();
+          }
+
+          const existingInPrefix = cachedMuridList.filter(m => String(m["ID_Murid"] || "").startsWith(prefix)).length;
+          const generatedId = prefix + String(existingInPrefix + successCount + 1).padStart(3, '0');
+
           const rowData = [
-            String(r[0]), String(r[1]), String(r[2]||"L"), String(r[3]||"2026"), String(r[4]||""),
-            String(r[5]||""), String(r[6]||"Ahli Aktif"), String(r[7]||""), String(r[8]||"Ahli Aktif"),
-            String(r[9]||""), String(r[10]||"Ahli Aktif"), String(r[11]||""), String(r[12]||"AKTIF")
+            generatedId, 
+            namaExcel, 
+            String(r[2]||"L"), 
+            String(r[3]||"2026"), 
+            kelasExcel,
+            String(r[5]||""), 
+            String(r[6]||"Ahli Aktif"), 
+            String(r[7]||""), 
+            String(r[8]||"Ahli Aktif"),
+            String(r[9]||""), 
+            String(r[10]||"Ahli Aktif"), 
+            String(r[11]||""), 
+            String(r[12]||"AKTIF")
           ];
+
           try {
             const response = await fetch(API_URL, {
               method: "POST",
@@ -1299,14 +1371,17 @@ async function handleExcelUpload(event) {
               })
             });
             const result = await response.json();
-            if (result.success) successCount++;
+            if (result.success) {
+              successCount++;
+              currentNames.push(namaExcel.toLowerCase());
+            }
           } catch (err) {
             console.error("Ralat pada baris Excel:", i, err);
           }
         }
       }
 
-      toast(`Import Pukal Excel Selesai! Berjaya masukkan ${successCount} murid.`);
+      toast(`Import Selesai! Masuk: ${successCount} | Duplikasi Disekat: ${duplicateCount}`);
       loadMasterMurid();
       event.target.value = "";
     } catch (err) {
