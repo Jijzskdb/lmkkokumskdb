@@ -1100,19 +1100,27 @@ async function tambahUnitKelab() {
   }
 }
 
-// Master Murid Cache & Papar
+// Master Murid Cache, Susun Automatik & Papar
 let cachedMuridList = [];
 
 async function loadMasterMurid() {
   cachedMuridList = await fetchSheetData("Master_Murid");
+  
+  // Susun semula senarai secara automatik mengikut ID_Murid secara numerik/alfabetik
+  cachedMuridList.sort((a, b) => {
+    let idA = String(a["ID_Murid"] || a["ID"] || Object.values(a)[0] || "").trim();
+    let idB = String(b["ID_Murid"] || b["ID"] || Object.values(b)[0] || "").trim();
+    return idA.localeCompare(idB, undefined, { numeric: true, sensitivity: 'base' });
+  });
+
   const tbody = document.getElementById("tbodyMasterMurid");
   if (cachedMuridList.length > 0) {
     tbody.innerHTML = cachedMuridList.map(m => {
-      const id = m["ID_Murid"] || "";
+      const id = m["ID_Murid"] || m["ID"] || Object.values(m)[0] || "";
       return `
         <tr>
           <td>${id}</td>
-          <td><b>${m["Nama_Murid"] || ""}</b></td>
+          <td><b>${m["Nama_Murid"] || m["Nama"] || ""}</b></td>
           <td>${m["Jantina"] || ""}</td>
           <td>${m["Tahun"] || ""}</td>
           <td>${m["Kelas"] || ""}</td>
@@ -1148,8 +1156,23 @@ function updateAutoID() {
     }
   }
   
-  const samePrefixCount = cachedMuridList.filter(m => String(m["ID_Murid"] || "").startsWith(prefix)).length + 1;
-  const autoId = prefix + String(samePrefixCount).padStart(3, '0');
+  let maxNum = 0;
+  if (cachedMuridList && cachedMuridList.length > 0) {
+    cachedMuridList.forEach(m => {
+      let existingId = String(m["ID_Murid"] || "").trim();
+      if (!isNaN(existingId)) {
+        const num = parseInt(existingId, 10);
+        if (num > maxNum) maxNum = num;
+      } else if (existingId.startsWith(prefix)) {
+        const numPart = parseInt(existingId.replace(prefix, ""), 10);
+        if (!isNaN(numPart) && numPart > maxNum) {
+          maxNum = numPart;
+        }
+      }
+    });
+  }
+  
+  const autoId = prefix + String(maxNum + 1).padStart(3, '0');
   document.getElementById("mID").value = autoId;
 }
 
